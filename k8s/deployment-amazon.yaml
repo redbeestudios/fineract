@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fineract-server
+  labels:
+    app: fineract-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fineract-server
+  template:
+    metadata:
+      labels:
+        app: fineract-server
+    spec:
+      containers:
+        - name: fineract-server
+          image: IMAGE_PATTERN
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: "http://fineract-cn-cloud-config-server:8888"
+            - name: SPRING_CLOUD_CONFIG_PROFILE
+              value: ENVIRONMENT_PATTERN
+          ports:
+            - name: httpport
+              containerPort: 8080
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 0.5
+            limits:
+              memory: 1Gi
+              cpu: 1
+      imagePullSecrets:
+        - name: docker.redbee
