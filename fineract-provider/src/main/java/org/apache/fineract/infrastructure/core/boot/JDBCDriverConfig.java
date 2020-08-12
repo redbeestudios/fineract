@@ -29,13 +29,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class JDBCDriverConfig {
 
-    @Value("${drizzle.driver-classname}")
+    @Value("${datasource.driver-classname}")
     private String driverClassName;
-    @Value("${drizzle.protocol}")
+    @Value("${datasource.protocol}")
     private String protocol;
-    @Value("${drizzle.subprotocol}")
+    @Value("${datasource.subprotocol}")
     private String subProtocol;
-    @Value("${drizzle.port}")
+    @Value("${datasource.port}")
     private Integer port;
 
     public String getDriverClassName() {
