@@ -20,6 +20,6 @@
 def app =[
         group: 'com.r2' ,
         name: 'fineract-provider',
-        version: '0.22.0',
+        version: '0.24.0',
         versionType: 'SNAPSHOT'
 ]
