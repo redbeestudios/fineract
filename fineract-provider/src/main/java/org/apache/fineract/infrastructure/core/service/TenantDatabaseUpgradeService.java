@@ -50,7 +50,7 @@ public class TenantDatabaseUpgradeService {
     private String datasourcePort;
     @Value("${datasource.username}")
     private String datasourceUsername;
-    @Value("${datasource.username}")
+    @Value("${datasource.password}")
     private String datasourcePassword;
 
     private final static Logger LOG = LoggerFactory.getLogger(TenantDatabaseUpgradeService.class);
