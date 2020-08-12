@@ -19,6 +19,10 @@ spec:
           image: IMAGE_PATTERN
           imagePullPolicy: Always
           env:
+            - name: JAVA_OPTS
+              value: -Dfineract_tenants_url=jdbc:mysql:thin://mysql:3306/mifosplatform-tenants
+                -Dfineract_tenants_driver=org.drizzle.jdbc.DrizzleDriver -Dfineract_tenants_uid=root
+                -Dfineract_tenants_pwd=waas123 -Djava.awt.headless=true -XX:+UseG1GC -Dfile.encoding=UTF-8
             - name: SPRING_CLOUD_CONFIG_URI
               value: "http://fineract-cn-cloud-config-server:8888"
             - name: SPRING_CLOUD_CONFIG_PROFILE

@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * A service that picks up on tenants that are configured to auto-update their
@@ -42,6 +43,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TenantDatabaseUpgradeService {
+
+    @Value("${datasource.host}")
+    private String datasourceHost;
+    @Value("${datasource.port}")
+    private String datasourcePort;
+    @Value("${datasource.username}")
+    private String datasourceUsername;
+    @Value("${datasource.password}")
+    private String datasourcePassword;
 
     private final static Logger LOG = LoggerFactory.getLogger(TenantDatabaseUpgradeService.class);
 
@@ -88,21 +98,17 @@ public class TenantDatabaseUpgradeService {
      * itself.
      */
     private void upgradeTenantDB() {
-        String dbHostname = getEnvVar("FINERACT_DEFAULT_TENANTDB_HOSTNAME", "localhost");
-        String dbPort = getEnvVar("FINERACT_DEFAULT_TENANTDB_PORT", "3306");
-        String dbUid = getEnvVar("FINERACT_DEFAULT_TENANTDB_UID", "root");
-        String dbPwd = getEnvVar("FINERACT_DEFAULT_TENANTDB_PWD", "mysql");
-        LOG.info("upgradeTenantDB: FINERACT_DEFAULT_TENANTDB_HOSTNAME = {}, FINERACT_DEFAULT_TENANTDB_PORT = {}", dbHostname, dbPort);
+        LOG.info("upgradeTenantDB: FINERACT_DEFAULT_TENANTDB_HOSTNAME = {}, FINERACT_DEFAULT_TENANTDB_PORT = {}", datasourceHost, datasourcePort);
 
         final Flyway flyway = new Flyway();
         flyway.setDataSource(tenantDataSource);
         flyway.setLocations("sql/migrations/list_db");
         flyway.setOutOfOrder(true);
         flyway.setPlaceholders(ImmutableMap.of( // FINERACT-773
-                "fineract_default_tenantdb_hostname", dbHostname,
-                "fineract_default_tenantdb_port",     dbPort,
-                "fineract_default_tenantdb_uid",      dbUid,
-                "fineract_default_tenantdb_pwd",      dbPwd));
+                "fineract_default_tenantdb_hostname", datasourceHost,
+                "fineract_default_tenantdb_port",     datasourcePort,
+                "fineract_default_tenantdb_uid",      datasourceUsername,
+                "fineract_default_tenantdb_pwd",      datasourcePassword));
         flyway.migrate();
 
         tenantDataSourcePortFixService.fixUpTenantsSchemaServerPort();

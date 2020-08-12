@@ -42,10 +42,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 @TestPropertySource(properties = {
         "spring.redis.host=localhost",
         "spring.redis.port=6379",
-        "drizzle.driver-classname=org.drizzle.jdbc.DrizzleDriver",
-        "drizzle.protocol=jdbc",
-        "drizzle.subprotocol=mysql:thin",
-        "drizzle.port=3306"
+        "datasource.driver-classname=org.drizzle.jdbc.DrizzleDriver",
+        "datasource.protocol=jdbc",
+        "datasource.subprotocol=mysql:thin",
+        "datasource.port=3306",
+        "datasource.host=localhost",
+        "datasource.username=root",
+        "datasource.password=mysql"
 })
 public class CommandHandlerProviderTest {
 
