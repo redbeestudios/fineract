@@ -45,7 +45,10 @@ import org.springframework.test.util.ReflectionTestUtils;
         "datasource.driver-classname=org.drizzle.jdbc.DrizzleDriver",
         "datasource.protocol=jdbc",
         "datasource.subprotocol=mysql:thin",
-        "datasource.port=3306"
+        "datasource.port=3306",
+        "datasource.host=localhost",
+        "datasource.username=root",
+        "datasource.password=mysql"
 })
 public class CommandHandlerProviderTest {
 
