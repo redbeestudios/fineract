@@ -84,6 +84,7 @@ dependencyManagement {
   }
 
   dependencies {
+     dependency 'io.micrometer:micrometer-registry-prometheus'
      dependency 'org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE'
      dependency 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
      dependency 'org.apache.openjpa:openjpa:3.1.0'
