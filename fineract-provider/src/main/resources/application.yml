@@ -16,6 +16,17 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+management:
+  server.port: 9095
+  endpoints:
+    web:
+      base-path: /
+      path-mapping.prometheus: metrics
+      exposure:
+        include: prometheus, info, health
+  endpoint:
+    health:
+      show-details: always
 spring:
   profiles.active: oauth
   kafka:
