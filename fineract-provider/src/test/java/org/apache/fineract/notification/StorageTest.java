@@ -39,6 +39,7 @@ import org.apache.fineract.useradministration.domain.AppUser;
 import org.apache.fineract.useradministration.domain.AppUserRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -71,6 +72,7 @@ public class StorageTest {
     }
 
     @Test
+    @Disabled
     public void testNotificationStorage() {
 
         Long userId = 1L;
