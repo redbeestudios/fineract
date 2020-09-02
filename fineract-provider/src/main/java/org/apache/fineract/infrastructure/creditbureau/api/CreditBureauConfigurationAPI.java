@@ -19,7 +19,6 @@
 
 package org.apache.fineract.infrastructure.creditbureau.api;
 
-import io.swagger.annotations.Api;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,9 +56,9 @@ import org.springframework.stereotype.Component;
 @Path("/CreditBureauConfiguration")
 @Component
 @Scope("singleton")
-@Api(value = "CreditBureau Configuration")
 public class CreditBureauConfigurationAPI {
-    private final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(
+
+    private final Set<String> responseDataParameters = new HashSet<>(
             Arrays.asList("creditBureauId", "alias", "country", "creditBureauProductId", "startDate", "endDate", "isActive"));
     private final String resourceNameForPermissions = "CreditBureau";
     private final PlatformSecurityContext context;
@@ -75,8 +74,7 @@ public class CreditBureauConfigurationAPI {
     private final CreditBureauReadConfigurationService creditBureauConfiguration;
 
     @Autowired
-    public CreditBureauConfigurationAPI(final PlatformSecurityContext context,
-            final CreditBureauReadPlatformService readPlatformService,
+    public CreditBureauConfigurationAPI(final PlatformSecurityContext context, final CreditBureauReadPlatformService readPlatformService,
             final DefaultToApiJsonSerializer<CreditBureauData> toApiJsonSerializer,
             final CreditBureauLoanProductMappingReadPlatformService readPlatformServiceCreditBureauLoanProduct,
             final DefaultToApiJsonSerializer<CreditBureauLoanProductMappingData> toApiJsonSerializerCreditBureauLoanProduct,
@@ -108,9 +106,8 @@ public class CreditBureauConfigurationAPI {
 
         final Collection<CreditBureauData> creditBureau = this.readPlatformService.retrieveCreditBureau();
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, creditBureau, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializer.serialize(settings, creditBureau, this.responseDataParameters);
 
     }
 
@@ -124,9 +121,9 @@ public class CreditBureauConfigurationAPI {
         final Collection<CreditBureauLoanProductMappingData> creditBureauLoanProductMapping = this.readPlatformServiceCreditBureauLoanProduct
                 .readCreditBureauLoanProductMapping();
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializerCreditBureauLoanProduct.serialize(settings, creditBureauLoanProductMapping, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializerCreditBureauLoanProduct.serialize(settings, creditBureauLoanProductMapping,
+                this.responseDataParameters);
 
     }
 
@@ -140,10 +137,8 @@ public class CreditBureauConfigurationAPI {
         final Collection<OrganisationCreditBureauData> organisationCreditBureau = this.readPlatformServiceOrganisationCreditBureau
                 .retrieveOrgCreditBureau();
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializerOrganisationCreditBureau.serialize(settings, organisationCreditBureau,
-                this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializerOrganisationCreditBureau.serialize(settings, organisationCreditBureau, this.responseDataParameters);
 
     }
 
@@ -151,7 +146,8 @@ public class CreditBureauConfigurationAPI {
     @Path("/config/{organisationCreditBureauId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getConfiguration(@PathParam("organisationCreditBureauId") final Long organisationCreditBureauId, @Context final UriInfo uriInfo) {
+    public String getConfiguration(@PathParam("organisationCreditBureauId") final Long organisationCreditBureauId,
+            @Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
 
@@ -160,7 +156,6 @@ public class CreditBureauConfigurationAPI {
 
         return this.toApiJsonSerializerReport.serialize(configurationData);
     }
-
 
     @GET
     @Path("/loanProduct")
@@ -172,9 +167,9 @@ public class CreditBureauConfigurationAPI {
         final Collection<CreditBureauLoanProductMappingData> creditBureauLoanProductMapping = this.readPlatformServiceCreditBureauLoanProduct
                 .fetchLoanProducts();
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializerCreditBureauLoanProduct.serialize(settings, creditBureauLoanProductMapping, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializerCreditBureauLoanProduct.serialize(settings, creditBureauLoanProductMapping,
+                this.responseDataParameters);
     }
 
     @PUT
@@ -183,8 +178,7 @@ public class CreditBureauConfigurationAPI {
     @Produces({ MediaType.APPLICATION_JSON })
     public String updateCreditBureau(final String apiRequestBodyAsJson) {
 
-        final CommandWrapper commandRequest = new CommandWrapperBuilder().updateCreditBureau()
-                .withJson(apiRequestBodyAsJson).build();
+        final CommandWrapper commandRequest = new CommandWrapperBuilder().updateCreditBureau().withJson(apiRequestBodyAsJson).build();
 
         final CommandProcessingResult result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
 
@@ -209,7 +203,8 @@ public class CreditBureauConfigurationAPI {
     @Path("/organisationCreditBureau/{organisationCreditBureauId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String addOrganisationCreditBureau(@PathParam("organisationCreditBureauId") final Long organisationCreditBureauId, final String apiRequestBodyAsJson) {
+    public String addOrganisationCreditBureau(@PathParam("organisationCreditBureauId") final Long organisationCreditBureauId,
+            final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().addOrganisationCreditBureau(organisationCreditBureauId)
                 .withJson(apiRequestBodyAsJson).build();
@@ -223,7 +218,8 @@ public class CreditBureauConfigurationAPI {
     @Path("/mappings/{CreditBureauId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String createCreditBureauLoanProductMapping(@PathParam("CreditBureauId") final Long CreditBureauId, final String apiRequestBodyAsJson) {
+    public String createCreditBureauLoanProductMapping(@PathParam("CreditBureauId") final Long CreditBureauId,
+            final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().createCreditBureauLoanProductMapping(CreditBureauId)
                 .withJson(apiRequestBodyAsJson).build();
@@ -232,7 +228,5 @@ public class CreditBureauConfigurationAPI {
 
         return this.toApiJsonSerializer.serialize(result);
     }
-
-
 
 }

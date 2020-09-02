@@ -22,15 +22,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.infrastructure.security.constants.TwoFactorConfigurationConstants;
 
 @Entity
-@Table(name = "twofactor_configuration",
-        uniqueConstraints = {@UniqueConstraint(columnNames = { "name" }, name = "name_UNIQUE")})
-public class TwoFactorConfiguration extends AbstractPersistableCustom<Long> {
+@Table(name = "twofactor_configuration", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }, name = "name_UNIQUE") })
+public class TwoFactorConfiguration extends AbstractPersistableCustom {
 
     @Column(name = "name", nullable = false, length = 32)
     private String name;
@@ -59,10 +58,10 @@ public class TwoFactorConfiguration extends AbstractPersistableCustom<Long> {
     }
 
     public Object getObjectValue() {
-        if(TwoFactorConfigurationConstants.NUMBER_PARAMETERS.contains(name)) {
+        if (TwoFactorConfigurationConstants.NUMBER_PARAMETERS.contains(name)) {
             return getIntegerValue();
         }
-        if(TwoFactorConfigurationConstants.BOOLEAN_PARAMETERS.contains(name)) {
+        if (TwoFactorConfigurationConstants.BOOLEAN_PARAMETERS.contains(name)) {
             return getBooleanValue();
         }
 

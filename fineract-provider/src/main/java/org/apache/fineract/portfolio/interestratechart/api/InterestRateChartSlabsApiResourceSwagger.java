@@ -18,177 +18,176 @@
  */
 package org.apache.fineract.portfolio.interestratechart.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 
 /**
  * Created by Chirag Gupta on 08/12/17.
  */
 final class InterestRateChartSlabsApiResourceSwagger {
-    private InterestRateChartSlabsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetInterestRateChartsChartIdChartSlabsResponse")
-    public final static class GetInterestRateChartsChartIdChartSlabsResponse {
-        private GetInterestRateChartsChartIdChartSlabsResponse() {
-        }
+    private InterestRateChartSlabsApiResourceSwagger() {}
 
-        final class GetInterestRateChartsChartIdChartSlabsIncentives {
-            private GetInterestRateChartsChartIdChartSlabsIncentives() {
-            }
+    @Schema(description = "GetInterestRateChartsChartIdChartSlabsResponse")
+    public static final class GetInterestRateChartsChartIdChartSlabsResponse {
 
-            final class GetInterestRateChartsChartIdChartSlabsEntityType {
-                private GetInterestRateChartsChartIdChartSlabsEntityType() {
-                }
+        private GetInterestRateChartsChartIdChartSlabsResponse() {}
 
-                @ApiModelProperty(example = "2")
+        static final class GetInterestRateChartsChartIdChartSlabsIncentives {
+
+            private GetInterestRateChartsChartIdChartSlabsIncentives() {}
+
+            static final class GetInterestRateChartsChartIdChartSlabsEntityType {
+
+                private GetInterestRateChartsChartIdChartSlabsEntityType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "InterestIncentiveEntityType.customer")
+                @Schema(example = "InterestIncentiveEntityType.customer")
                 public Integer code;
-                @ApiModelProperty(example = "Customer")
-                public Integer value;
+                @Schema(example = "Customer")
+                public Integer description;
             }
 
-            final class GetInterestRateChartsChartIdChartSlabsAttributeName {
-                private GetInterestRateChartsChartIdChartSlabsAttributeName() {
-                }
+            static final class GetInterestRateChartsChartIdChartSlabsAttributeName {
 
-                @ApiModelProperty(example = "2")
+                private GetInterestRateChartsChartIdChartSlabsAttributeName() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "InterestIncentiveAttributeName.gender")
+                @Schema(example = "InterestIncentiveAttributeName.gender")
                 public Integer code;
-                @ApiModelProperty(example = "Gender")
-                public Integer value;
+                @Schema(example = "Gender")
+                public Integer description;
             }
 
-            final class GetInterestRateChartsChartIdChartSlabsConditionType {
-                private GetInterestRateChartsChartIdChartSlabsConditionType() {
-                }
+            static final class GetInterestRateChartsChartIdChartSlabsConditionType {
 
-                @ApiModelProperty(example = "2")
+                private GetInterestRateChartsChartIdChartSlabsConditionType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "incentiveConditionType.equal")
+                @Schema(example = "incentiveConditionType.equal")
                 public Integer code;
-                @ApiModelProperty(example = "equal")
-                public Integer value;
+                @Schema(example = "equal")
+                public Integer description;
             }
 
-            final class GetInterestRateChartsChartIdChartSlabsIncentiveType {
-                private GetInterestRateChartsChartIdChartSlabsIncentiveType() {
-                }
+            static final class GetInterestRateChartsChartIdChartSlabsIncentiveType {
 
-                @ApiModelProperty(example = "3")
+                private GetInterestRateChartsChartIdChartSlabsIncentiveType() {}
+
+                @Schema(example = "3")
                 public Integer id;
-                @ApiModelProperty(example = "InterestIncentiveType.incentive")
+                @Schema(example = "InterestIncentiveType.incentive")
                 public Integer code;
-                @ApiModelProperty(example = "Incentive")
-                public Integer value;
+                @Schema(example = "Incentive")
+                public Integer description;
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
             public GetInterestRateChartsChartIdChartSlabsEntityType entityType;
             public GetInterestRateChartsChartIdChartSlabsAttributeName attributeName;
             public GetInterestRateChartsChartIdChartSlabsConditionType conditionType;
-            @ApiModelProperty(example = "11")
+            @Schema(example = "11")
             public Integer attributeValue;
-            @ApiModelProperty(example = "FEMALE")
+            @Schema(example = "FEMALE")
             public String attributeValueDesc;
             public GetInterestRateChartsChartIdChartSlabsIncentiveType incentiveType;
-            @ApiModelProperty(example = "-1.000000")
+            @Schema(example = "-1.000000")
             public Float amount;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "5% interest from 1 day till 180 days of deposit")
+        @Schema(example = "5% interest from 1 day till 180 days of deposit")
         public String description;
         public InterestRateChartsApiResourceSwagger.GetInterestRateChartsTemplateResponse.GetInterestRateChartsTemplatePeriodTypes periodTypes;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromPeriod;
-        @ApiModelProperty(example = "180")
+        @Schema(example = "180")
         public Integer toPeriod;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Double annualInterestRate;
         public InterestRateChartsApiResourceSwagger.GetInterestRateChartsResponse.GetInterestRateChartsCurrency currency;
         public Set<GetInterestRateChartsChartIdChartSlabsIncentives> incentives;
     }
 
-    @ApiModel(value = "PostInterestRateChartsChartIdChartSlabsRequest")
+    @Schema(description = "PostInterestRateChartsChartIdChartSlabsRequest")
     public static final class PostInterestRateChartsChartIdChartSlabsRequest {
-        private PostInterestRateChartsChartIdChartSlabsRequest() {
-        }
 
-        final class PostInterestRateChartsChartIdChartSlabsIncentives {
-            private PostInterestRateChartsChartIdChartSlabsIncentives() {
-            }
+        private PostInterestRateChartsChartIdChartSlabsRequest() {}
 
-            @ApiModelProperty(example = "2")
+        static final class PostInterestRateChartsChartIdChartSlabsIncentives {
+
+            private PostInterestRateChartsChartIdChartSlabsIncentives() {}
+
+            @Schema(example = "2")
             public Integer entityType;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer attributeName;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer conditionType;
-            @ApiModelProperty(example = "11")
+            @Schema(example = "11")
             public Integer attributeValue;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer incentiveType;
-            @ApiModelProperty(example = "-1")
+            @Schema(example = "-1")
             public Float amount;
         }
 
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Integer periodType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromPeriod;
-        @ApiModelProperty(example = "180")
+        @Schema(example = "180")
         public Integer toPeriod;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Double annualInterestRate;
-        @ApiModelProperty(example = "5% interest from 1 day till 180 days of deposit")
+        @Schema(example = "5% interest from 1 day till 180 days of deposit")
         public String description;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
         public Set<PostInterestRateChartsChartIdChartSlabsIncentives> incentives;
     }
 
-    @ApiModel(value = "PostInterestRateChartsChartIdChartSlabsResponse")
-    public final static class PostInterestRateChartsChartIdChartSlabsResponse {
-        private PostInterestRateChartsChartIdChartSlabsResponse() {
-        }
+    @Schema(description = "PostInterestRateChartsChartIdChartSlabsResponse")
+    public static final class PostInterestRateChartsChartIdChartSlabsResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostInterestRateChartsChartIdChartSlabsResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest")
+    @Schema(description = "PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest")
     public static final class PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest {
-        private PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest() {
-        }
 
-        @ApiModelProperty(example = "6")
+        private PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest() {}
+
+        @Schema(example = "6")
         public Double annualInterestRate;
-        @ApiModelProperty(example = "Interest rate changed to 6%")
+        @Schema(example = "Interest rate changed to 6%")
         public String description;
     }
 
-    @ApiModel(value = "PutInterestRateChartsChartIdChartSlabsChartSlabIdResponse")
+    @Schema(description = "PutInterestRateChartsChartIdChartSlabsChartSlabIdResponse")
     public static final class PutInterestRateChartsChartIdChartSlabsChartSlabIdResponse {
-        private PutInterestRateChartsChartIdChartSlabsChartSlabIdResponse() {
-        }
 
-        @ApiModelProperty(example = "1")
+        private PutInterestRateChartsChartIdChartSlabsChartSlabIdResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
         public PutInterestRateChartsChartIdChartSlabsChartSlabIdRequest changes;
     }
 
-    @ApiModel(value = "DeleteInterestRateChartsChartIdChartSlabsResponse")
-    public final static class DeleteInterestRateChartsChartIdChartSlabsResponse {
-        private DeleteInterestRateChartsChartIdChartSlabsResponse() {
-        }
+    @Schema(description = "DeleteInterestRateChartsChartIdChartSlabsResponse")
+    public static final class DeleteInterestRateChartsChartIdChartSlabsResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteInterestRateChartsChartIdChartSlabsResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 }

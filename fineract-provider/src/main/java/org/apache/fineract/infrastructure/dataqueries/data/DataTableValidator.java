@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 public class DataTableValidator {
 
     private final FromJsonHelper fromApiJsonHelper;
-    private final Set<String> REGISTER_PARAMS = new HashSet<>(
+    private final Set<String> registerParams = new HashSet<>(
             Arrays.asList(DataTableApiConstant.categoryParamName, DataTableApiConstant.localParamName));
 
     @Autowired
@@ -50,10 +50,11 @@ public class DataTableValidator {
     public void validateDataTableRegistration(final String json) {
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
-        this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, REGISTER_PARAMS);
+        this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, registerParams);
 
         final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
-        final DataValidatorBuilder baseDataValidator = new DataValidatorBuilder(dataValidationErrors).resource(DataTableApiConstant.DATATABLE_RESOURCE_NAME);
+        final DataValidatorBuilder baseDataValidator = new DataValidatorBuilder(dataValidationErrors)
+                .resource(DataTableApiConstant.DATATABLE_RESOURCE_NAME);
         final JsonElement element = this.fromApiJsonHelper.parse(json);
 
         if (this.fromApiJsonHelper.parameterExists(DataTableApiConstant.categoryParamName, element)) {
@@ -63,7 +64,9 @@ public class DataTableValidator {
             baseDataValidator.reset().parameter(DataTableApiConstant.categoryParamName).value(category).isOneOfTheseValues(objectArray);
         }
 
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
 
     }
 }

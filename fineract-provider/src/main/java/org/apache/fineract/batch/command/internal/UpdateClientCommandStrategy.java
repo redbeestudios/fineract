@@ -29,13 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Implements {@link org.apache.fineract.batch.command.CommandStrategy} and
- * updates the information of an existing client. It passes the contents of the
- * body from the BatchRequest to
- * {@link org.apache.fineract.portfolio.client.api.ClientsApiResource} and gets
- * back the response. This class will also catch any errors raised by
- * {@link org.apache.fineract.portfolio.client.api.ClientsApiResource} and map
- * those errors to appropriate status codes in BatchResponse.
+ * Implements {@link org.apache.fineract.batch.command.CommandStrategy} and updates the information of an existing
+ * client. It passes the contents of the body from the BatchRequest to
+ * {@link org.apache.fineract.portfolio.client.api.ClientsApiResource} and gets back the response. This class will also
+ * catch any errors raised by {@link org.apache.fineract.portfolio.client.api.ClientsApiResource} and map those errors
+ * to appropriate status codes in BatchResponse.
  *
  * @author Rishabh Shukla
  *
@@ -71,7 +69,7 @@ public class UpdateClientCommandStrategy implements CommandStrategy {
 
             // Calls 'update' function from 'ClientsApiResource' to update a
             // client
-            responseBody = clientsApiResource.update("",clientId, request.getBody());
+            responseBody = clientsApiResource.update("", clientId, request.getBody());
 
             response.setStatusCode(200);
             // Sets the body of the response after the successful update of

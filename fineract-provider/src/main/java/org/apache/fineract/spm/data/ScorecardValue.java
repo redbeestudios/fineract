@@ -28,7 +28,7 @@ public class ScorecardValue {
     private Date createdOn;
 
     public ScorecardValue() {
-        super();
+
     }
 
     private ScorecardValue(final Long questionId, final Long responseId, final Integer value, final Date createdOn) {
@@ -66,15 +66,12 @@ public class ScorecardValue {
         this.value = value;
     }
 
-
     public Date getCreatedOn() {
         return this.createdOn;
     }
 
-
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
     }
-
 
 }

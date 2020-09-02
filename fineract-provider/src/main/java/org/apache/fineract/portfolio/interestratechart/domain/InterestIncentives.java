@@ -31,7 +31,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_interest_incentives")
-public class InterestIncentives extends AbstractPersistableCustom<Long> {
+public class InterestIncentives extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "interest_rate_slab_id", nullable = false)
@@ -45,10 +45,8 @@ public class InterestIncentives extends AbstractPersistableCustom<Long> {
     }
 
     /*
-     * public InterestIncentives(final InterestRateChartSlab
-     * interestRateChartSlab, final InterestIncentivesFields
-     * interestIncentivesFields) { this.interestRateChartSlab =
-     * interestRateChartSlab; this.interestIncentivesFields =
+     * public InterestIncentives(final InterestRateChartSlab interestRateChartSlab, final InterestIncentivesFields
+     * interestIncentivesFields) { this.interestRateChartSlab = interestRateChartSlab; this.interestIncentivesFields =
      * interestIncentivesFields; }
      */
 

@@ -18,18 +18,17 @@
  */
 package org.apache.fineract.integrationtests;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.loans.LoanTransactionHelper;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Client Loan Integration Test for checking Loan Application Repayment
- * Schedule.
+ * Client Loan Integration Test for checking Loan Application Repayment Schedule.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class SurveyIntegrationTest {
@@ -38,7 +37,7 @@ public class SurveyIntegrationTest {
     private RequestSpecification requestSpec;
     private LoanTransactionHelper loanTransactionHelper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         Utils.initializeRESTAssured();
         this.requestSpec = new RequestSpecBuilder().setContentType(ContentType.JSON).build();

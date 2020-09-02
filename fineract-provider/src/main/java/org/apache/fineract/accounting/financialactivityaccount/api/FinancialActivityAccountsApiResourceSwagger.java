@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.accounting.financialactivityaccount.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.fineract.accounting.financialactivityaccount.data.FinancialActivityData;
 import org.apache.fineract.accounting.glaccount.data.GLAccountData;
 
@@ -27,73 +26,88 @@ import org.apache.fineract.accounting.glaccount.data.GLAccountData;
  * Created by sanyam on 24/7/17.
  */
 final class FinancialActivityAccountsApiResourceSwagger {
-    private FinancialActivityAccountsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetFinancialActivityAccountsResponse")
-    public static final class GetFinancialActivityAccountsResponse{
+    private FinancialActivityAccountsApiResourceSwagger() {}
+
+    @Schema(description = "GetFinancialActivityAccountsResponse")
+    public static final class GetFinancialActivityAccountsResponse {
+
         private GetFinancialActivityAccountsResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long id;
         public FinancialActivityData financialActivityData;
         public GLAccountData glAccountData;
 
     }
 
-    @ApiModel(value = "PostFinancialActivityAccountsRequest")
-    public static final class PostFinancialActivityAccountsRequest{
+    @Schema(description = "PostFinancialActivityAccountsRequest")
+    public static final class PostFinancialActivityAccountsRequest {
+
         private PostFinancialActivityAccountsRequest() {
 
         }
-        @ApiModelProperty(example = "200")
+
+        @Schema(example = "200")
         public Long financialActivityId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Long glAccountId;
     }
 
-    @ApiModel(value = "PostFinancialActivityAccountsResponse")
-    public static final class PostFinancialActivityAccountsResponse{
+    @Schema(description = "PostFinancialActivityAccountsResponse")
+    public static final class PostFinancialActivityAccountsResponse {
+
         private PostFinancialActivityAccountsResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long resourceId;
     }
 
-    @ApiModel(value = "PutFinancialActivityAccountsRequest")
-    public static final class PutFinancialActivityAccountsRequest{
+    @Schema(description = "PutFinancialActivityAccountsRequest")
+    public static final class PutFinancialActivityAccountsRequest {
+
         private PutFinancialActivityAccountsRequest() {
 
         }
-        @ApiModelProperty(example = "200")
+
+        @Schema(example = "200")
         public Long financialActivityId;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Long glAccountId;
     }
 
-    @ApiModel(value = "PutFinancialActivityAccountsResponse")
-    public static final class PutFinancialActivityAccountsResponse{
+    @Schema(description = "PutFinancialActivityAccountsResponse")
+    public static final class PutFinancialActivityAccountsResponse {
+
         private PutFinancialActivityAccountsResponse() {
 
         }
-        public final class PutFinancialActivityAccountscommentsSwagger{
-            private PutFinancialActivityAccountscommentsSwagger(){}
-            @ApiModelProperty(example = "1")
+
+        public static final class PutFinancialActivityAccountscommentsSwagger {
+
+            private PutFinancialActivityAccountscommentsSwagger() {}
+
+            @Schema(example = "1")
             public Long glAccountId;
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long resourceId;
         public PutFinancialActivityAccountscommentsSwagger comments;
     }
 
-    @ApiModel(value = "DeleteFinancialActivityAccountsResponse")
-    public static final class DeleteFinancialActivityAccountsResponse{
+    @Schema(description = "DeleteFinancialActivityAccountsResponse")
+    public static final class DeleteFinancialActivityAccountsResponse {
+
         private DeleteFinancialActivityAccountsResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long resourceId;
     }
 

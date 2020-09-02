@@ -26,7 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.useradministration.domain.AppUser;
@@ -34,7 +34,7 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "m_portfolio_command_source")
-public class CommandSource extends AbstractPersistableCustom<Long> {
+public class CommandSource extends AbstractPersistableCustom {
 
     @Column(name = "action_name", nullable = true, length = 100)
     private String actionName;
@@ -94,10 +94,10 @@ public class CommandSource extends AbstractPersistableCustom<Long> {
     @Column(name = "transaction_id", length = 100)
     private String transactionId;
 
-    @Column(name="creditbureau_id")
+    @Column(name = "creditbureau_id")
     private Long creditBureauId;
 
-    @Column(name="organisation_creditbureau_id")
+    @Column(name = "organisation_creditbureau_id")
     private Long organisationCreditBureauId;
 
     public static CommandSource fullEntryFrom(final CommandWrapper wrapper, final JsonCommand command, final AppUser maker) {
@@ -120,23 +120,22 @@ public class CommandSource extends AbstractPersistableCustom<Long> {
         this.maker = maker;
         this.madeOnDate = madeOnDateTime.toDate();
         this.processingResult = CommandProcessingResultType.PROCESSED.getValue();
-    } public Long getCreditBureauId() {
-        return this.creditBureauId;
     }
 
+    public Long getCreditBureauId() {
+        return this.creditBureauId;
+    }
 
     public void setCreditBureauId(Long creditBureauId) {
         this.creditBureauId = creditBureauId;
     }
 
-
     public Long getOrganisationCreditBureauId() {
         return this.organisationCreditBureauId;
     }
 
-
-    public void setOrganisationCreditBureauId(Long OrganisationCreditBureauId) {
-        this.organisationCreditBureauId = OrganisationCreditBureauId;
+    public void setOrganisationCreditBureauId(Long organisationCreditBureauId) {
+        this.organisationCreditBureauId = organisationCreditBureauId;
     }
 
     public void markAsChecked(final AppUser checker, final DateTime checkedOnDate) {
@@ -145,7 +144,7 @@ public class CommandSource extends AbstractPersistableCustom<Long> {
         this.processingResult = CommandProcessingResultType.PROCESSED.getValue();
     }
 
-    public void markAsRejected(final AppUser checker, final DateTime checkedOnDate){
+    public void markAsRejected(final AppUser checker, final DateTime checkedOnDate) {
         this.checker = checker;
         this.checkedOnDate = checkedOnDate.toDate();
         this.processingResult = CommandProcessingResultType.REJECTED.getValue();
@@ -204,7 +203,9 @@ public class CommandSource extends AbstractPersistableCustom<Long> {
     }
 
     public boolean isMarkedAsAwaitingApproval() {
-        if (this.processingResult.equals(CommandProcessingResultType.AWAITING_APPROVAL.getValue())) { return true; }
+        if (this.processingResult.equals(CommandProcessingResultType.AWAITING_APPROVAL.getValue())) {
+            return true;
+        }
 
         return false;
     }

@@ -18,20 +18,23 @@
  */
 package org.apache.fineract.integrationtests.common.savings;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.accounting.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("unused")
 public class SavingsProductHelper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SavingsProductHelper.class);
     private static final String SAVINGS_PRODUCT_URL = "/fineract-provider/api/v1/savingsproducts";
     private static final String CREATE_SAVINGS_PRODUCT_URL = SAVINGS_PRODUCT_URL + "?" + Utils.TENANT_IDENTIFIER;
 
@@ -89,6 +92,8 @@ public class SavingsProductHelper {
     private String daysToInactive = null;
     private String daysToDormancy = null;
     private String daysToEscheat = null;
+    private Boolean withgsimID = null;
+    private Integer gsimID = null;
 
     public String build() {
         final HashMap<String, String> map = new HashMap<>();
@@ -125,21 +130,23 @@ public class SavingsProductHelper {
         map.put("minRequiredBalance", this.minRequiredBalance);
         map.put("enforceMinRequiredBalance", this.enforceMinRequiredBalance);
         map.put("withHoldTax", this.withHoldTax.toString());
+
         if (withHoldTax) {
             map.put("taxGroupId", taxGroupId);
         }
         if (this.accountingRule.equals(CASH_BASED)) {
             map.putAll(getAccountMappingForCashBased());
         }
-        if(this.isDormancyTrackingActive){
+        if (this.isDormancyTrackingActive) {
             map.put("isDormancyTrackingActive", Boolean.toString(this.isDormancyTrackingActive));
             map.put("daysToInactive", this.daysToInactive);
             map.put("daysToDormancy", this.daysToDormancy);
             map.put("daysToEscheat", this.daysToEscheat);
 
         }
+
         String savingsProductCreateJson = new Gson().toJson(map);
-        System.out.println(savingsProductCreateJson);
+        LOG.info("{}", savingsProductCreateJson);
         return savingsProductCreateJson;
     }
 
@@ -214,9 +221,9 @@ public class SavingsProductHelper {
         return this;
     }
 
-    public SavingsProductHelper withOverDraft(final String overDraftLimit) {
+    public SavingsProductHelper withOverDraft(final String overdraftLimit) {
         this.allowOverdraft = "true";
-        this.overdraftLimit = overDraftLimit;
+        this.overdraftLimit = overdraftLimit;
         return this;
     }
 
@@ -224,6 +231,13 @@ public class SavingsProductHelper {
         if (taxGroupId != null) {
             this.withHoldTax = true;
             this.taxGroupId = taxGroupId;
+        }
+        return this;
+    }
+
+    public SavingsProductHelper withgsimID(final Integer gsimID) {
+        if (withgsimID != null) {
+            this.gsimID = gsimID;
         }
         return this;
     }
@@ -273,12 +287,12 @@ public class SavingsProductHelper {
         return Utils.performServerPost(requestSpec, responseSpec, CREATE_SAVINGS_PRODUCT_URL, savingsProductJSON, "resourceId");
     }
 
-    public static void verifySavingsProductCreatedOnServer(final RequestSpecification requestSpec,
-            final ResponseSpecification responseSpec, final Integer generatedProductID) {
-        System.out.println("------------------------------CHECK CLIENT DETAILS------------------------------------\n");
+    public static void verifySavingsProductCreatedOnServer(final RequestSpecification requestSpec, final ResponseSpecification responseSpec,
+            final Integer generatedProductID) {
+        LOG.info("------------------------------CHECK CLIENT DETAILS------------------------------------\n");
         final String GET_SAVINGS_PRODUCT_URL = SAVINGS_PRODUCT_URL + "/" + generatedProductID + "?" + Utils.TENANT_IDENTIFIER;
         final Integer responseSavingsProductID = Utils.performServerGet(requestSpec, responseSpec, GET_SAVINGS_PRODUCT_URL, "id");
-        assertEquals("ERROR IN CREATING THE Savings Product", generatedProductID, responseSavingsProductID);
+        assertEquals(generatedProductID, responseSavingsProductID, "ERROR IN CREATING THE Savings Product");
     }
 
     public SavingsProductHelper withDormancy() {
@@ -286,7 +300,6 @@ public class SavingsProductHelper {
         this.daysToInactive = "30";
         this.daysToDormancy = "60";
         this.daysToEscheat = "90";
-
         return this;
     }
 

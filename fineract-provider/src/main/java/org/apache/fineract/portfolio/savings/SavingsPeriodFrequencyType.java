@@ -25,6 +25,7 @@ import java.util.List;
  * An enumeration of supported calendar periods used in savings.
  */
 public enum SavingsPeriodFrequencyType {
+
     DAYS(0, "savingsPeriodFrequencyType.days"), //
     WEEKS(1, "savingsPeriodFrequencyType.weeks"), //
     MONTHS(2, "savingsPeriodFrequencyType.months"), //
@@ -34,7 +35,7 @@ public enum SavingsPeriodFrequencyType {
     private final Integer value;
     private final String code;
 
-    private SavingsPeriodFrequencyType(final Integer value, final String code) {
+    SavingsPeriodFrequencyType(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

@@ -54,7 +54,8 @@ public class DepositAccountOnHoldTransactionReadPlatformServiceImpl implements D
     }
 
     @Override
-    public Page<DepositAccountOnHoldTransactionData> retriveAll(Long savingsId, Long guarantorFundingId, SearchParameters searchParameters) {
+    public Page<DepositAccountOnHoldTransactionData> retriveAll(Long savingsId, Long guarantorFundingId,
+            SearchParameters searchParameters) {
         final StringBuilder sqlBuilder = new StringBuilder(200);
         List<Long> paramObj = new ArrayList<>(2);
         sqlBuilder.append("select SQL_CALC_FOUND_ROWS ");
@@ -94,7 +95,7 @@ public class DepositAccountOnHoldTransactionReadPlatformServiceImpl implements D
 
         private final String schemaSql;
 
-        public DepositAccountOnHoldTransactionsMapper() {
+        DepositAccountOnHoldTransactionsMapper() {
 
             final StringBuilder sqlBuilder = new StringBuilder(400);
             sqlBuilder.append(" tr.id as transactionId, tr.transaction_type_enum as transactionType, ");

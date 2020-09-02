@@ -45,7 +45,7 @@ public interface LoanReadPlatformService {
     LoanAccountData retrieveOne(Long loanId);
 
     LoanScheduleData retrieveRepaymentSchedule(Long loanId, RepaymentScheduleRelatedLoanData repaymentScheduleRelatedData,
-                                               Collection<DisbursementData> disbursementData, boolean isInterestRecalculationEnabled, BigDecimal totalPaidFeeCharges);
+            Collection<DisbursementData> disbursementData, boolean isInterestRecalculationEnabled, BigDecimal totalPaidFeeCharges);
 
     Collection<LoanTransactionData> retrieveLoanTransactions(Long loanId);
 
@@ -82,14 +82,13 @@ public interface LoanReadPlatformService {
     Collection<StaffData> retrieveAllowedLoanOfficers(Long selectedOfficeId, boolean staffInSelectedOfficeOnly);
 
     /*
-     * musoni-specific at present - will find overdue scheduled installments
-     * that have a special 'overdue charge' associated with the loan product.
+     * musoni-specific at present - will find overdue scheduled installments that have a special 'overdue charge'
+     * associated with the loan product.
      *
-     * The 'overdue-charge' is only ever applied once to an installment and as a
-     * result overdue installments with this charge already applied are not
-     * returned.
+     * The 'overdue-charge' is only ever applied once to an installment and as a result overdue installments with this
+     * charge already applied are not returned.
      */
-    Collection<OverdueLoanScheduleData> retrieveAllLoansWithOverdueInstallments(final Long penaltyWaitPeriod, final Boolean backdatePenalties);
+    Collection<OverdueLoanScheduleData> retrieveAllLoansWithOverdueInstallments(Long penaltyWaitPeriod, Boolean backdatePenalties);
 
     Integer retriveLoanCounter(Long groupId, Integer loanType, Long productId);
 
@@ -131,8 +130,7 @@ public interface LoanReadPlatformService {
 
     Collection<Long> retrieveLoanIdsWithPendingIncomePostingTransactions();
 
-    LoanTransactionData retrieveLoanForeclosureTemplate(final Long loanId, final LocalDate transactionDate);
-
+    LoanTransactionData retrieveLoanForeclosureTemplate(Long loanId, LocalDate transactionDate);
 
     LoanAccountData retrieveLoanByLoanAccount(String loanAccountNumber);
 
@@ -141,5 +139,7 @@ public interface LoanReadPlatformService {
     String retrieveAccountNumberByAccountId(Long accountId);
 
     Integer retrieveNumberOfActiveLoans();
+
+    List<LoanAccountData> retrieveGLIMChildLoansByGLIMParentAccount(String parentloanAccountNumber);
 
 }

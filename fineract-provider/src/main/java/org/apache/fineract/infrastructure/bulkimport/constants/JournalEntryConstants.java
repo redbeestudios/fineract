@@ -18,7 +18,11 @@
  */
 package org.apache.fineract.infrastructure.bulkimport.constants;
 
-public class JournalEntryConstants {
+public final class JournalEntryConstants {
+
+    private JournalEntryConstants() {
+
+    }
 
     public static final int OFFICE_NAME_COL = 0;
 
@@ -45,5 +49,5 @@ public class JournalEntryConstants {
     public static final int ROUTING_CODE_COL = 12;
     public static final int RECEIPT_NO_COL = 13;
     public static final int BANK_NO_COL = 14;
-    public static final int COMMENTS_COL=15;
+    public static final int COMMENTS_COL = 15;
 }

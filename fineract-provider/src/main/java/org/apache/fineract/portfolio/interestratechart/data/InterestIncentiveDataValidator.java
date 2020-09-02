@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.data.ApiParameterError;
 import org.apache.fineract.infrastructure.core.data.DataValidatorBuilder;
 import org.apache.fineract.infrastructure.core.exception.InvalidJsonException;
@@ -59,12 +59,12 @@ public class InterestIncentiveDataValidator {
     private final FromJsonHelper fromApiJsonHelper;
 
     private static final Set<String> INTERESTRATE_INCENTIVE_CREATE_REQUEST_DATA_PARAMETERS = new HashSet<>(
-            Arrays.asList(InterestIncentiveApiConstants.idParamName, entityTypeParamName, attributeNameParamName,
-                    conditionTypeParamName, attributeValueParamName, incentiveTypeparamName, amountParamName));
+            Arrays.asList(InterestIncentiveApiConstants.idParamName, entityTypeParamName, attributeNameParamName, conditionTypeParamName,
+                    attributeValueParamName, incentiveTypeparamName, amountParamName));
 
     private static final Set<String> INTERESTRATE_INCENTIVE_UPDATE_REQUEST_DATA_PARAMETERS = new HashSet<>(
-            Arrays.asList(InterestIncentiveApiConstants.idParamName, entityTypeParamName, attributeNameParamName,
-                    conditionTypeParamName, attributeValueParamName, incentiveTypeparamName, amountParamName));
+            Arrays.asList(InterestIncentiveApiConstants.idParamName, entityTypeParamName, attributeNameParamName, conditionTypeParamName,
+                    attributeValueParamName, incentiveTypeparamName, amountParamName));
 
     @Autowired
     public InterestIncentiveDataValidator(final FromJsonHelper fromApiJsonHelper) {
@@ -72,7 +72,9 @@ public class InterestIncentiveDataValidator {
     }
 
     public void validateCreate(final String json) {
-        if (StringUtils.isBlank(json)) { throw new InvalidJsonException(); }
+        if (StringUtils.isBlank(json)) {
+            throw new InvalidJsonException();
+        }
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
         this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, INTERESTRATE_INCENTIVE_CREATE_REQUEST_DATA_PARAMETERS);
@@ -115,7 +117,9 @@ public class InterestIncentiveDataValidator {
     }
 
     public void validateUpdate(final String json) {
-        if (StringUtils.isBlank(json)) { throw new InvalidJsonException(); }
+        if (StringUtils.isBlank(json)) {
+            throw new InvalidJsonException();
+        }
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
         this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, INTERESTRATE_INCENTIVE_UPDATE_REQUEST_DATA_PARAMETERS);
@@ -175,7 +179,9 @@ public class InterestIncentiveDataValidator {
     }
 
     private void throwExceptionIfValidationWarningsExist(final List<ApiParameterError> dataValidationErrors) {
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
     }
 
 }

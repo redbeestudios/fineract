@@ -28,7 +28,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_survey_lookup_tables")
-public class LookupTable extends AbstractPersistableCustom<Long> {
+public class LookupTable extends AbstractPersistableCustom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
@@ -50,7 +50,7 @@ public class LookupTable extends AbstractPersistableCustom<Long> {
     private Double score;
 
     public LookupTable() {
-        super();
+
     }
 
     public Survey getSurvey() {

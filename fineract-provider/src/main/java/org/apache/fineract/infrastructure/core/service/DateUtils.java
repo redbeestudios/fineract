@@ -34,14 +34,17 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class DateUtils {
+public final class DateUtils {
+
+    private DateUtils() {
+
+    }
 
     public static DateTimeZone getDateTimeZoneOfTenant() {
         final FineractPlatformTenant tenant = ThreadLocalContextUtil.getTenant();
         DateTimeZone zone = null;
         if (tenant != null) {
             zone = DateTimeZone.forID(tenant.getTimezoneId());
-            TimeZone.getTimeZone(tenant.getTimezoneId());
         }
         return zone;
     }
@@ -92,11 +95,11 @@ public class DateUtils {
             return dateTime.toLocalDate();
         } catch (final IllegalArgumentException e) {
             final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
-            final ApiParameterError error = ApiParameterError.parameterError("validation.msg.invalid.date.pattern", "The parameter date ("
-                    + stringDate + ") is invalid w.r.t. pattern " + pattern, "date", stringDate, pattern);
+            final ApiParameterError error = ApiParameterError.parameterError("validation.msg.invalid.date.pattern",
+                    "The parameter date (" + stringDate + ") is invalid w.r.t. pattern " + pattern, "date", stringDate, pattern);
             dataValidationErrors.add(error);
             throw new PlatformApiDataValidationException("validation.msg.validation.errors.exist", "Validation errors exist.",
-                    dataValidationErrors);
+                    dataValidationErrors, e);
         }
     }
 

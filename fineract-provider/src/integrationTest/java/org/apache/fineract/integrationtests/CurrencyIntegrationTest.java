@@ -18,14 +18,14 @@
  */
 package org.apache.fineract.integrationtests;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.savings.SavingsAccountHelper;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class CurrencyIntegrationTest {
 
@@ -33,8 +33,7 @@ public class CurrencyIntegrationTest {
     private RequestSpecification requestSpec;
     private SavingsAccountHelper savingsAccountHelper;
 
-
-    @Before
+    @BeforeEach
     public void setup() {
         Utils.initializeRESTAssured();
         this.requestSpec = new RequestSpecBuilder().setContentType(ContentType.JSON).build();

@@ -22,19 +22,15 @@ import org.joda.time.DateTimeConstants;
 
 public enum DayOfWeekType {
 
-    MONDAY(DateTimeConstants.MONDAY, "weekDayType.monday"),
-    TUESDAY(DateTimeConstants.TUESDAY, "weekDayType.tuesday"),
-    WEDNESDAY(DateTimeConstants.WEDNESDAY, "weekDayType.wednesday"),
-    THURSDAY(DateTimeConstants.THURSDAY, "weekDayType.thursday"),
-    FRIDAY(DateTimeConstants.FRIDAY, "weekDayType.friday"),
-    SATURDAY(DateTimeConstants.SATURDAY, "weekDayType.saturday"),
-    SUNDAY(DateTimeConstants.SUNDAY, "weekDayType.sunday"),
-    INVALID(0, "weekDayType.invalid");
+    MONDAY(DateTimeConstants.MONDAY, "weekDayType.monday"), TUESDAY(DateTimeConstants.TUESDAY, "weekDayType.tuesday"), WEDNESDAY(
+            DateTimeConstants.WEDNESDAY, "weekDayType.wednesday"), THURSDAY(DateTimeConstants.THURSDAY, "weekDayType.thursday"), FRIDAY(
+                    DateTimeConstants.FRIDAY, "weekDayType.friday"), SATURDAY(DateTimeConstants.SATURDAY, "weekDayType.saturday"), SUNDAY(
+                            DateTimeConstants.SUNDAY, "weekDayType.sunday"), INVALID(0, "weekDayType.invalid");
 
     private final Integer value;
     private final String code;
 
-    private DayOfWeekType(Integer value, String code) {
+    DayOfWeekType(Integer value, String code) {
         this.value = value;
         this.code = code;
     }

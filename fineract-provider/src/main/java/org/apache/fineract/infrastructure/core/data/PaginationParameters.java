@@ -18,14 +18,14 @@
  */
 package org.apache.fineract.infrastructure.core.data;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
  * Immutable data object representing pagination parameter values.
  * </p>
  */
-public class PaginationParameters {
+public final class PaginationParameters {
 
     private final boolean paged;
     private final Integer offset;
@@ -104,7 +104,7 @@ public class PaginationParameters {
     }
 
     public String orderBySql() {
-        final StringBuffer sql = new StringBuffer();
+        final StringBuilder sql = new StringBuilder();
 
         if (this.isOrderByRequested()) {
             sql.append(" order by ").append(this.getOrderBy());
@@ -116,7 +116,7 @@ public class PaginationParameters {
     }
 
     public String limitSql() {
-        final StringBuffer sql = new StringBuffer();
+        final StringBuilder sql = new StringBuilder();
         if (this.isLimited()) {
             sql.append(" limit ").append(this.getLimit());
             if (this.isOffset()) {
@@ -126,7 +126,7 @@ public class PaginationParameters {
         return sql.toString();
     }
 
-    public String paginationSql(){
+    public String paginationSql() {
         final StringBuilder sqlBuilder = new StringBuilder(50);
         if (this.isOrderByRequested()) {
             sqlBuilder.append(' ').append(this.orderBySql());

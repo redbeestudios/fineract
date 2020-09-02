@@ -22,13 +22,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 
 /**
- * Immutable data object representing platform API request used for
- * logging/debugging.
+ * Immutable data object representing platform API request used for logging/debugging.
  */
-public class PlatformRequestLog {
+public final class PlatformRequestLog {
 
     @SuppressWarnings("unused")
     private final long startTime;

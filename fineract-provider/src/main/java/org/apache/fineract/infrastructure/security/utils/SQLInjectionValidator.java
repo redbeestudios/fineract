@@ -21,18 +21,26 @@ package org.apache.fineract.infrastructure.security.utils;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
-public class SQLInjectionValidator {
+public final class SQLInjectionValidator {
 
-    private final static String[] DDL_COMMANDS = { "create", "drop", "alter", "truncate", "comment", "sleep" };
+    private SQLInjectionValidator() {
 
-    private final static String[] DML_COMMANDS = { "select", "insert", "update", "delete", "merge", "upsert", "call" };
+    }
 
-    private final static String[] COMMENTS = { "--", "({", "/*", "#" };
+    private static final String[] DDL_COMMANDS = { "create", "drop", "alter", "truncate", "comment", "sleep" };
 
-    private final static String SQL_PATTERN = "[a-zA-Z_=,\\-'!><.?\"`% ()0-9*\n\r]*";
+    private static final String[] DML_COMMANDS = { "select", "insert", "update", "delete", "merge", "upsert", "call" };
 
-    public final static void validateSQLInput(final String sqlSearch) {
+    private static final String[] COMMENTS = { "--", "({", "/*", "#" };
+
+    private static final String SQL_PATTERN = "[a-zA-Z_=,\\-'!><.?\"`% ()0-9*\n\r]*";
+
+    public static final void validateSQLInput(final String sqlSearch) {
+        if (StringUtils.isBlank(sqlSearch)) {
+            return;
+        }
         String lowerCaseSQL = sqlSearch.toLowerCase();
         for (String ddl : DDL_COMMANDS) {
             if (lowerCaseSQL.contains(ddl)) {
@@ -52,15 +60,17 @@ public class SQLInjectionValidator {
             }
         }
 
-        //Removing the space before and after '=' operator
-        //String s = "          \"              OR 1    =    1"; For the cases like this
+        // Removing the space before and after '=' operator
+        // String s = " \" OR 1 = 1"; For the cases like this
         boolean injectionFound = false;
         String inputSqlString = lowerCaseSQL;
-        while (inputSqlString.indexOf(" =") > 0) { //Don't remove space before = operator
+        while (inputSqlString.indexOf(" =") > 0) { // Don't remove space before
+                                                   // = operator
             inputSqlString = inputSqlString.replaceAll(" =", "=");
         }
 
-        while (inputSqlString.indexOf("= ") > 0) { //Don't remove space after = operator
+        while (inputSqlString.indexOf("= ") > 0) { // Don't remove space after =
+                                                   // operator
             inputSqlString = inputSqlString.replaceAll("= ", "=");
         }
 
@@ -76,7 +86,7 @@ public class SQLInjectionValidator {
                     }
                 } else {
                     injectionFound = true;
-                    break ;
+                    break;
                 }
             }
             if (token.equals("\"")) {
@@ -88,7 +98,7 @@ public class SQLInjectionValidator {
                     }
                 } else {
                     injectionFound = true;
-                    break ;
+                    break;
                 }
             } else if (token.indexOf('=') > 0) {
                 StringTokenizer operatorToken = new StringTokenizer(token, "=");
@@ -114,7 +124,11 @@ public class SQLInjectionValidator {
             throw new SQLInjectionException();
         }
     }
-    public final static void validateAdhocQuery(final String sqlSearch) {
+
+    public static final void validateAdhocQuery(final String sqlSearch) {
+        if (StringUtils.isBlank(sqlSearch)) {
+            return;
+        }
         String lowerCaseSQL = sqlSearch.toLowerCase().trim();
         for (String ddl : DDL_COMMANDS) {
             if (lowerCaseSQL.startsWith(ddl)) {
@@ -122,22 +136,23 @@ public class SQLInjectionValidator {
             }
         }
 
-
         for (String comments : COMMENTS) {
             if (lowerCaseSQL.contains(comments)) {
                 throw new SQLInjectionException();
             }
         }
 
-        //Removing the space before and after '=' operator
-        //String s = "          \"              OR 1    =    1"; For the cases like this
+        // Removing the space before and after '=' operator
+        // String s = " \" OR 1 = 1"; For the cases like this
         boolean injectionFound = false;
         String inputSqlString = lowerCaseSQL;
-        while (inputSqlString.indexOf(" =") > 0) { //Don't remove space before = operator
+        while (inputSqlString.indexOf(" =") > 0) { // Don't remove space before
+                                                   // = operator
             inputSqlString = inputSqlString.replaceAll(" =", "=");
         }
 
-        while (inputSqlString.indexOf("= ") > 0) { //Don't remove space after = operator
+        while (inputSqlString.indexOf("= ") > 0) { // Don't remove space after =
+                                                   // operator
             inputSqlString = inputSqlString.replaceAll("= ", "=");
         }
 
@@ -153,7 +168,7 @@ public class SQLInjectionValidator {
                     }
                 } else {
                     injectionFound = true;
-                    break ;
+                    break;
                 }
             }
             if (token.equals("\"")) {
@@ -165,7 +180,7 @@ public class SQLInjectionValidator {
                     }
                 } else {
                     injectionFound = true;
-                    break ;
+                    break;
                 }
             } else if (token.indexOf('=') > 0) {
                 StringTokenizer operatorToken = new StringTokenizer(token, "=");

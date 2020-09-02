@@ -30,11 +30,14 @@ import org.apache.fineract.portfolio.loanproduct.domain.InterestMethod;
 import org.apache.fineract.portfolio.loanproduct.domain.LoanProductRelatedDetail;
 
 /**
- * This class is used to keep in one place configurations for setting up
- * {@link LoanProductRelatedDetail} object used in {@link LoanScheduleGenerator}
- * 's
+ * This class is used to keep in one place configurations for setting up {@link LoanProductRelatedDetail} object used in
+ * {@link LoanScheduleGenerator} 's
  */
-public class LoanProductRelatedDetailTestHelper {
+public final class LoanProductRelatedDetailTestHelper {
+
+    private LoanProductRelatedDetailTestHelper() {
+
+    }
 
     public static LoanProductRelatedDetail createSettingsForEqualPrincipalAmortizationQuarterly() {
 
@@ -154,8 +157,10 @@ public class LoanProductRelatedDetailTestHelper {
         final boolean considerPartialPeriodInterest = false;
         final boolean isEqualAmortization = false;
         return new LoanProductRelatedDetail(currency, defaultPrincipal, defaultNominalInterestRatePerPeriod, interestPeriodFrequencyType,
-                defaultAnnualNominalInterestRate, interestMethod, interestCalculationPeriodMethod, considerPartialPeriodInterest, repayEvery,
-                repaymentFrequencyType, defaultNumberOfRepayments, graceOnPrincipalPayment, recurringMoratoriumOnPrincipalPeriods, graceOnInterestPayment, graceOnInterestCharged,
-                amortizationMethod, inArrearsTolerance, graceOnArrearsAgeing, daysInMonthType, daysInYearType, isInterestRecalculationEnabled, isEqualAmortization);
+                defaultAnnualNominalInterestRate, interestMethod, interestCalculationPeriodMethod, considerPartialPeriodInterest,
+                repayEvery, repaymentFrequencyType, defaultNumberOfRepayments, graceOnPrincipalPayment,
+                recurringMoratoriumOnPrincipalPeriods, graceOnInterestPayment, graceOnInterestCharged, amortizationMethod,
+                inArrearsTolerance, graceOnArrearsAgeing, daysInMonthType, daysInYearType, isInterestRecalculationEnabled,
+                isEqualAmortization);
     }
 }

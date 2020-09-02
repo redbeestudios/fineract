@@ -18,8 +18,8 @@
  */
 package org.apache.fineract.interoperation.service;
 
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.interoperation.data.InteropAccountData;
 import org.apache.fineract.interoperation.data.InteropIdentifierAccountResponseData;
@@ -39,18 +39,20 @@ public interface InteropService {
     InteropAccountData getAccountDetails(@NotNull String accountId);
 
     @NotNull
-    InteropTransactionsData getAccountTransactions(@NotNull String accountId, boolean debit, boolean credit, LocalDateTime transactionsFrom, LocalDateTime transactionsTo);
+    InteropTransactionsData getAccountTransactions(@NotNull String accountId, boolean debit, boolean credit, LocalDateTime transactionsFrom,
+            LocalDateTime transactionsTo);
 
     @NotNull
-    InteropIdentifierAccountResponseData getAccountByIdentifier(@NotNull InteropIdentifierType idType, @NotNull String idValue, String subIdOrType);
+    InteropIdentifierAccountResponseData getAccountByIdentifier(@NotNull InteropIdentifierType idType, @NotNull String idValue,
+            String subIdOrType);
 
     @NotNull
     InteropIdentifierAccountResponseData registerAccountIdentifier(@NotNull InteropIdentifierType idType, @NotNull String idValue,
-                                                                   String subIdOrType, @NotNull JsonCommand command);
+            String subIdOrType, @NotNull JsonCommand command);
 
     @NotNull
     InteropIdentifierAccountResponseData deleteAccountIdentifier(@NotNull InteropIdentifierType idType, @NotNull String idValue,
-                                                                 String subIdOrType);
+            String subIdOrType);
 
     InteropTransactionRequestResponseData getTransactionRequest(@NotNull String transactionCode, @NotNull String requestCode);
 
@@ -69,4 +71,7 @@ public interface InteropService {
 
     @NotNull
     InteropTransferResponseData commitTransfer(@NotNull JsonCommand command);
+
+    @NotNull
+    InteropTransferResponseData releaseTransfer(@NotNull JsonCommand command);
 }

@@ -28,8 +28,8 @@ public class FineractPlatformTenant implements Serializable {
     private final String timezoneId;
     private final FineractPlatformTenantConnection connection;
 
-    public FineractPlatformTenant(final Long id, final String tenantIdentifier, final String name,
-            final String timezoneId, final FineractPlatformTenantConnection connection) {
+    public FineractPlatformTenant(final Long id, final String tenantIdentifier, final String name, final String timezoneId,
+            final FineractPlatformTenantConnection connection) {
         this.id = id;
         this.tenantIdentifier = tenantIdentifier;
         this.name = name;
@@ -56,5 +56,4 @@ public class FineractPlatformTenant implements Serializable {
     public FineractPlatformTenantConnection getConnection() {
         return connection;
     }
-
 }

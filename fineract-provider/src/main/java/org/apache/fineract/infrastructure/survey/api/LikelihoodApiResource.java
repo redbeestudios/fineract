@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.infrastructure.survey.api;
 
-import io.swagger.annotations.Api;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -45,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Path("/likelihood")
 @Component
 @Scope("singleton")
-@Api(value = "Likelihood")
+
 public class LikelihoodApiResource {
 
     private final DefaultToApiJsonSerializer<LikelihoodData> toApiJsonSerializer;
@@ -82,7 +81,7 @@ public class LikelihoodApiResource {
     @Path("{ppiName}/{likelihoodId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String retrieve(@PathParam("likelihoodId") final Long likelihoodId) {
+    public String retrieve(@PathParam("likelihoodId") final Long likelihoodId, @PathParam("ppiName") final String ppiName) {
 
         this.context.authenticatedUser().validateHasReadPermission(PovertyLineApiConstants.POVERTY_LINE_RESOURCE_NAME);
 
@@ -95,7 +94,8 @@ public class LikelihoodApiResource {
     @Path("{ppiName}/{likelihoodId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String update(@PathParam("likelihoodId") final Long likelihoodId, final String apiRequestBodyAsJson) {
+    public String update(@PathParam("likelihoodId") final Long likelihoodId, final String apiRequestBodyAsJson,
+            @PathParam("ppiName") final String ppiName) {
 
         this.context.authenticatedUser().validateHasReadPermission(PovertyLineApiConstants.POVERTY_LINE_RESOURCE_NAME);
 

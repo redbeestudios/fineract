@@ -33,7 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.accounting.glaccount.domain.GLAccount;
 import org.apache.fineract.accounting.journalentry.domain.JournalEntryType;
 import org.apache.fineract.accounting.rule.api.AccountingRuleJsonInputParams;
@@ -42,8 +42,9 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.organisation.office.domain.Office;
 
 @Entity
-@Table(name = "acc_accounting_rule", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }, name = "accounting_rule_name_unique") })
-public class AccountingRule extends AbstractPersistableCustom<Long> {
+@Table(name = "acc_accounting_rule", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "name" }, name = "accounting_rule_name_unique") })
+public class AccountingRule extends AbstractPersistableCustom {
 
     @Column(name = "name", nullable = false, length = 500)
     private String name;
@@ -66,7 +67,7 @@ public class AccountingRule extends AbstractPersistableCustom<Long> {
     @Column(name = "system_defined", nullable = false)
     private Boolean systemDefined;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accountingRule", orphanRemoval = true, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accountingRule", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<AccountingTagRule> accountingTagRules = new ArrayList<>();
 
     @Column(name = "allow_multiple_credits", nullable = false)
@@ -104,8 +105,8 @@ public class AccountingRule extends AbstractPersistableCustom<Long> {
 
     public Map<String, Object> update(final JsonCommand command) {
         final Map<String, Object> actualChanges = new LinkedHashMap<>(10);
-        handlePropertyUpdate(command, actualChanges, AccountingRuleJsonInputParams.OFFICE_ID.getValue(), this.office == null ? 0L
-                : this.office.getId());
+        handlePropertyUpdate(command, actualChanges, AccountingRuleJsonInputParams.OFFICE_ID.getValue(),
+                this.office == null ? 0L : this.office.getId());
         handlePropertyUpdate(command, actualChanges, AccountingRuleJsonInputParams.ACCOUNT_TO_DEBIT.getValue(),
                 this.accountToDebit == null ? 0L : this.accountToDebit.getId());
         handlePropertyUpdate(command, actualChanges, AccountingRuleJsonInputParams.ACCOUNT_TO_CREDIT.getValue(),

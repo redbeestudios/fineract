@@ -37,7 +37,7 @@ import org.joda.time.LocalDate;
 
 @Entity
 @Table(name = "m_loan_term_variations")
-public class LoanTermVariations extends AbstractPersistableCustom<Long> {
+public class LoanTermVariations extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "loan_id", nullable = false)
@@ -97,7 +97,8 @@ public class LoanTermVariations extends AbstractPersistableCustom<Long> {
     }
 
     public LoanTermVariations(final Integer termType, final Date termApplicableFrom, final BigDecimal decimalValue, final Date dateValue,
-            final boolean isSpecificToInstallment, final Loan loan, final Integer loanStatus, final Boolean isActive, final LoanTermVariations parent) {
+            final boolean isSpecificToInstallment, final Loan loan, final Integer loanStatus, final Boolean isActive,
+            final LoanTermVariations parent) {
         this.loan = loan;
         this.termApplicableFrom = termApplicableFrom;
         this.termType = termType;
@@ -155,7 +156,6 @@ public class LoanTermVariations extends AbstractPersistableCustom<Long> {
         this.decimalValue = decimalValue;
     }
 
-
     public Integer getOnLoanStatus() {
         return this.onLoanStatus;
     }
@@ -168,7 +168,7 @@ public class LoanTermVariations extends AbstractPersistableCustom<Long> {
         return this.parent;
     }
 
-    public void updateIsActive(final Boolean isActive){
+    public void updateIsActive(final Boolean isActive) {
         this.isActive = isActive;
     }
 

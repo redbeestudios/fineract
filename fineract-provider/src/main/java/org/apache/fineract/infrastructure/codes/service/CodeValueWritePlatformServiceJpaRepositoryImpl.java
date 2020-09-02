@@ -36,13 +36,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValueWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(CodeValueWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CodeValueWritePlatformServiceJpaRepositoryImpl.class);
 
     private final PlatformSecurityContext context;
     private final CodeValueRepositoryWrapper codeValueRepositoryWrapper;
@@ -72,8 +74,7 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
             this.fromApiJsonDeserializer.validateForCreate(command.json());
 
             final Long codeId = command.entityId();
-            final Code code = this.codeRepository.findById(codeId)
-                    .orElseThrow(() -> new CodeNotFoundException(codeId));
+            final Code code = this.codeRepository.findById(codeId).orElseThrow(() -> new CodeNotFoundException(codeId));
             final CodeValue codeValue = CodeValue.fromJson(code, command);
             this.codeValueRepository.save(codeValue);
 
@@ -82,8 +83,9 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
                     .withEntityId(code.getId()) //
                     .withSubEntityId(codeValue.getId())//
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleCodeValueDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleCodeValueDataIntegrityIssues(command, throwable, dve);
             return new CommandProcessingResultBuilder() //
                     .withCommandId(command.commandId()) //
                     .build();
@@ -91,18 +93,17 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
     }
 
     /*
-     * Guaranteed to throw an exception no matter what the data integrity issue
-     * is.
+     * Guaranteed to throw an exception no matter what the data integrity issue is.
      */
-    private void handleCodeValueDataIntegrityIssues(final JsonCommand command, final DataIntegrityViolationException dve) {
-        final Throwable realCause = dve.getMostSpecificCause();
+    private void handleCodeValueDataIntegrityIssues(final JsonCommand command, final Throwable realCause,
+            final NonTransientDataAccessException dve) {
         if (realCause.getMessage().contains("code_value")) {
             final String name = command.stringValueOfParameterNamed("name");
-            throw new PlatformDataIntegrityException("error.msg.code.value.duplicate.label", "A code value with lable '" + name
-                    + "' already exists", "name", name);
+            throw new PlatformDataIntegrityException("error.msg.code.value.duplicate.label",
+                    "A code value with lable '" + name + "' already exists", "name", name);
         }
 
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.code.value.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource: " + realCause.getMessage());
     }
@@ -129,8 +130,9 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
                     .withEntityId(codeValueId) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleCodeValueDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleCodeValueDataIntegrityIssues(command, throwable, dve);
             return new CommandProcessingResultBuilder() //
                     .withCommandId(command.commandId()) //
                     .build();
@@ -146,8 +148,7 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
         try {
             this.context.authenticatedUser();
 
-            final Code code = this.codeRepository.findById(codeId)
-                    .orElseThrow(() -> new CodeNotFoundException(codeId));
+            final Code code = this.codeRepository.findById(codeId).orElseThrow(() -> new CodeNotFoundException(codeId));
 
             final CodeValue codeValueToDelete = this.codeValueRepositoryWrapper.findOneWithNotFoundDetection(codeValueId);
 
@@ -160,13 +161,14 @@ public class CodeValueWritePlatformServiceJpaRepositoryImpl implements CodeValue
                     .withEntityId(codeId) //
                     .withSubEntityId(codeValueId)//
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            logger.error(dve.getMessage(), dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            LOG.error("Error occured.", dve);
             final Throwable realCause = dve.getMostSpecificCause();
-            if (realCause.getMessage().contains("code_value")) { throw new PlatformDataIntegrityException("error.msg.codeValue.in.use",
-                    "This code value is in use", codeValueId); }
+            if (realCause.getMessage().contains("code_value")) {
+                throw new PlatformDataIntegrityException("error.msg.codeValue.in.use", "This code value is in use", codeValueId, dve);
+            }
             throw new PlatformDataIntegrityException("error.msg.code.value.unknown.data.integrity.issue",
-                    "Unknown data integrity issue with resource: " + dve.getMostSpecificCause().getMessage());
+                    "Unknown data integrity issue with resource: " + dve.getMostSpecificCause().getMessage(), dve);
         }
     }
 }

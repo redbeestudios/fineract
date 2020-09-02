@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResultBuilder;
@@ -63,7 +63,8 @@ public class CollectionSheetWritePlatformServiceJpaRepositoryImpl implements Col
             final CollectionSheetBulkDisbursalCommandFromApiJsonDeserializer bulkDisbursalCommandFromApiJsonDeserializer,
             final CollectionSheetTransactionDataValidator transactionDataValidator,
             final MeetingWritePlatformService meetingWritePlatformService, final DepositAccountAssembler accountAssembler,
-            final DepositAccountWritePlatformService accountWritePlatformService, final PaymentDetailAssembler paymentDetailAssembler, final PaymentDetailWritePlatformService paymentDetailWritePlatformService) {
+            final DepositAccountWritePlatformService accountWritePlatformService, final PaymentDetailAssembler paymentDetailAssembler,
+            final PaymentDetailWritePlatformService paymentDetailWritePlatformService) {
         this.loanWritePlatformService = loanWritePlatformService;
         this.bulkRepaymentCommandFromApiJsonDeserializer = bulkRepaymentCommandFromApiJsonDeserializer;
         this.bulkDisbursalCommandFromApiJsonDeserializer = bulkDisbursalCommandFromApiJsonDeserializer;
@@ -157,7 +158,8 @@ public class CollectionSheetWritePlatformServiceJpaRepositoryImpl implements Col
         List<Long> depositTransactionIds = new ArrayList<>();
         for (SavingsAccountTransactionDTO savingsAccountTransactionDTO : savingsTransactions) {
             try {
-                SavingsAccountTransaction savingsAccountTransaction =  this.accountWritePlatformService.mandatorySavingsAccountDeposit(savingsAccountTransactionDTO);
+                SavingsAccountTransaction savingsAccountTransaction = this.accountWritePlatformService
+                        .mandatorySavingsAccountDeposit(savingsAccountTransactionDTO);
                 depositTransactionIds.add(savingsAccountTransaction.getId());
             } catch (Exception e) {
                 // TODO: handle exception

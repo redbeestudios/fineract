@@ -32,6 +32,9 @@ public interface SavingsAccountRepository extends JpaRepository<SavingsAccount, 
     @Query("select s_acc from SavingsAccount s_acc where s_acc.client.id = :clientId")
     List<SavingsAccount> findSavingAccountByClientId(@Param("clientId") Long clientId);
 
+    @Query("select s_acc from SavingsAccount s_acc where s_acc.gsim.id = :gsimId")
+    List<SavingsAccount> findSavingAccountByGsimId(@Param("gsimId") Long gsimId);
+
     @Query("select s_acc from SavingsAccount s_acc where s_acc.status = :status")
     List<SavingsAccount> findSavingAccountByStatus(@Param("status") Integer status);
 
@@ -51,7 +54,7 @@ public interface SavingsAccountRepository extends JpaRepository<SavingsAccount, 
     @Query("select sa from SavingsAccount sa where sa.accountNumber = :accountNumber and sa.status in (100, 200, 300, 303, 304) ")
     SavingsAccount findNonClosedAccountByAccountNumber(@Param("accountNumber") String accountNumber);
 
-    Page<SavingsAccount> findByStatus(Integer status,Pageable pageable);
+    Page<SavingsAccount> findByStatus(Integer status, Pageable pageable);
 
     SavingsAccount findByExternalId(String externalId);
 }

@@ -25,7 +25,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "notification_generator")
-public class Notification extends AbstractPersistableCustom<Long> {
+public class Notification extends AbstractPersistableCustom {
 
     @Column(name = "object_type")
     private String objectType;
@@ -51,7 +51,7 @@ public class Notification extends AbstractPersistableCustom<Long> {
     public Notification() {}
 
     public Notification(String objectType, Long objectIdentifier, String action, Long actorId, boolean isSystemGenerated,
-                        String notificationContent, String createdAt) {
+            String notificationContent, String createdAt) {
         this.objectType = objectType;
         this.objectIdentifier = objectIdentifier;
         this.action = action;
@@ -89,7 +89,7 @@ public class Notification extends AbstractPersistableCustom<Long> {
         return actorId;
     }
 
-    public void setActor(Long actor) {
+    public void setActor(Long actorId) {
         this.actorId = actorId;
     }
 
@@ -107,5 +107,12 @@ public class Notification extends AbstractPersistableCustom<Long> {
 
     public void setNotificationContent(String notificationContent) {
         this.notificationContent = notificationContent;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification [objectType=" + this.objectType + ", objectIdentifier=" + this.objectIdentifier + ", action=" + this.action
+                + ", actorId=" + this.actorId + ", isSystemGenerated=" + this.isSystemGenerated + ", notificationContent="
+                + this.notificationContent + ", createdAt=" + this.createdAt + ", getId()=" + this.getId() + "]";
     }
 }

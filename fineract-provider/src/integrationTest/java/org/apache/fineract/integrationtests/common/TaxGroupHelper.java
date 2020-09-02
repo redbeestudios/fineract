@@ -19,21 +19,29 @@
 package org.apache.fineract.integrationtests.common;
 
 import com.google.gson.Gson;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class TaxGroupHelper {
+public final class TaxGroupHelper {
 
+    private TaxGroupHelper() {
+
+    }
+
+    private static final Logger LOG = LoggerFactory.getLogger(TaxGroupHelper.class);
     private static final String CREATE_TAX_COMPONENT_URL = "/fineract-provider/api/v1/taxes/group?" + Utils.TENANT_IDENTIFIER;
 
     public static Integer createTaxGroup(final RequestSpecification requestSpec, final ResponseSpecification responseSpec,
             final Collection<Integer> taxComponentIds) {
-        System.out.println("---------------------------------CREATING A TAX GROUP---------------------------------------------");
-        return Utils.performServerPost(requestSpec, responseSpec, CREATE_TAX_COMPONENT_URL, getTaxGroupAsJSON(taxComponentIds), "resourceId");
+        LOG.info("---------------------------------CREATING A TAX GROUP---------------------------------------------");
+        return Utils.performServerPost(requestSpec, responseSpec, CREATE_TAX_COMPONENT_URL, getTaxGroupAsJSON(taxComponentIds),
+                "resourceId");
     }
 
     public static String getTaxGroupAsJSON(final Collection<Integer> taxComponentIds) {

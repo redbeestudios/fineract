@@ -22,12 +22,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum GuarantorType {
+
     CUSTOMER(1, "guarantor.existing.customer"), STAFF(2, "guarantor.staff"), EXTERNAL(3, "guarantor.external");
 
     private final Integer value;
     private final String code;
 
-    private GuarantorType(final Integer value, final String code) {
+    GuarantorType(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

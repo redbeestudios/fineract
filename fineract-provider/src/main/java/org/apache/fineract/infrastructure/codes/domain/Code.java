@@ -28,14 +28,14 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.codes.exception.SystemDefinedCodeCannotBeChangedException;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_code", uniqueConstraints = { @UniqueConstraint(columnNames = { "code_name" }, name = "code_name") })
-public class Code extends AbstractPersistableCustom<Long> {
+public class Code extends AbstractPersistableCustom {
 
     @Column(name = "code_name", length = 100)
     private String name;
@@ -74,7 +74,9 @@ public class Code extends AbstractPersistableCustom<Long> {
 
     public Map<String, Object> update(final JsonCommand command) {
 
-        if (this.systemDefined) { throw new SystemDefinedCodeCannotBeChangedException(); }
+        if (this.systemDefined) {
+            throw new SystemDefinedCodeCannotBeChangedException();
+        }
 
         final Map<String, Object> actualChanges = new LinkedHashMap<>(1);
 

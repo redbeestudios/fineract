@@ -31,21 +31,20 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractAuditableCustom;
 import org.apache.fineract.portfolio.tax.api.TaxApiConstants;
 import org.apache.fineract.portfolio.tax.exception.TaxMappingNotFoundException;
-import org.apache.fineract.useradministration.domain.AppUser;
 
 @Entity
 @Table(name = "m_tax_group")
-public class TaxGroup extends AbstractAuditableCustom<AppUser, Long> {
+public class TaxGroup extends AbstractAuditableCustom {
 
     @Column(name = "name", length = 100)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "tax_group_id", referencedColumnName = "id", nullable = false)
     private Set<TaxGroupMappings> taxGroupMappings = new HashSet<>();
 
@@ -97,7 +96,9 @@ public class TaxGroup extends AbstractAuditableCustom<AppUser, Long> {
     public TaxGroupMappings findOneBy(final TaxGroupMappings groupMapping) {
         if (groupMapping.getId() != null) {
             for (TaxGroupMappings groupMappings : this.taxGroupMappings) {
-                if (groupMappings.getId().equals(groupMapping.getId())) { return groupMappings; }
+                if (groupMappings.getId().equals(groupMapping.getId())) {
+                    return groupMappings;
+                }
             }
             throw new TaxMappingNotFoundException(groupMapping.getId());
         }

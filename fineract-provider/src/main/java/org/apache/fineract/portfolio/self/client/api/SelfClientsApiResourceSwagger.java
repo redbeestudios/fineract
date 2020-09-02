@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.self.client.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -29,228 +28,228 @@ import java.util.Set;
  */
 
 final class SelfClientsApiResourceSwagger {
-    private SelfClientsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetSelfClientsResponse")
-    public final static class GetSelfClientsResponse {
-        private GetSelfClientsResponse() {
-        }
+    private SelfClientsApiResourceSwagger() {}
 
-        final class GetSelfClientsPageItems {
-            private GetSelfClientsPageItems() {
-            }
+    @Schema(description = "GetSelfClientsResponse")
+    public static final class GetSelfClientsResponse {
 
-            final class GetSelfClientsStatus {
-                private GetSelfClientsStatus() {
-                }
+        private GetSelfClientsResponse() {}
 
-                @ApiModelProperty(example = "300")
+        static final class GetSelfClientsPageItems {
+
+            private GetSelfClientsPageItems() {}
+
+            static final class GetSelfClientsStatus {
+
+                private GetSelfClientsStatus() {}
+
+                @Schema(example = "300")
                 public Integer id;
-                @ApiModelProperty(example = "clientStatusType.active")
+                @Schema(example = "clientStatusType.active")
                 public String code;
-                @ApiModelProperty(example = "Active")
-                public String value;
+                @Schema(example = "Active")
+                public String description;
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "000000001")
+            @Schema(example = "000000001")
             public Long accountNo;
             public GetSelfClientsStatus status;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean active;
-            @ApiModelProperty(example = "[2013, 3, 1]")
+            @Schema(example = "[2013, 3, 1]")
             public LocalDate activationDate;
-            @ApiModelProperty(example = "Small shop")
+            @Schema(example = "Small shop")
             public String fullname;
-            @ApiModelProperty(example = "Small shop")
+            @Schema(example = "Small shop")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
         }
 
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer totalFilteredRecords;
         public Set<GetSelfClientsPageItems> pageItems;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdResponse")
-    public final static class GetSelfClientsClientIdResponse {
-        private GetSelfClientsClientIdResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdResponse")
+    public static final class GetSelfClientsClientIdResponse {
 
-        final class GetSelfClientsTimeline {
-            private GetSelfClientsTimeline() {
-            }
+        private GetSelfClientsClientIdResponse() {}
 
-            @ApiModelProperty(example = "[2013, 1, 1]")
+        static final class GetSelfClientsTimeline {
+
+            private GetSelfClientsTimeline() {}
+
+            @Schema(example = "[2013, 1, 1]")
             public LocalDate submittedOnDate;
-            @ApiModelProperty(example = "mifos")
+            @Schema(example = "mifos")
             public String submittedByUsername;
-            @ApiModelProperty(example = "App")
+            @Schema(example = "App")
             public String submittedByFirstname;
-            @ApiModelProperty(example = "Administrator")
+            @Schema(example = "Administrator")
             public String submittedByLastname;
-            @ApiModelProperty(example = "[2013, 1, 1]")
+            @Schema(example = "[2013, 1, 1]")
             public LocalDate activatedOnDate;
-            @ApiModelProperty(example = "mifos")
+            @Schema(example = "mifos")
             public String activatedByUsername;
-            @ApiModelProperty(example = "App")
+            @Schema(example = "App")
             public String activatedByFirstname;
-            @ApiModelProperty(example = "Administrator")
+            @Schema(example = "Administrator")
             public String activatedByLastname;
 
         }
 
-        @ApiModelProperty(example = "27")
+        @Schema(example = "27")
         public Integer id;
-        @ApiModelProperty(example = "000000027")
+        @Schema(example = "000000027")
         public Long accountNo;
         public GetSelfClientsResponse.GetSelfClientsPageItems.GetSelfClientsStatus status;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean active;
-        @ApiModelProperty(example = "[2013, 1, 1]")
+        @Schema(example = "[2013, 1, 1]")
         public LocalDate activationDate;
-        @ApiModelProperty(example = "savings")
+        @Schema(example = "savings")
         public String firstname;
-        @ApiModelProperty(example = "test")
+        @Schema(example = "test")
         public String lastname;
-        @ApiModelProperty(example = "savings test")
+        @Schema(example = "savings test")
         public String displayName;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Head Office")
+        @Schema(example = "Head Office")
         public String officeName;
         public GetSelfClientsTimeline timeline;
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer savingsProductId;
-        @ApiModelProperty(example = "account overdraft")
+        @Schema(example = "account overdraft")
         public String savingsProductName;
-        @ApiModelProperty(example = "")
+        @Schema(example = "")
         public List<String> groups;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdAccountsResponse")
-    public final static class GetSelfClientsClientIdAccountsResponse {
-        private GetSelfClientsClientIdAccountsResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdAccountsResponse")
+    public static final class GetSelfClientsClientIdAccountsResponse {
 
-        final class GetSelfClientsLoanAccounts {
-            private GetSelfClientsLoanAccounts() {
-            }
+        private GetSelfClientsClientIdAccountsResponse() {}
 
-            final class GetSelfClientsLoanAccountsStatus {
-                private GetSelfClientsLoanAccountsStatus() {
-                }
+        static final class GetSelfClientsLoanAccounts {
 
-                @ApiModelProperty(example = "300")
+            private GetSelfClientsLoanAccounts() {}
+
+            static final class GetSelfClientsLoanAccountsStatus {
+
+                private GetSelfClientsLoanAccountsStatus() {}
+
+                @Schema(example = "300")
                 public Integer id;
-                @ApiModelProperty(example = "loanStatusType.active")
+                @Schema(example = "loanStatusType.active")
                 public String code;
-                @ApiModelProperty(example = "Active")
-                public String value;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "Active")
+                public String description;
+                @Schema(example = "false")
                 public Boolean pendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean waitingForDisbursal;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedObligationsMet;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedWrittenOff;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedRescheduled;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean overpaid;
             }
 
-            final class GetSelfClientsLoanAccountsType {
-                private GetSelfClientsLoanAccountsType() {
-                }
+            static final class GetSelfClientsLoanAccountsType {
 
-                @ApiModelProperty(example = "1")
+                private GetSelfClientsLoanAccountsType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "loanType.individual")
+                @Schema(example = "loanType.individual")
                 public String code;
-                @ApiModelProperty(example = "Individual")
-                public String value;
+                @Schema(example = "Individual")
+                public String description;
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "000000001")
+            @Schema(example = "000000001")
             public Long accountNo;
-            @ApiModelProperty(example = "456")
+            @Schema(example = "456")
             public Integer externalId;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "TestOne")
+            @Schema(example = "TestOne")
             public String productName;
             public GetSelfClientsLoanAccountsStatus status;
             public GetSelfClientsLoanAccountsType loanType;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer loanCycle;
         }
 
-        final class GetSelfClientsSavingsAccounts {
-            private GetSelfClientsSavingsAccounts() {
-            }
+        static final class GetSelfClientsSavingsAccounts {
 
-            final class GetSelfClientsSavingsAccountsCurrency {
-                private GetSelfClientsSavingsAccountsCurrency() {
-                }
+            private GetSelfClientsSavingsAccounts() {}
 
-                @ApiModelProperty(example = "USD")
+            static final class GetSelfClientsSavingsAccountsCurrency {
+
+                private GetSelfClientsSavingsAccountsCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            final class GetSelfClientsSavingsAccountsStatus {
-                private GetSelfClientsSavingsAccountsStatus() {
-                }
+            static final class GetSelfClientsSavingsAccountsStatus {
 
-                @ApiModelProperty(example = "100")
+                private GetSelfClientsSavingsAccountsStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "savingsAccountStatusType.submitted.and.pending.approval")
+                @Schema(example = "savingsAccountStatusType.submitted.and.pending.approval")
                 public String code;
-                @ApiModelProperty(example = "Submitted and pending approval")
-                public String value;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "Submitted and pending approval")
+                public String description;
+                @Schema(example = "true")
                 public Boolean submittedAndPendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean approved;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean rejected;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean withdrawnByApplicant;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
             }
 
-            @ApiModelProperty(example = "7")
+            @Schema(example = "7")
             public Integer id;
-            @ApiModelProperty(example = "000000007")
+            @Schema(example = "000000007")
             public Long accountNo;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer productId;
-            @ApiModelProperty(example = "Other product")
+            @Schema(example = "Other product")
             public String productName;
             public GetSelfClientsSavingsAccountsStatus status;
             public GetSelfClientsSavingsAccountsCurrency currency;
@@ -260,179 +259,179 @@ final class SelfClientsApiResourceSwagger {
         public Set<GetSelfClientsSavingsAccounts> savingsAccounts;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdChargesResponse")
-    public final static class GetSelfClientsClientIdChargesResponse {
-        private GetSelfClientsClientIdChargesResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdChargesResponse")
+    public static final class GetSelfClientsClientIdChargesResponse {
 
-        final class GetSelfClientsChargesPageItems {
-            private GetSelfClientsChargesPageItems() {
-            }
+        private GetSelfClientsClientIdChargesResponse() {}
 
-            final class GetSelfClientsChargeTimeType {
-                private GetSelfClientsChargeTimeType() {
-                }
+        static final class GetSelfClientsChargesPageItems {
 
-                @ApiModelProperty(example = "2")
+            private GetSelfClientsChargesPageItems() {}
+
+            static final class GetSelfClientsChargeTimeType {
+
+                private GetSelfClientsChargeTimeType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "chargeTimeType.specifiedDueDate")
+                @Schema(example = "chargeTimeType.specifiedDueDate")
                 public String code;
-                @ApiModelProperty(example = "Specified due date")
-                public String value;
+                @Schema(example = "Specified due date")
+                public String description;
             }
 
-            final class GetSelfClientsChargeCalculationType {
-                private GetSelfClientsChargeCalculationType() {
-                }
+            static final class GetSelfClientsChargeCalculationType {
 
-                @ApiModelProperty(example = "1")
+                private GetSelfClientsChargeCalculationType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "chargeCalculationType.flat")
+                @Schema(example = "chargeCalculationType.flat")
                 public String code;
-                @ApiModelProperty(example = "Flat")
-                public String value;
+                @Schema(example = "Flat")
+                public String description;
             }
 
-            @ApiModelProperty(example = "5")
+            @Schema(example = "5")
             public Integer id;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer clientId;
-            @ApiModelProperty(example = "6")
+            @Schema(example = "6")
             public Integer chargeId;
-            @ApiModelProperty(example = "Client Fees 2")
+            @Schema(example = "Client Fees 2")
             public String name;
             public GetSelfClientsChargeTimeType chargeTimeType;
-            @ApiModelProperty(example = "[2015, 9, 1]")
+            @Schema(example = "[2015, 9, 1]")
             public LocalDate dueDate;
             public GetSelfClientsChargeCalculationType chargeCalculationType;
             public GetSelfClientsClientIdAccountsResponse.GetSelfClientsSavingsAccounts.GetSelfClientsSavingsAccountsCurrency currency;
-            @ApiModelProperty(example = "550")
+            @Schema(example = "550")
             public Float amount;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Float amountPaid;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Float amountWaived;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Float amountWrittenOff;
-            @ApiModelProperty(example = "550")
+            @Schema(example = "550")
             public Float amountOutstanding;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean penalty;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean isActive;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean isPaid;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean isWaived;
         }
 
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer totalFilteredRecords;
         public Set<GetSelfClientsChargesPageItems> pageItems;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdChargesChargeIdResponse")
-    public final static class GetSelfClientsClientIdChargesChargeIdResponse {
-        private GetSelfClientsClientIdChargesChargeIdResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdChargesChargeIdResponse")
+    public static final class GetSelfClientsClientIdChargesChargeIdResponse {
 
-        @ApiModelProperty(example = "3")
+        private GetSelfClientsClientIdChargesChargeIdResponse() {}
+
+        @Schema(example = "3")
         public Integer id;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Integer chargeId;
-        @ApiModelProperty(example = "Client Fee 1")
+        @Schema(example = "Client Fee 1")
         public String name;
         public GetSelfClientsClientIdChargesResponse.GetSelfClientsChargesPageItems.GetSelfClientsChargeTimeType chargeTimeType;
-        @ApiModelProperty(example = "[2015, 8, 17]")
+        @Schema(example = "[2015, 8, 17]")
         public LocalDate dueDate;
         public GetSelfClientsClientIdChargesResponse.GetSelfClientsChargesPageItems.GetSelfClientsChargeCalculationType chargeCalculationType;
         public GetSelfClientsClientIdAccountsResponse.GetSelfClientsSavingsAccounts.GetSelfClientsSavingsAccountsCurrency currency;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amount;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountPaid;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amountWaived;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWrittenOff;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountOutstanding;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean penalty;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean isActive;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean isPaid;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean isWaived;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdTransactionsResponse")
-    public final static class GetSelfClientsClientIdTransactionsResponse {
-        private GetSelfClientsClientIdTransactionsResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdTransactionsResponse")
+    public static final class GetSelfClientsClientIdTransactionsResponse {
 
-        final class GetSelfClientsClientIdTransactionsPageItems {
-            private GetSelfClientsClientIdTransactionsPageItems() {
-            }
+        private GetSelfClientsClientIdTransactionsResponse() {}
 
-            final class GetSelfClientsClientIdTransactionsType {
-                private GetSelfClientsClientIdTransactionsType() {
-                }
+        static final class GetSelfClientsClientIdTransactionsPageItems {
 
-                @ApiModelProperty(example = "1")
+            private GetSelfClientsClientIdTransactionsPageItems() {}
+
+            static final class GetSelfClientsClientIdTransactionsType {
+
+                private GetSelfClientsClientIdTransactionsType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "clientTransactionType.payCharge")
+                @Schema(example = "clientTransactionType.payCharge")
                 public String code;
-                @ApiModelProperty(example = "PAY_CHARGE")
-                public String value;
+                @Schema(example = "PAY_CHARGE")
+                public String description;
             }
 
-            @ApiModelProperty(example = "226")
+            @Schema(example = "226")
             public Integer id;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
             public GetSelfClientsClientIdTransactionsType type;
-            @ApiModelProperty(example = "[2015, 9, 2]")
+            @Schema(example = "[2015, 9, 2]")
             public LocalDate date;
             public GetSelfClientsClientIdAccountsResponse.GetSelfClientsSavingsAccounts.GetSelfClientsSavingsAccountsCurrency currency;
-            @ApiModelProperty(example = "22")
+            @Schema(example = "22")
             public Double amount;
-            @ApiModelProperty(example = "[2015, 9, 2]")
+            @Schema(example = "[2015, 9, 2]")
             public LocalDate submittedOnDate;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean reversed;
         }
 
-        @ApiModelProperty(example = "20")
+        @Schema(example = "20")
         public Integer totalFilteredRecords;
         public Set<GetSelfClientsClientIdTransactionsPageItems> pageItems;
     }
 
-    @ApiModel(value = "GetSelfClientsClientIdTransactionsTransactionIdResponse")
-    public final static class GetSelfClientsClientIdTransactionsTransactionIdResponse {
-        private GetSelfClientsClientIdTransactionsTransactionIdResponse() {
-        }
+    @Schema(description = "GetSelfClientsClientIdTransactionsTransactionIdResponse")
+    public static final class GetSelfClientsClientIdTransactionsTransactionIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private GetSelfClientsClientIdTransactionsTransactionIdResponse() {}
+
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Head Office")
+        @Schema(example = "Head Office")
         public String officeName;
         public GetSelfClientsClientIdTransactionsResponse.GetSelfClientsClientIdTransactionsPageItems.GetSelfClientsClientIdTransactionsType type;
-        @ApiModelProperty(example = "[2015, 8, 17]")
+        @Schema(example = "[2015, 8, 17]")
         public LocalDate date;
         public GetSelfClientsClientIdAccountsResponse.GetSelfClientsSavingsAccounts.GetSelfClientsSavingsAccountsCurrency currency;
-        @ApiModelProperty(example = "60.000000")
+        @Schema(example = "60.000000")
         public Float amount;
-        @ApiModelProperty(example = "[2015, 8, 19]")
+        @Schema(example = "[2015, 8, 19]")
         public LocalDate submittedOnDate;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean reversed;
     }
 }

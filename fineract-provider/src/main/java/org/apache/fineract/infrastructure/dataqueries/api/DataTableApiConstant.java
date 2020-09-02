@@ -21,13 +21,17 @@ package org.apache.fineract.infrastructure.dataqueries.api;
 /**
  * Created by Cieyou on 2/26/14.
  */
-public class DataTableApiConstant {
+public final class DataTableApiConstant {
+
+    private DataTableApiConstant() {
+
+    }
 
     public static final Integer CATEGORY_PPI = 200;
     public static final Integer CATEGORY_DEFAULT = 100;
 
-    public static final String categoryParamName ="category";
+    public static final String categoryParamName = "category";
     public static final String localParamName = "locale";
-    public static final String DATATABLE_RESOURCE_NAME ="dataTables";
+    public static final String DATATABLE_RESOURCE_NAME = "dataTables";
 
 }

@@ -23,8 +23,7 @@ import java.util.Map;
 
 /***
  *
- * People typically use either of the following settings when defining interest
- * recalculation method:
+ * People typically use either of the following settings when defining interest recalculation method:
  * <ul>
  * <li>NONE</li>
  * <li>INTEREST</li>
@@ -54,7 +53,7 @@ public enum InterestRecalculationCompoundingMethod {
         return type;
     }
 
-    private InterestRecalculationCompoundingMethod(final Integer value, final String code) {
+    InterestRecalculationCompoundingMethod(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

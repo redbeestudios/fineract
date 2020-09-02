@@ -26,19 +26,18 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.exception.InvalidJsonException;
 import org.apache.fineract.infrastructure.core.serialization.AbstractFromApiJsonDeserializer;
 import org.apache.fineract.infrastructure.core.serialization.FromApiJsonDeserializer;
 import org.apache.fineract.infrastructure.core.serialization.FromJsonHelper;
-import org.apache.fineract.portfolio.collateral.api.CollateralApiConstants.COLLATERAL_JSON_INPUT_PARAMS;
+import org.apache.fineract.portfolio.collateral.api.CollateralApiConstants.CollateralJSONinputParams;
 import org.apache.fineract.portfolio.collateral.command.CollateralCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementation of {@link FromApiJsonDeserializer} for
- * {@link CollateralCommand}'s.
+ * Implementation of {@link FromApiJsonDeserializer} for {@link CollateralCommand}'s.
  */
 @Component
 public final class CollateralCommandFromApiJsonDeserializer extends AbstractFromApiJsonDeserializer<CollateralCommand> {
@@ -52,10 +51,12 @@ public final class CollateralCommandFromApiJsonDeserializer extends AbstractFrom
 
     @Override
     public CollateralCommand commandFromApiJson(final String json) {
-        if (StringUtils.isBlank(json)) { throw new InvalidJsonException(); }
+        if (StringUtils.isBlank(json)) {
+            throw new InvalidJsonException();
+        }
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
-        final Set<String> supportedParameters = COLLATERAL_JSON_INPUT_PARAMS.getAllValues();
+        final Set<String> supportedParameters = CollateralJSONinputParams.getAllValues();
         supportedParameters.add("locale");
         supportedParameters.add("dateFormat");
         this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, supportedParameters);
@@ -64,11 +65,10 @@ public final class CollateralCommandFromApiJsonDeserializer extends AbstractFrom
         final JsonObject topLevelJsonElement = element.getAsJsonObject();
         final Locale locale = this.fromApiJsonHelper.extractLocaleParameter(topLevelJsonElement);
 
-        final Long collateralTypeId = this.fromApiJsonHelper.extractLongNamed(COLLATERAL_JSON_INPUT_PARAMS.COLLATERAL_TYPE_ID.getValue(),
+        final Long collateralTypeId = this.fromApiJsonHelper.extractLongNamed(CollateralJSONinputParams.COLLATERAL_TYPE_ID.getValue(),
                 element);
-        final String description = this.fromApiJsonHelper.extractStringNamed(COLLATERAL_JSON_INPUT_PARAMS.DESCRIPTION.getValue(), element);
-        final BigDecimal value = this.fromApiJsonHelper.extractBigDecimalNamed(COLLATERAL_JSON_INPUT_PARAMS.VALUE.getValue(), element,
-                locale);
+        final String description = this.fromApiJsonHelper.extractStringNamed(CollateralJSONinputParams.DESCRIPTION.getValue(), element);
+        final BigDecimal value = this.fromApiJsonHelper.extractBigDecimalNamed(CollateralJSONinputParams.VALUE.getValue(), element, locale);
 
         return new CollateralCommand(collateralTypeId, value, description);
     }

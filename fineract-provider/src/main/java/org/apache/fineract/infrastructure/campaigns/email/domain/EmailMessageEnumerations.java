@@ -20,7 +20,11 @@ package org.apache.fineract.infrastructure.campaigns.email.domain;
 
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 
-public class EmailMessageEnumerations {
+public final class EmailMessageEnumerations {
+
+    private EmailMessageEnumerations() {
+
+    }
 
     public static EnumOptionData status(final Integer statusId) {
         return status(EmailMessageStatusType.fromInt(statusId));
@@ -47,8 +51,8 @@ public class EmailMessageEnumerations {
                         EmailMessageStatusType.DELIVERED.getCode(), "Delivered");
             break;
             case FAILED:
-                optionData = new EnumOptionData(EmailMessageStatusType.FAILED.getValue().longValue(), EmailMessageStatusType.FAILED.getCode(),
-                        "Failed");
+                optionData = new EnumOptionData(EmailMessageStatusType.FAILED.getValue().longValue(),
+                        EmailMessageStatusType.FAILED.getCode(), "Failed");
             break;
 
         }

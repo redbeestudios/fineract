@@ -34,13 +34,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PasswordPreferencesWritePlatformServiceJpaRepositoryImpl implements PasswordPreferencesWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(PasswordPreferencesWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PasswordPreferencesWritePlatformServiceJpaRepositoryImpl.class);
     private final PasswordValidationPolicyRepository validationRepository;
     private final PasswordPreferencesDataValidator dataValidator;
 
@@ -76,7 +77,9 @@ public class PasswordPreferencesWritePlatformServiceJpaRepositoryImpl implements
                 }
             }
 
-            if (!found) { throw new PasswordValidationPolicyNotFoundException(validationPolicyId); }
+            if (!found) {
+                throw new PasswordValidationPolicyNotFoundException(validationPolicyId);
+            }
 
             if (!changes.isEmpty()) {
                 this.validationRepository.saveAll(validationPolicies);
@@ -87,10 +90,10 @@ public class PasswordPreferencesWritePlatformServiceJpaRepositoryImpl implements
                     .withCommandId(command.commandId()) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            logger.error(dve.getMessage(), dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            LOG.error("Error occured.", dve);
             throw new PlatformDataIntegrityException("error.msg.password.validation.policy.unknown.data.integrity.issue",
-                    "Unknown data integrity issue with resource.");
+                    "Unknown data integrity issue with resource.", dve);
         }
     }
 }

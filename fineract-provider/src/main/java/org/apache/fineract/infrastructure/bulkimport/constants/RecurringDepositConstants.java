@@ -18,7 +18,11 @@
  */
 package org.apache.fineract.infrastructure.bulkimport.constants;
 
-public class RecurringDepositConstants {
+public final class RecurringDepositConstants {
+
+    private RecurringDepositConstants() {
+
+    }
 
     public static final int OFFICE_NAME_COL = 0;
     public static final int CLIENT_NAME_COL = 1;
@@ -53,7 +57,6 @@ public class RecurringDepositConstants {
     public static final int CHARGE_ID_2 = 33;
     public static final int CHARGE_AMOUNT_2 = 34;
     public static final int CHARGE_DUE_DATE_2 = 35;
-
 
     public static final int LOOKUP_CLIENT_NAME_COL = 31;
     public static final int LOOKUP_ACTIVATION_DATE_COL = 32;

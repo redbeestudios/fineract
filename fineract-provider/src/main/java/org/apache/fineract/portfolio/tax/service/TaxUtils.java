@@ -28,7 +28,11 @@ import org.apache.fineract.portfolio.tax.domain.TaxComponent;
 import org.apache.fineract.portfolio.tax.domain.TaxGroupMappings;
 import org.joda.time.LocalDate;
 
-public class TaxUtils {
+public final class TaxUtils {
+
+    private TaxUtils() {
+
+    }
 
     public static Map<TaxComponent, BigDecimal> splitTax(final BigDecimal amount, final LocalDate date,
             final Set<TaxGroupMappings> taxGroupMappings, final int scale) {
@@ -73,7 +77,7 @@ public class TaxUtils {
     public static BigDecimal addTax(final BigDecimal amount, final LocalDate date, final List<TaxGroupMappings> taxGroupMappings,
             final int scale) {
         BigDecimal totalAmount = null;
-        if (amount != null && amount.compareTo(BigDecimal.ZERO) == 1) {
+        if (amount != null && amount.compareTo(BigDecimal.ZERO) > 0) {
             double percentageVal = 0;
             double amountVal = amount.doubleValue();
             double cent_percentage = Double.valueOf("100.0");

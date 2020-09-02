@@ -21,8 +21,7 @@ package org.apache.fineract.portfolio.savings;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccount;
 
 /**
- * An enumeration of on hold transactions that can occur on a
- * {@link SavingsAccount}.
+ * An enumeration of on hold transactions that can occur on a {@link SavingsAccount}.
  */
 public enum DepositAccountOnHoldTransactionType {
 
@@ -33,7 +32,7 @@ public enum DepositAccountOnHoldTransactionType {
     private final Integer value;
     private final String code;
 
-    private DepositAccountOnHoldTransactionType(final Integer value, final String code) {
+    DepositAccountOnHoldTransactionType(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }
@@ -48,7 +47,9 @@ public enum DepositAccountOnHoldTransactionType {
 
     public static DepositAccountOnHoldTransactionType fromInt(final Integer transactionType) {
 
-        if (transactionType == null) { return DepositAccountOnHoldTransactionType.INVALID; }
+        if (transactionType == null) {
+            return DepositAccountOnHoldTransactionType.INVALID;
+        }
 
         DepositAccountOnHoldTransactionType savingsAccountTransactionType = DepositAccountOnHoldTransactionType.INVALID;
         switch (transactionType) {

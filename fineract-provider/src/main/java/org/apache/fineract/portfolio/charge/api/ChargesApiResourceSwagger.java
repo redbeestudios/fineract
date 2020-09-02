@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.charge.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 
 /**
@@ -27,84 +26,85 @@ import java.util.Set;
  */
 final class ChargesApiResourceSwagger {
 
-    @ApiModel(value = "GetChargesResponse")
+    @Schema(description = "GetChargesResponse")
     public static final class GetChargesResponse {
-        private GetChargesResponse() {
-        }
 
-        final class GetChargesCurrencyResponse {
-            @ApiModelProperty(example = "USD")
+        private GetChargesResponse() {}
+
+        static final class GetChargesCurrencyResponse {
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetChargesTimeTypeResponse {
-            private GetChargesTimeTypeResponse() {
-            }
+        static final class GetChargesTimeTypeResponse {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesTimeTypeResponse() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeTimeType.disbursement")
+            @Schema(example = "chargeTimeType.disbursement")
             public String code;
-            @ApiModelProperty(example = "Disbursement")
-            public String value;
+            @Schema(example = "Disbursement")
+            public String description;
         }
 
-        final class GetChargesAppliesToResponse {
-            private GetChargesAppliesToResponse() {
-            }
+        static final class GetChargesAppliesToResponse {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesAppliesToResponse() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeAppliesTo.loan")
+            @Schema(example = "chargeAppliesTo.loan")
             public String code;
-            @ApiModelProperty(example = "Loan")
-            public String value;
+            @Schema(example = "Loan")
+            public String description;
         }
 
-        final class GetChargesCalculationTypeResponse {
-            private GetChargesCalculationTypeResponse() {
-            }
+        static final class GetChargesCalculationTypeResponse {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesCalculationTypeResponse() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeCalculationType.flat")
+            @Schema(example = "chargeCalculationType.flat")
             public String code;
-            @ApiModelProperty(example = "Flat")
-            public String value;
+            @Schema(example = "Flat")
+            public String description;
         }
 
-        final class GetChargesPaymentModeResponse {
-            private GetChargesPaymentModeResponse() {
-            }
+        static final class GetChargesPaymentModeResponse {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesPaymentModeResponse() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargepaymentmode.accounttransfer")
+            @Schema(example = "chargepaymentmode.accounttransfer")
             public String code;
-            @ApiModelProperty(example = "Account Transfer")
-            public String value;
+            @Schema(example = "Account Transfer")
+            public String description;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Long id;
-        @ApiModelProperty(example = "Loan Service fee")
+        @Schema(example = "Loan Service fee")
         public String name;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public String active;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public String penalty;
         public GetChargesCurrencyResponse currency;
-        @ApiModelProperty(example = "230.56")
+        @Schema(example = "230.56")
         public Float amount;
         public GetChargesTimeTypeResponse chargeTimeType;
         public GetChargesAppliesToResponse chargeAppliesTo;
@@ -112,108 +112,112 @@ final class ChargesApiResourceSwagger {
         public GetChargesPaymentModeResponse chargePaymentMode;
     }
 
-    @ApiModel(value = "PostChargesRequest")
+    @Schema(description = "PostChargesRequest")
     public static final class PostChargesRequest {
-        private PostChargesRequest() {
-        }
 
-        @ApiModelProperty(example = "Loan Service fee")
+        private PostChargesRequest() {}
+
+        @Schema(example = "Loan Service fee")
         public String name;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer chargeAppliesTo;
-        @ApiModelProperty(example = "USD")
+        @Schema(example = "USD")
         public String currencyCode;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "230.56")
+        @Schema(example = "230.56")
         public Float amount;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer chargeTimeType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer chargeCalculationType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer chargePaymentMode;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public String active;
     }
 
-    @ApiModel(value = "PostChargesResponse")
+    @Schema(description = "PostChargesResponse")
     public static final class PostChargesResponse {
-        private PostChargesResponse() {
-        }
 
-        @ApiModelProperty(example = "1")
+        private PostChargesResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutChargesChargeIdRequest")
+    @Schema(description = "PutChargesChargeIdRequest")
     public static final class PutChargesChargeIdRequest {
-        private PutChargesChargeIdRequest() {
-        }
 
-        @ApiModelProperty(example = "Loan service fee(changed)")
+        private PutChargesChargeIdRequest() {}
+
+        @Schema(example = "Loan service fee(changed)")
         public String name;
     }
 
-    @ApiModel(value = "PutChargesChargeIdResponse")
+    @Schema(description = "PutChargesChargeIdResponse")
     public static final class PutChargesChargeIdResponse {
-        private PutChargesChargeIdResponse() {
-        }
 
-        @ApiModelProperty(example = "1")
+        private PutChargesChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
         public PutChargesChargeIdRequest changes;
     }
 
-    @ApiModel(value = "DeleteChargesChargeIdResponse")
+    @Schema(description = "DeleteChargesChargeIdResponse")
     public static final class DeleteChargesChargeIdResponse {
-        private DeleteChargesChargeIdResponse() {
-        }
 
-        @ApiModelProperty(example = "1")
+        private DeleteChargesChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "GetChargesTemplateResponse")
+    @Schema(description = "GetChargesTemplateResponse")
     public static final class GetChargesTemplateResponse {
-        private GetChargesTemplateResponse() {
-        }
 
-        final class GetChargesTemplateLoanChargeCalculationTypeOptions {
-            private GetChargesTemplateLoanChargeCalculationTypeOptions() {
-            }
+        private GetChargesTemplateResponse() {}
 
-            @ApiModelProperty(example = "1")
+        static final class GetChargesTemplateLoanChargeCalculationTypeOptions {
+
+            private GetChargesTemplateLoanChargeCalculationTypeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeCalculationType.flat")
+            @Schema(example = "chargeCalculationType.flat")
             public String code;
-            @ApiModelProperty(example = "Flat")
-            public String value;
+            @Schema(example = "Flat")
+            public String description;
         }
 
-        final class GetChargesTemplateLoanChargeTimeTypeOptions {
-            private GetChargesTemplateLoanChargeTimeTypeOptions() {
-            }
+        static final class GetChargesTemplateLoanChargeTimeTypeOptions {
 
-            @ApiModelProperty(example = "2")
+            private GetChargesTemplateLoanChargeTimeTypeOptions() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "chargeTimeType.specifiedDueDate")
+            @Schema(example = "chargeTimeType.specifiedDueDate")
             public String code;
-            @ApiModelProperty(example = "Specified due date")
-            public String value;
+            @Schema(example = "Specified due date")
+            public String description;
         }
-        final class GetChargesTemplateFeeFrequencyOptions{
-            private GetChargesTemplateFeeFrequencyOptions(){}
-            @ApiModelProperty(example = "0")
+
+        static final class GetChargesTemplateFeeFrequencyOptions {
+
+            private GetChargesTemplateFeeFrequencyOptions() {}
+
+            @Schema(example = "0")
             public Integer id;
-            @ApiModelProperty(example = "loanTermFrequency.periodFrequencyType.days")
+            @Schema(example = "loanTermFrequency.periodFrequencyType.days")
             public String code;
-            @ApiModelProperty(example = "Days")
-            public String value;
+            @Schema(example = "Days")
+            public String description;
         }
-        @ApiModelProperty(example = "false")
+
+        @Schema(example = "false")
         public String active;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public String penalty;
         public Set<GetChargesResponse.GetChargesCurrencyResponse> currencyOptions;
         public Set<GetChargesResponse.GetChargesCalculationTypeResponse> chargeCalculationTypeOptions;

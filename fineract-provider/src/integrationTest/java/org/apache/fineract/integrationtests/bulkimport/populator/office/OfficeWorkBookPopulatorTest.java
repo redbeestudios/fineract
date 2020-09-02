@@ -18,10 +18,10 @@
  */
 package org.apache.fineract.integrationtests.bulkimport.populator.office;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.io.IOException;
 import org.apache.fineract.infrastructure.bulkimport.constants.OfficeConstants;
 import org.apache.fineract.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
@@ -30,34 +30,31 @@ import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class OfficeWorkBookPopulatorTest {
+
     private ResponseSpecification responseSpec;
     private RequestSpecification requestSpec;
 
-    @Before
-    public void setup(){
+    @BeforeEach
+    public void setup() {
         Utils.initializeRESTAssured();
-        this.requestSpec=new RequestSpecBuilder().build();
-        this.requestSpec
-                .header("Authorization",
-                        "Basic "
-                                + Utils.loginIntoServerAndGetBase64EncodedAuthenticationKey());
-        this.responseSpec = new ResponseSpecBuilder().expectStatusCode(200)
-                .build();
+        this.requestSpec = new RequestSpecBuilder().build();
+        this.requestSpec.header("Authorization", "Basic " + Utils.loginIntoServerAndGetBase64EncodedAuthenticationKey());
+        this.responseSpec = new ResponseSpecBuilder().expectStatusCode(200).build();
     }
 
     @Test
     public void testOfficeWorkbookPopulate() throws IOException {
-        OfficeHelper officeHelper=new OfficeHelper(requestSpec,responseSpec);
-        Workbook workbook=officeHelper.getOfficeWorkBook("dd MMMM yyyy");
-        Sheet sheet=workbook.getSheet(TemplatePopulateImportConstants.OFFICE_SHEET_NAME);
-        Row firstRow= sheet.getRow(1);
-        Assert.assertNotNull("No parent offices found",firstRow.getCell(OfficeConstants.LOOKUP_OFFICE_COL).getStringCellValue());
-        Assert.assertEquals(1,firstRow.getCell(OfficeConstants.LOOKUP_OFFICE_ID_COL).getNumericCellValue(),0.0);
+        OfficeHelper officeHelper = new OfficeHelper(requestSpec, responseSpec);
+        Workbook workbook = officeHelper.getOfficeWorkBook("dd MMMM yyyy");
+        Sheet sheet = workbook.getSheet(TemplatePopulateImportConstants.OFFICE_SHEET_NAME);
+        Row firstRow = sheet.getRow(1);
+        Assertions.assertNotNull("No parent offices found", firstRow.getCell(OfficeConstants.LOOKUP_OFFICE_COL).getStringCellValue());
+        Assertions.assertEquals(1, firstRow.getCell(OfficeConstants.LOOKUP_OFFICE_ID_COL).getNumericCellValue(), 0.0);
 
     }
 }

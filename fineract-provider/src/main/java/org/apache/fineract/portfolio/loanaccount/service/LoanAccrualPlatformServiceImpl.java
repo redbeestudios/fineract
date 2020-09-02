@@ -21,17 +21,23 @@ package org.apache.fineract.portfolio.loanaccount.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.apache.fineract.infrastructure.core.exception.MultiException;
 import org.apache.fineract.infrastructure.jobs.annotation.CronTarget;
 import org.apache.fineract.infrastructure.jobs.exception.JobExecutionException;
 import org.apache.fineract.infrastructure.jobs.service.JobName;
 import org.apache.fineract.portfolio.loanaccount.data.LoanScheduleAccrualData;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoanAccrualPlatformServiceImpl implements LoanAccrualPlatformService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LoanAccrualPlatformServiceImpl.class);
 
     private final LoanReadPlatformService loanReadPlatformService;
     private final LoanAccrualWritePlatformService loanAccrualWritePlatformService;
@@ -47,7 +53,6 @@ public class LoanAccrualPlatformServiceImpl implements LoanAccrualPlatformServic
     @CronTarget(jobName = JobName.ADD_ACCRUAL_ENTRIES)
     public void addAccrualAccounting() throws JobExecutionException {
         Collection<LoanScheduleAccrualData> loanScheduleAccrualDatas = this.loanReadPlatformService.retriveScheduleAccrualData();
-        StringBuilder sb = new StringBuilder();
         Map<Long, Collection<LoanScheduleAccrualData>> loanDataMap = new HashMap<>();
         for (final LoanScheduleAccrualData accrualData : loanScheduleAccrualDatas) {
             if (loanDataMap.containsKey(accrualData.getLoanId())) {
@@ -59,37 +64,39 @@ public class LoanAccrualPlatformServiceImpl implements LoanAccrualPlatformServic
             }
         }
 
+        List<Throwable> errors = new ArrayList<>();
         for (Map.Entry<Long, Collection<LoanScheduleAccrualData>> mapEntry : loanDataMap.entrySet()) {
             try {
                 this.loanAccrualWritePlatformService.addAccrualAccounting(mapEntry.getKey(), mapEntry.getValue());
             } catch (Exception e) {
-                Throwable realCause = e;
-                if (e.getCause() != null) {
-                    realCause = e.getCause();
-                }
-                sb.append("failed to add accural transaction for loan " + mapEntry.getKey() + " with message " + realCause.getMessage());
+                LOG.error("Failed to add accural transaction for loan {}", mapEntry.getKey(), e);
+                errors.add(e);
             }
         }
-
-        if (sb.length() > 0) { throw new JobExecutionException(sb.toString()); }
+        if (!errors.isEmpty()) {
+            throw new JobExecutionException(errors);
+        }
     }
 
     @Override
     @CronTarget(jobName = JobName.ADD_PERIODIC_ACCRUAL_ENTRIES)
     public void addPeriodicAccruals() throws JobExecutionException {
-        String errors = addPeriodicAccruals(LocalDate.now());
-        if (errors.length() > 0) { throw new JobExecutionException(errors); }
+        try {
+            addPeriodicAccruals(LocalDate.now());
+        } catch (MultiException e) {
+            throw new JobExecutionException(e);
+        }
     }
 
     @Override
-    public String addPeriodicAccruals(final LocalDate tilldate) {
+    public void addPeriodicAccruals(final LocalDate tilldate) throws JobExecutionException {
         Collection<LoanScheduleAccrualData> loanScheduleAccrualDatas = this.loanReadPlatformService.retrivePeriodicAccrualData(tilldate);
-        return addPeriodicAccruals(tilldate, loanScheduleAccrualDatas);
+        addPeriodicAccruals(tilldate, loanScheduleAccrualDatas);
     }
 
     @Override
-    public String addPeriodicAccruals(final LocalDate tilldate, Collection<LoanScheduleAccrualData> loanScheduleAccrualDatas) {
-        StringBuilder sb = new StringBuilder();
+    public void addPeriodicAccruals(final LocalDate tilldate, Collection<LoanScheduleAccrualData> loanScheduleAccrualDatas)
+            throws JobExecutionException {
         Map<Long, Collection<LoanScheduleAccrualData>> loanDataMap = new HashMap<>();
         for (final LoanScheduleAccrualData accrualData : loanScheduleAccrualDatas) {
             if (loanDataMap.containsKey(accrualData.getLoanId())) {
@@ -101,39 +108,37 @@ public class LoanAccrualPlatformServiceImpl implements LoanAccrualPlatformServic
             }
         }
 
+        List<Throwable> errors = new ArrayList<>();
         for (Map.Entry<Long, Collection<LoanScheduleAccrualData>> mapEntry : loanDataMap.entrySet()) {
             try {
                 this.loanAccrualWritePlatformService.addPeriodicAccruals(tilldate, mapEntry.getKey(), mapEntry.getValue());
             } catch (Exception e) {
-                Throwable realCause = e;
-                if (e.getCause() != null) {
-                    realCause = e.getCause();
-                }
-                sb.append("failed to add accural transaction for loan " + mapEntry.getKey() + " with message " + realCause.getMessage());
+                LOG.error("Failed to add accural transaction for loan {}", mapEntry.getKey(), e);
+                errors.add(e);
             }
         }
-
-        return sb.toString();
+        if (!errors.isEmpty()) {
+            throw new JobExecutionException(errors);
+        }
     }
 
     @Override
     @CronTarget(jobName = JobName.ADD_PERIODIC_ACCRUAL_ENTRIES_FOR_LOANS_WITH_INCOME_POSTED_AS_TRANSACTIONS)
     public void addPeriodicAccrualsForLoansWithIncomePostedAsTransactions() throws JobExecutionException {
         Collection<Long> loanIds = this.loanReadPlatformService.retrieveLoanIdsWithPendingIncomePostingTransactions();
-        if(loanIds != null && loanIds.size() > 0){
-            StringBuilder sb = new StringBuilder();
+        if (loanIds != null && loanIds.size() > 0) {
+            List<Throwable> errors = new ArrayList<>();
             for (Long loanId : loanIds) {
                 try {
                     this.loanAccrualWritePlatformService.addIncomeAndAccrualTransactions(loanId);
                 } catch (Exception e) {
-                    Throwable realCause = e;
-                    if (e.getCause() != null) {
-                        realCause = e.getCause();
-                    }
-                    sb.append("failed to add income and accrual transaction for loan " + loanId + " with message " + realCause.getMessage());
+                    LOG.error("Failed to add income and accrual transaction for loan {}", loanId, e);
+                    errors.add(e);
                 }
             }
-            if (sb.length() > 0) { throw new JobExecutionException(sb.toString()); }
+            if (!errors.isEmpty()) {
+                throw new JobExecutionException(errors);
+            }
         }
     }
 }

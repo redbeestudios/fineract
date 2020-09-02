@@ -30,7 +30,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "m_client_transfer_details")
-public class ClientTransferDetails extends AbstractPersistableCustom<Long> {
+public class ClientTransferDetails extends AbstractPersistableCustom {
 
     @Column(name = "client_id", length = 20, unique = true, nullable = false)
     private Long clientId;
@@ -55,12 +55,10 @@ public class ClientTransferDetails extends AbstractPersistableCustom<Long> {
     @Column(name = "submitted_by", nullable = false)
     private Long submittedBy;
 
-    protected ClientTransferDetails() {
-    }
+    protected ClientTransferDetails() {}
 
-    private ClientTransferDetails(final Long clientId, final Long fromOfficeId, final Long toOfficeId,
-            final Date proposedTransferDate, final Integer transferEventType, final Date submittedOn,
-            final Long submittedBy) {
+    private ClientTransferDetails(final Long clientId, final Long fromOfficeId, final Long toOfficeId, final Date proposedTransferDate,
+            final Integer transferEventType, final Date submittedOn, final Long submittedBy) {
         this.clientId = clientId;
         this.fromOfficeId = fromOfficeId;
         this.toOfficeId = toOfficeId;
@@ -71,10 +69,9 @@ public class ClientTransferDetails extends AbstractPersistableCustom<Long> {
     }
 
     public static ClientTransferDetails instance(final Long clientId, final Long fromOfficeId, final Long toOfficeId,
-            final Date proposedTransferDate, final Integer transferEventType, final Date submittedOn,
-            final Long submittedBy) {
-        return new ClientTransferDetails(clientId, fromOfficeId, toOfficeId, proposedTransferDate, transferEventType,
-                submittedOn, submittedBy);
+            final Date proposedTransferDate, final Integer transferEventType, final Date submittedOn, final Long submittedBy) {
+        return new ClientTransferDetails(clientId, fromOfficeId, toOfficeId, proposedTransferDate, transferEventType, submittedOn,
+                submittedBy);
 
     }
 

@@ -26,12 +26,11 @@ public class ResponseData {
     private Integer sequenceNo;
 
     public ResponseData() {
-        super();
+
     }
 
-    public ResponseData(final Long id, final String text, final Integer value,
-                        final Integer sequenceNo) {
-        super();
+    public ResponseData(final Long id, final String text, final Integer value, final Integer sequenceNo) {
+
         this.id = id;
         this.text = text;
         this.value = value;

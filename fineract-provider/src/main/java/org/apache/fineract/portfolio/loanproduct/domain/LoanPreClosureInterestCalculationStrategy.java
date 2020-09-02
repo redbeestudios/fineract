@@ -30,8 +30,8 @@ public enum LoanPreClosureInterestCalculationStrategy {
     // REPAYMENT_PERIOD_DATE(3,
     // "loanPreClosureInterestCalculationStrategy.repaymentPeriodDate")
 
-    private Integer value;
-    private String code;
+    private final Integer value;
+    private final String code;
 
     private static final Map<Integer, LoanPreClosureInterestCalculationStrategy> intToEnumMap = new HashMap<>();
     private static int minValue;
@@ -58,7 +58,7 @@ public enum LoanPreClosureInterestCalculationStrategy {
         return type;
     }
 
-    private LoanPreClosureInterestCalculationStrategy(final Integer value, final String code) {
+    LoanPreClosureInterestCalculationStrategy(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

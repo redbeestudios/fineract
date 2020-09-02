@@ -29,7 +29,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_product_loan_variations_borrower_cycle")
-public class LoanProductBorrowerCycleVariations extends AbstractPersistableCustom<Long> {
+public class LoanProductBorrowerCycleVariations extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "loan_product_id", nullable = false)
@@ -53,8 +53,7 @@ public class LoanProductBorrowerCycleVariations extends AbstractPersistableCusto
     @Column(name = "default_value", scale = 6, precision = 19, nullable = false)
     private BigDecimal defaultValue;
 
-    protected LoanProductBorrowerCycleVariations() {
-    }
+    protected LoanProductBorrowerCycleVariations() {}
 
     public LoanProductBorrowerCycleVariations(final Integer borrowerCycleNumber, final Integer paramType, final Integer valueConditionType,
             final BigDecimal minValue, final BigDecimal maxValue, final BigDecimal defaultValue) {
@@ -80,14 +79,14 @@ public class LoanProductBorrowerCycleVariations extends AbstractPersistableCusto
 
     @Override
     public boolean equals(final Object obj) {
+        if (!(obj instanceof LoanProductBorrowerCycleVariations)) {
+            return false;
+        }
         final LoanProductBorrowerCycleVariations other = (LoanProductBorrowerCycleVariations) obj;
-        return Objects.equals(loanProduct, other.loanProduct)
-            && Objects.equals(borrowerCycleNumber, other.borrowerCycleNumber)
-            && Objects.equals(paramType, other.paramType)
-            && Objects.equals(valueConditionType, other.valueConditionType)
-            && Objects.equals(minValue, other.minValue)
-            && Objects.equals(maxValue, other.maxValue)
-            && Objects.equals(defaultValue, other.defaultValue);
+        return Objects.equals(loanProduct, other.loanProduct) && Objects.equals(borrowerCycleNumber, other.borrowerCycleNumber)
+                && Objects.equals(paramType, other.paramType) && Objects.equals(valueConditionType, other.valueConditionType)
+                && Objects.equals(minValue, other.minValue) && Objects.equals(maxValue, other.maxValue)
+                && Objects.equals(defaultValue, other.defaultValue);
     }
 
     @Override

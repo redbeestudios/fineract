@@ -25,6 +25,7 @@ import java.util.List;
  * An enumeration of supported calendar periods used in savings.
  */
 public enum SharePeriodFrequencyType {
+
     DAYS(0, "sharePeriodFrequencyType.days"), //
     WEEKS(1, "sharePeriodFrequencyType.weeks"), //
     MONTHS(2, "sharePeriodFrequencyType.months"), //
@@ -34,7 +35,7 @@ public enum SharePeriodFrequencyType {
     private final Integer value;
     private final String code;
 
-    private SharePeriodFrequencyType(final Integer value, final String code) {
+    SharePeriodFrequencyType(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

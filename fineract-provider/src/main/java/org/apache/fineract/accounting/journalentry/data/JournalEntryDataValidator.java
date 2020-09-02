@@ -40,7 +40,7 @@ public class JournalEntryDataValidator {
 
     private final FromJsonHelper fromApiJsonHelper;
 
-    private final Set<String> RUNNING_BALANCE_UPDATE_REQUEST_DATA_PARAMETERS = new HashSet<>(
+    private static final Set<String> RUNNING_BALANCE_UPDATE_REQUEST_DATA_PARAMETERS = new HashSet<>(
             Arrays.asList(JournalEntryJsonInputParams.OFFICE_ID.getValue()));
 
     @Autowired
@@ -60,8 +60,10 @@ public class JournalEntryDataValidator {
             baseDataValidator.reset().parameter(JournalEntryJsonInputParams.OFFICE_ID.getValue()).value(officeId).ignoreIfNull()
                     .longGreaterThanZero();
         }
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException("validation.msg.validation.errors.exist",
-                "Validation errors exist.", dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException("validation.msg.validation.errors.exist", "Validation errors exist.",
+                    dataValidationErrors);
+        }
     }
 
 }

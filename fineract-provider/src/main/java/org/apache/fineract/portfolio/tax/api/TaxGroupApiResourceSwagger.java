@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.tax.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -28,128 +27,128 @@ import java.util.Set;
  * Created by Chirag Gupta on 12/14/17.
  */
 final class TaxGroupApiResourceSwagger {
-    private TaxGroupApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetTaxesGroupResponse")
-    public final static class GetTaxesGroupResponse {
-        private GetTaxesGroupResponse() {
-        }
+    private TaxGroupApiResourceSwagger() {}
 
-        final class GetTaxesGroupTaxAssociations {
-            private GetTaxesGroupTaxAssociations() {
-            }
+    @Schema(description = "GetTaxesGroupResponse")
+    public static final class GetTaxesGroupResponse {
 
-            final class GetTaxesGroupTaxComponent {
-                private GetTaxesGroupTaxComponent() {
-                }
+        private GetTaxesGroupResponse() {}
 
-                @ApiModelProperty(example = "7")
+        static final class GetTaxesGroupTaxAssociations {
+
+            private GetTaxesGroupTaxAssociations() {}
+
+            static final class GetTaxesGroupTaxComponent {
+
+                private GetTaxesGroupTaxComponent() {}
+
+                @Schema(example = "7")
                 public Integer id;
-                @ApiModelProperty(example = "tax component 2")
+                @Schema(example = "tax component 2")
                 public String name;
             }
 
-            @ApiModelProperty(example = "7")
+            @Schema(example = "7")
             public Integer id;
             public GetTaxesGroupTaxComponent taxComponent;
-            @ApiModelProperty(example = "[2016, 4, 11]")
+            @Schema(example = "[2016, 4, 11]")
             public LocalDate startDate;
         }
 
-        @ApiModelProperty(example = "7")
+        @Schema(example = "7")
         public Integer id;
-        @ApiModelProperty(example = "tax group 1")
+        @Schema(example = "tax group 1")
         public String name;
         public Set<GetTaxesGroupTaxAssociations> taxAssociations;
     }
 
-    @ApiModel(value = "PostTaxesGroupRequest")
-    public final static class PostTaxesGroupRequest {
-        private PostTaxesGroupRequest() {
-        }
+    @Schema(description = "PostTaxesGroupRequest")
+    public static final class PostTaxesGroupRequest {
 
-        final class PostTaxesGroupTaxComponents {
-            private PostTaxesGroupTaxComponents() {
-            }
+        private PostTaxesGroupRequest() {}
 
-            @ApiModelProperty(example = "7")
+        static final class PostTaxesGroupTaxComponents {
+
+            private PostTaxesGroupTaxComponents() {}
+
+            @Schema(example = "7")
             public Integer taxComponentId;
-            @ApiModelProperty(example = "11 April 2016")
+            @Schema(example = "11 April 2016")
             public String startDate;
         }
 
-        @ApiModelProperty(example = "tax group 1")
+        @Schema(example = "tax group 1")
         public String name;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
         public Set<PostTaxesGroupTaxComponents> taxComponents;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
     }
 
-    @ApiModel(value = "PostTaxesGroupResponse")
+    @Schema(description = "PostTaxesGroupResponse")
     public static final class PostTaxesGroupResponse {
-        private PostTaxesGroupResponse() {
-        }
 
-        @ApiModelProperty(example = "1")
+        private PostTaxesGroupResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutTaxesGroupTaxGroupIdRequest")
-    public final static class PutTaxesGroupTaxGroupIdRequest {
-        private PutTaxesGroupTaxGroupIdRequest() {
-        }
+    @Schema(description = "PutTaxesGroupTaxGroupIdRequest")
+    public static final class PutTaxesGroupTaxGroupIdRequest {
 
-        final class PutTaxesGroupTaxComponents {
-            private PutTaxesGroupTaxComponents() {
-            }
+        private PutTaxesGroupTaxGroupIdRequest() {}
 
-            @ApiModelProperty(example = "7")
+        static final class PutTaxesGroupTaxComponents {
+
+            private PutTaxesGroupTaxComponents() {}
+
+            @Schema(example = "7")
             public Integer id;
-            @ApiModelProperty(example = "7")
+            @Schema(example = "7")
             public Integer taxComponentId;
-            @ApiModelProperty(example = "22 April 2016")
+            @Schema(example = "22 April 2016")
             public String endDate;
         }
 
-        @ApiModelProperty(example = "tax group 2")
+        @Schema(example = "tax group 2")
         public String name;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
         public Set<PutTaxesGroupTaxComponents> taxComponents;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
     }
 
-    @ApiModel(value = "PutTaxesGroupTaxGroupIdResponse")
-    public final static class PutTaxesGroupTaxGroupIdResponse {
-        private PutTaxesGroupTaxGroupIdResponse() {
-        }
+    @Schema(description = "PutTaxesGroupTaxGroupIdResponse")
+    public static final class PutTaxesGroupTaxGroupIdResponse {
 
-        final class PutTaxesGroupChanges {
-            private PutTaxesGroupChanges() {
-            }
+        private PutTaxesGroupTaxGroupIdResponse() {}
 
-            final class PutTaxesGroupModifiedComponents {
-                private PutTaxesGroupModifiedComponents() {
-                }
+        static final class PutTaxesGroupChanges {
 
-                @ApiModelProperty(example = "Apr 22, 2016 12:00:00 AM")
+            private PutTaxesGroupChanges() {}
+
+            static final class PutTaxesGroupModifiedComponents {
+
+                private PutTaxesGroupModifiedComponents() {}
+
+                @Schema(example = "Apr 22, 2016 12:00:00 AM")
                 public String endDate;
-                @ApiModelProperty(example = "7")
+                @Schema(example = "7")
                 public Integer taxComponentId;
             }
 
-            @ApiModelProperty(example = "[6]")
+            @Schema(example = "[6]")
             public List<Integer> addComponents;
             public Set<PutTaxesGroupModifiedComponents> modifiedComponents;
-            @ApiModelProperty(example = "tax group 2")
+            @Schema(example = "tax group 2")
             public String name;
         }
 
-        @ApiModelProperty(example = "7")
+        @Schema(example = "7")
         public Integer resourceId;
         public PutTaxesGroupChanges changes;
     }

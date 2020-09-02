@@ -31,7 +31,7 @@ import org.apache.fineract.organisation.monetary.domain.Money;
 
 @Entity
 @Table(name = "m_loan_transaction_repayment_schedule_mapping")
-public class LoanTransactionToRepaymentScheduleMapping extends AbstractPersistableCustom<Long> {
+public class LoanTransactionToRepaymentScheduleMapping extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "loan_repayment_schedule_id", nullable = false)
@@ -56,9 +56,9 @@ public class LoanTransactionToRepaymentScheduleMapping extends AbstractPersistab
 
     }
 
-    private LoanTransactionToRepaymentScheduleMapping(final LoanRepaymentScheduleInstallment installment,
-            final BigDecimal principalPortion, final BigDecimal interestPortion, final BigDecimal feeChargesPortion,
-            final BigDecimal penaltyChargesPortion, final BigDecimal amount) {
+    private LoanTransactionToRepaymentScheduleMapping(final LoanRepaymentScheduleInstallment installment, final BigDecimal principalPortion,
+            final BigDecimal interestPortion, final BigDecimal feeChargesPortion, final BigDecimal penaltyChargesPortion,
+            final BigDecimal amount) {
         this.installment = installment;
         this.principalPortion = principalPortion;
         this.interestPortion = interestPortion;

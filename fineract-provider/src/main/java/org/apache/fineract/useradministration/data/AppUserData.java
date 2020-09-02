@@ -29,7 +29,7 @@ import org.apache.fineract.portfolio.client.data.ClientData;
 /**
  * Immutable data object for application user data.
  */
-public class AppUserData implements Serializable {
+public final class AppUserData implements Serializable {
 
     private final Long id;
     private final String username;
@@ -40,7 +40,7 @@ public class AppUserData implements Serializable {
     private final String email;
     private final Boolean passwordNeverExpires;
 
-    //import fields
+    // import fields
     private List<Long> roles;
     private Boolean sendPasswordToEmail;
     private Long staffId;
@@ -57,15 +57,14 @@ public class AppUserData implements Serializable {
     @SuppressWarnings("unused")
     private Set<ClientData> clients;
 
-    public static AppUserData importInstance(Long officeId,Long staffId,String userName, String firstName, String lastName,
-            String email,Boolean sendPasswordToEmail,Boolean passwordNeverExpires, List<Long> roleIds,
-            Integer rowIndex){
-        return new AppUserData(officeId,staffId,userName,firstName,lastName,email,
-                sendPasswordToEmail,passwordNeverExpires,roleIds,rowIndex);
+    public static AppUserData importInstance(Long officeId, Long staffId, String username, String firstname, String lastname, String email,
+            Boolean sendPasswordToEmail, Boolean passwordNeverExpires, List<Long> roleIds, Integer rowIndex) {
+        return new AppUserData(officeId, staffId, username, firstname, lastname, email, sendPasswordToEmail, passwordNeverExpires, roleIds,
+                rowIndex);
     }
-    private AppUserData(Long officeId,Long staffId,String username, String firstname, String lastname,
-            String email,Boolean sendPasswordToEmail,Boolean passwordNeverExpires, List<Long> roleIds,
-            Integer rowIndex) {
+
+    private AppUserData(Long officeId, Long staffId, String username, String firstname, String lastname, String email,
+            Boolean sendPasswordToEmail, Boolean passwordNeverExpires, List<Long> roleIds, Integer rowIndex) {
         this.id = null;
         this.username = username;
         this.officeId = officeId;
@@ -97,7 +96,8 @@ public class AppUserData implements Serializable {
                 user.isSelfServiceUser);
     }
 
-    public static AppUserData template(final Collection<OfficeData> offices, final Collection<RoleData> availableRoles, final Collection<RoleData> selfServiceRoles) {
+    public static AppUserData template(final Collection<OfficeData> offices, final Collection<RoleData> availableRoles,
+            final Collection<RoleData> selfServiceRoles) {
         return new AppUserData(null, null, null, null, null, null, null, availableRoles, selfServiceRoles, null, offices, null, null, null);
     }
 
@@ -109,15 +109,15 @@ public class AppUserData implements Serializable {
             final String officeName, final String firstname, final String lastname, final Collection<RoleData> availableRoles,
             final Collection<RoleData> selfServiceRoles, final Collection<RoleData> selectedRoles, final StaffData staff,
             final Boolean passwordNeverExpire, final Boolean isSelfServiceUser) {
-        return new AppUserData(id, username, email, officeId, officeName, firstname, lastname, availableRoles, selfServiceRoles, selectedRoles, null,
-                staff, passwordNeverExpire, isSelfServiceUser);
+        return new AppUserData(id, username, email, officeId, officeName, firstname, lastname, availableRoles, selfServiceRoles,
+                selectedRoles, null, staff, passwordNeverExpire, isSelfServiceUser);
     }
 
     private AppUserData(final Long id, final String username, final String email, final Long officeId, final String officeName,
             final String firstname, final String lastname, final Collection<RoleData> availableRoles,
             final Collection<RoleData> selfServiceRoles, final Collection<RoleData> selectedRoles,
-            final Collection<OfficeData> allowedOffices, final StaffData staff,
-            final Boolean passwordNeverExpire, final Boolean isSelfServiceUser) {
+            final Collection<OfficeData> allowedOffices, final StaffData staff, final Boolean passwordNeverExpire,
+            final Boolean isSelfServiceUser) {
         this.id = id;
         this.username = username;
         this.officeId = officeId;
@@ -144,12 +144,18 @@ public class AppUserData implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !(o instanceof AppUserData)) {
+            return false;
+        }
 
         AppUserData that = (AppUserData) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
 
         return true;
     }
@@ -159,12 +165,12 @@ public class AppUserData implements Serializable {
         return id != null ? id.hashCode() : 0;
     }
 
-    public void setClients(Set<ClientData> clients){
+    public void setClients(Set<ClientData> clients) {
         this.clients = clients;
     }
 
     public boolean isSelfServiceUser() {
-        return this.isSelfServiceUser==null?false:this.isSelfServiceUser;
+        return this.isSelfServiceUser == null ? false : this.isSelfServiceUser;
     }
 
 }

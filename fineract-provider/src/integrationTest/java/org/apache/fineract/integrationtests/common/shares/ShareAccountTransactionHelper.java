@@ -18,12 +18,16 @@
  */
 package org.apache.fineract.integrationtests.common.shares;
 
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.Map;
 import org.apache.fineract.integrationtests.common.Utils;
 
-public class ShareAccountTransactionHelper {
+public final class ShareAccountTransactionHelper {
+
+    private ShareAccountTransactionHelper() {
+
+    }
 
     private static final String SHARE_ACCOUNT_URL = "/fineract-provider/api/v1/accounts/share";
     private static final String CREATE_SHARE_ACCOUNT_URL = SHARE_ACCOUNT_URL + "?" + Utils.TENANT_IDENTIFIER;
@@ -45,8 +49,8 @@ public class ShareAccountTransactionHelper {
         return Utils.performServerPut(requestSpec, responseSpec, url, shareAccountJson, "resourceId");
     }
 
-    public static Integer postCommand(final String command, final Integer shareAccountId, String jsonBody, final RequestSpecification requestSpec,
-            final ResponseSpecification responseSpec) {
+    public static Integer postCommand(final String command, final Integer shareAccountId, String jsonBody,
+            final RequestSpecification requestSpec, final ResponseSpecification responseSpec) {
         String url = SHARE_ACCOUNT_URL + "/" + shareAccountId + "?command=" + command + "&" + Utils.TENANT_IDENTIFIER;
         return Utils.performServerPost(requestSpec, responseSpec, url, jsonBody, "resourceId");
     }

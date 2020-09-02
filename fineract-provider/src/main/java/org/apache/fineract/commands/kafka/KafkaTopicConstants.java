@@ -24,4 +24,3 @@ public interface KafkaTopicConstants {
     String TOPIC_DEATH_LETTER = "topic_death_letter";
 
 }
-

@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.client.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
@@ -28,168 +27,168 @@ import java.util.Set;
  * Created by Chirag Gupta on 01/12/18.
  */
 final class ClientChargesApiResourceSwagger {
-    private ClientChargesApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetClientsClientIdChargesResponse")
-    public final static class GetClientsClientIdChargesResponse {
-        private GetClientsClientIdChargesResponse() {
-        }
+    private ClientChargesApiResourceSwagger() {}
 
-        final class GetClientsChargesPageItems {
-            private GetClientsChargesPageItems() {
-            }
+    @Schema(description = "GetClientsClientIdChargesResponse")
+    public static final class GetClientsClientIdChargesResponse {
 
-            final class GetClientChargeTimeType {
-                private GetClientChargeTimeType() {
-                }
+        private GetClientsClientIdChargesResponse() {}
 
-                @ApiModelProperty(example = "2")
+        static final class GetClientsChargesPageItems {
+
+            private GetClientsChargesPageItems() {}
+
+            static final class GetClientChargeTimeType {
+
+                private GetClientChargeTimeType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "chargeTimeType.specifiedDueDate")
+                @Schema(example = "chargeTimeType.specifiedDueDate")
                 public String code;
-                @ApiModelProperty(example = "Specified due date")
-                public String value;
+                @Schema(example = "Specified due date")
+                public String description;
             }
 
-            final class GetClientChargeCalculationType {
-                private GetClientChargeCalculationType() {
-                }
+            static final class GetClientChargeCalculationType {
 
-                @ApiModelProperty(example = "1")
+                private GetClientChargeCalculationType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "chargeCalculationType.flat")
+                @Schema(example = "chargeCalculationType.flat")
                 public String code;
-                @ApiModelProperty(example = "Flat")
-                public String value;
+                @Schema(example = "Flat")
+                public String description;
             }
 
-            final class GetClientChargeCurrency {
-                private GetClientChargeCurrency() {
-                }
+            static final class GetClientChargeCurrency {
 
-                @ApiModelProperty(example = "USD")
+                private GetClientChargeCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            @ApiModelProperty(example = "3")
+            @Schema(example = "3")
             public Integer id;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer clientId;
-            @ApiModelProperty(example = "5")
+            @Schema(example = "5")
             public Integer chargeId;
-            @ApiModelProperty(example = "Client Fee 1")
+            @Schema(example = "Client Fee 1")
             public String name;
             public GetClientChargeTimeType chargeTimeType;
-            @ApiModelProperty(example = "[2015, 8, 17]")
+            @Schema(example = "[2015, 8, 17]")
             public LocalDate dueDate;
             public GetClientChargeCalculationType chargeCalculationType;
             public GetClientChargeCurrency currency;
-            @ApiModelProperty(example = "100.000000")
+            @Schema(example = "100.000000")
             public BigDecimal amount;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public BigDecimal amountPaid;
-            @ApiModelProperty(example = "100.000000")
+            @Schema(example = "100.000000")
             public BigDecimal amountWaived;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public BigDecimal amountWrittenOff;
-            @ApiModelProperty(example = "0.000000")
+            @Schema(example = "0.000000")
             public BigDecimal amountOutstanding;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean penalty;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean isActive;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean isPaid;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean isWaived;
         }
 
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer totalFilteredRecords;
         public Set<GetClientsChargesPageItems> pageItems;
     }
 
-    @ApiModel(value = "PostClientsClientIdChargesRequest")
-    public final static class PostClientsClientIdChargesRequest {
-        private PostClientsClientIdChargesRequest() {
-        }
+    @Schema(description = "PostClientsClientIdChargesRequest")
+    public static final class PostClientsClientIdChargesRequest {
 
-        @ApiModelProperty(example = "100")
+        private PostClientsClientIdChargesRequest() {}
+
+        @Schema(example = "100")
         public Integer amount;
-        @ApiModelProperty(example = "226")
+        @Schema(example = "226")
         public Integer chargeId;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "01 September 2015")
+        @Schema(example = "01 September 2015")
         public String dueDate;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
     }
 
-    @ApiModel(value = "PostClientsClientIdChargesResponse")
-    public final static class PostClientsClientIdChargesResponse {
-        private PostClientsClientIdChargesResponse() {
-        }
+    @Schema(description = "PostClientsClientIdChargesResponse")
+    public static final class PostClientsClientIdChargesResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostClientsClientIdChargesResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "189")
+        @Schema(example = "189")
         public Integer chargeId;
-        @ApiModelProperty(example = "164")
+        @Schema(example = "164")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PostClientsClientIdChargesChargeIdRequest")
-    public final static class PostClientsClientIdChargesChargeIdRequest {
-        private PostClientsClientIdChargesChargeIdRequest() {
-        }
+    @Schema(description = "PostClientsClientIdChargesChargeIdRequest")
+    public static final class PostClientsClientIdChargesChargeIdRequest {
 
-        @ApiModelProperty(example = "200")
+        private PostClientsClientIdChargesChargeIdRequest() {}
+
+        @Schema(example = "200")
         public Integer amount;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "01 September 2015")
+        @Schema(example = "01 September 2015")
         public String transactionDate;
     }
 
-    @ApiModel(value = "PostClientsClientIdChargesChargeIdResponse")
-    public final static class PostClientsClientIdChargesChargeIdResponse {
-        private PostClientsClientIdChargesChargeIdResponse() {
-        }
+    @Schema(description = "PostClientsClientIdChargesChargeIdResponse")
+    public static final class PostClientsClientIdChargesChargeIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostClientsClientIdChargesChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "189")
+        @Schema(example = "189")
         public Integer clientId;
-        @ApiModelProperty(example = "157")
+        @Schema(example = "157")
         public Integer resourceId;
-        @ApiModelProperty(example = "221")
+        @Schema(example = "221")
         public Integer transactionId;
     }
 
-    @ApiModel(value = "DeleteClientsClientIdChargesChargeIdResponse")
-    public final static class DeleteClientsClientIdChargesChargeIdResponse {
-        private DeleteClientsClientIdChargesChargeIdResponse() {
-        }
+    @Schema(description = "DeleteClientsClientIdChargesChargeIdResponse")
+    public static final class DeleteClientsClientIdChargesChargeIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteClientsClientIdChargesChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "189")
+        @Schema(example = "189")
         public Integer clientId;
-        @ApiModelProperty(example = "164")
+        @Schema(example = "164")
         public Integer resourceId;
     }
 }

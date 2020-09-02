@@ -31,7 +31,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_share_product_market_price")
-public class ShareProductMarketPrice extends AbstractPersistableCustom<Long> {
+public class ShareProductMarketPrice extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
@@ -42,34 +42,34 @@ public class ShareProductMarketPrice extends AbstractPersistableCustom<Long> {
     private Date fromDate;
 
     @Column(name = "share_value", nullable = false)
-    private BigDecimal shareValue ;
+    private BigDecimal shareValue;
 
     public ShareProductMarketPrice() {
 
     }
 
     public ShareProductMarketPrice(final Date fromDate, final BigDecimal shareValue) {
-        this.fromDate = fromDate ;
-        this.shareValue = shareValue ;
+        this.fromDate = fromDate;
+        this.shareValue = shareValue;
     }
 
     public void setShareProduct(final ShareProduct product) {
-        this.product = product ;
+        this.product = product;
     }
 
     public Date getStartDate() {
-        return this.fromDate ;
+        return this.fromDate;
     }
 
     public BigDecimal getPrice() {
-        return this.shareValue ;
+        return this.shareValue;
     }
 
     public void setStartDate(Date date) {
-        this.fromDate = date ;
+        this.fromDate = date;
     }
 
     public void setShareValue(BigDecimal value) {
-        this.shareValue = value ;
+        this.shareValue = value;
     }
 }

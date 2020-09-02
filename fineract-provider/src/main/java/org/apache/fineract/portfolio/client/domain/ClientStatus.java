@@ -18,6 +18,8 @@
  */
 package org.apache.fineract.portfolio.client.domain;
 
+import org.springframework.util.StringUtils;
+
 /**
  * Enum representation of client status states.
  */
@@ -28,10 +30,7 @@ public enum ClientStatus {
     ACTIVE(300, "clientStatusType.active"), //
     TRANSFER_IN_PROGRESS(303, "clientStatusType.transfer.in.progress"), //
     TRANSFER_ON_HOLD(304, "clientStatusType.transfer.on.hold"), //
-    CLOSED(600, "clientStatusType.closed"),
-    REJECTED(700,"clientStatusType.rejected"),
-    WITHDRAWN(800,"clientStatusType.withdraw");
-
+    CLOSED(600, "clientStatusType.closed"), REJECTED(700, "clientStatusType.rejected"), WITHDRAWN(800, "clientStatusType.withdraw");
 
     private final Integer value;
     private final String code;
@@ -66,6 +65,33 @@ public enum ClientStatus {
         return enumeration;
     }
 
+    public static ClientStatus fromString(final String clientString) {
+
+        ClientStatus clientStatus = ClientStatus.INVALID;
+
+        if (StringUtils.isEmpty(clientString)) {
+            return clientStatus;
+        }
+
+        if (clientString.equalsIgnoreCase(ClientStatus.PENDING.toString())) {
+            clientStatus = ClientStatus.PENDING;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.ACTIVE.toString())) {
+            clientStatus = ClientStatus.ACTIVE;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.TRANSFER_IN_PROGRESS.toString())) {
+            clientStatus = ClientStatus.TRANSFER_IN_PROGRESS;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.WITHDRAWN.toString())) {
+            clientStatus = ClientStatus.WITHDRAWN;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.CLOSED.toString())) {
+            clientStatus = ClientStatus.CLOSED;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.TRANSFER_ON_HOLD.toString())) {
+            clientStatus = ClientStatus.TRANSFER_ON_HOLD;
+        } else if (clientString.equalsIgnoreCase(ClientStatus.REJECTED.toString())) {
+            clientStatus = ClientStatus.REJECTED;
+        }
+
+        return clientStatus;
+    }
+
     private ClientStatus(final Integer value, final String code) {
         this.value = value;
         this.code = code;
@@ -94,12 +120,15 @@ public enum ClientStatus {
     public boolean isClosed() {
         return this.value.equals(ClientStatus.CLOSED.getValue());
     }
-    public boolean isRejected(){
+
+    public boolean isRejected() {
         return this.value.equals(ClientStatus.REJECTED.getValue());
     }
-    public boolean isWithdrawn(){
+
+    public boolean isWithdrawn() {
         return this.value.equals(ClientStatus.WITHDRAWN.getValue());
     }
+
     public boolean isTransferInProgress() {
         return this.value.equals(ClientStatus.TRANSFER_IN_PROGRESS.getValue());
     }

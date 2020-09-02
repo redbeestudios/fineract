@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 import org.apache.fineract.infrastructure.core.domain.JdbcSupport;
 import org.apache.fineract.infrastructure.core.service.RoutingDataSource;
@@ -88,8 +88,7 @@ public class NoteReadPlatformServiceImpl implements NoteReadPlatformService {
         final NoteType noteType = NoteType.fromInt(noteTypeId);
         try {
             final NoteMapper rm = new NoteMapper();
-            List<Object> paramList = new ArrayList<>(
-                    Arrays.asList(noteId, resourceId));
+            List<Object> paramList = new ArrayList<>(Arrays.asList(noteId, resourceId));
             String conditionSql = getResourceCondition(noteType, paramList);
             if (StringUtils.isNotBlank(conditionSql)) {
                 conditionSql = " and " + conditionSql;
@@ -99,7 +98,7 @@ public class NoteReadPlatformServiceImpl implements NoteReadPlatformService {
 
             return this.jdbcTemplate.queryForObject(sql, rm, paramList.toArray());
         } catch (final EmptyResultDataAccessException e) {
-            throw new NoteNotFoundException(noteId, resourceId, noteType.name().toLowerCase());
+            throw new NoteNotFoundException(noteId, resourceId, noteType.name().toLowerCase(), e);
         }
     }
 
@@ -107,8 +106,7 @@ public class NoteReadPlatformServiceImpl implements NoteReadPlatformService {
     public Collection<NoteData> retrieveNotesByResource(final Long resourceId, final Integer noteTypeId) {
         final NoteType noteType = NoteType.fromInt(noteTypeId);
         final NoteMapper rm = new NoteMapper();
-        List<Object> paramList = new ArrayList<>(
-                Arrays.asList(resourceId));
+        List<Object> paramList = new ArrayList<>(Arrays.asList(resourceId));
         final String conditionSql = getResourceCondition(noteType, paramList);
 
         final String sql = rm.schema() + " where " + conditionSql + " order by n.created_date DESC";
@@ -137,8 +135,8 @@ public class NoteReadPlatformServiceImpl implements NoteReadPlatformService {
                 conditionSql = " n.saving_account_id = ? and ( n.note_type_enum = ? or n.note_type_enum = ? ) ";
             break;
             case SAVINGS_TRANSACTION:
-                conditionSql = " n.savings_account_transaction_id = ? " ;
-                break ;
+                conditionSql = " n.savings_account_transaction_id = ? ";
+            break;
             case GROUP:
                 conditionSql = " n.group_id = ? ";
             break;

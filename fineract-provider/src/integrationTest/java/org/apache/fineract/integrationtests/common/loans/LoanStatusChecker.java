@@ -18,17 +18,21 @@
  */
 package org.apache.fineract.integrationtests.common.loans;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.HashMap;
 import org.apache.fineract.integrationtests.common.Utils;
 
 @SuppressWarnings("rawtypes")
-public class LoanStatusChecker {
+public final class LoanStatusChecker {
+
+    private LoanStatusChecker() {
+
+    }
 
     public static void verifyLoanIsApproved(final HashMap loanStatusHashMap) {
         assertFalse(getStatus(loanStatusHashMap, "pendingApproval"));
@@ -60,6 +64,10 @@ public class LoanStatusChecker {
 
     public static void verifyLoanAccountForeclosed(final HashMap loanSubStatusHashMap) {
         assertEquals("Foreclosed", getSubStatus(loanSubStatusHashMap, "value"));
+    }
+
+    public static void verifyLoanAccountRejected(final HashMap loanSubStatusHashMap) {
+        assertEquals("Rejected", getSubStatus(loanSubStatusHashMap, "value"));
     }
 
     public static HashMap<String, Object> getStatusOfLoan(final RequestSpecification requestSpec, final ResponseSpecification responseSpec,

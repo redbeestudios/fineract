@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.savings.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,255 +26,255 @@ import java.util.Set;
  * Created by Chirag Gupta on 12/23/17.
  */
 final class FixedDepositProductsApiResourceSwagger {
-    private FixedDepositProductsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "PostFixedDepositProductsRequest")
-    public final static class PostFixedDepositProductsRequest {
-        private PostFixedDepositProductsRequest() {
-        }
+    private FixedDepositProductsApiResourceSwagger() {}
 
-        final class PostFixedDepositProductsCharts {
-            private PostFixedDepositProductsCharts() {
-            }
+    @Schema(description = "PostFixedDepositProductsRequest")
+    public static final class PostFixedDepositProductsRequest {
 
-            final class PostFixedDepositProductsChartSlabs {
-                private PostFixedDepositProductsChartSlabs() {
-                }
+        private PostFixedDepositProductsRequest() {}
 
-                @ApiModelProperty(example = "from 0 to 90 days")
+        static final class PostFixedDepositProductsCharts {
+
+            private PostFixedDepositProductsCharts() {}
+
+            static final class PostFixedDepositProductsChartSlabs {
+
+                private PostFixedDepositProductsChartSlabs() {}
+
+                @Schema(example = "from 0 to 90 days")
                 public String description;
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Integer periodType;
-                @ApiModelProperty(example = "0")
+                @Schema(example = "0")
                 public Integer fromPeriod;
-                @ApiModelProperty(example = "90")
+                @Schema(example = "90")
                 public Integer toPeriod;
-                @ApiModelProperty(example = "4.5")
+                @Schema(example = "4.5")
                 public Double annualInterestRate;
             }
 
-            @ApiModelProperty(example = "01 Jan 2014")
+            @Schema(example = "01 Jan 2014")
             public String fromDate;
-            @ApiModelProperty(example = "en")
+            @Schema(example = "en")
             public String locale;
-            @ApiModelProperty(example = "dd MMMM yyyy")
+            @Schema(example = "dd MMMM yyyy")
             public String dateFormat;
             public Set<PostFixedDepositProductsChartSlabs> chartSlabs;
         }
 
-        @ApiModelProperty(example = "Fixed deposit product")
+        @Schema(example = "Fixed deposit product")
         public String name;
-        @ApiModelProperty(example = "FD01")
+        @Schema(example = "FD01")
         public String shortName;
-        @ApiModelProperty(example = "Daily compounding using Daily Balance, 5% per year, 365 days in year")
+        @Schema(example = "Daily compounding using Daily Balance, 5% per year, 365 days in year")
         public String description;
-        @ApiModelProperty(example = "USD")
+        @Schema(example = "USD")
         public String currencyCode;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer digitsAfterDecimal;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Integer inMultiplesOf;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer interestCompoundingPeriodType;
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer interestPostingPeriodType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer interestCalculationType;
-        @ApiModelProperty(example = "365")
+        @Schema(example = "365")
         public Integer interestCalculationDaysInYearType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer accountingRule;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean preClosurePenalApplicable;
-        @ApiModelProperty(example = "1.75")
+        @Schema(example = "1.75")
         public Double preClosurePenalInterest;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer preClosurePenalInterestOnTypeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minDepositTerm;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minDepositTermTypeId;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Integer maxDepositTerm;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer maxDepositTermTypeId;
         public Set<PostFixedDepositProductsCharts> charts;
     }
 
-    @ApiModel(value = "PostFixedDepositProductsResponse")
-    public final static class PostFixedDepositProductsResponse {
-        private PostFixedDepositProductsResponse() {
-        }
+    @Schema(description = "PostFixedDepositProductsResponse")
+    public static final class PostFixedDepositProductsResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostFixedDepositProductsResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutFixedDepositProductsProductIdRequest")
-    public final static class PutFixedDepositProductsProductIdRequest {
-        private PutFixedDepositProductsProductIdRequest() {
-        }
+    @Schema(description = "PutFixedDepositProductsProductIdRequest")
+    public static final class PutFixedDepositProductsProductIdRequest {
 
-        @ApiModelProperty(example = "Fixed deposit product new offerings")
+        private PutFixedDepositProductsProductIdRequest() {}
+
+        @Schema(example = "Fixed deposit product new offerings")
         public String description;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Integer minDepositTerm;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minDepositTermTypeId;
     }
 
-    @ApiModel(value = "PutFixedDepositProductsProductIdResponse")
-    public final static class PutFixedDepositProductsProductIdResponse {
-        private PutFixedDepositProductsProductIdResponse() {
-        }
+    @Schema(description = "PutFixedDepositProductsProductIdResponse")
+    public static final class PutFixedDepositProductsProductIdResponse {
 
-        final class PutFixedDepositProductsChanges {
-            private PutFixedDepositProductsChanges() {
-            }
+        private PutFixedDepositProductsProductIdResponse() {}
 
-            @ApiModelProperty(example = "Fixed deposit product new offerings")
+        static final class PutFixedDepositProductsChanges {
+
+            private PutFixedDepositProductsChanges() {}
+
+            @Schema(example = "Fixed deposit product new offerings")
             public String description;
-            @ApiModelProperty(example = "5")
+            @Schema(example = "5")
             public Integer minDepositTerm;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
         public PutFixedDepositProductsChanges changes;
     }
 
-    @ApiModel(value = "GetFixedDepositProductsResponse")
-    public final static class GetFixedDepositProductsResponse {
-        private GetFixedDepositProductsResponse() {
-        }
+    @Schema(description = "GetFixedDepositProductsResponse")
+    public static final class GetFixedDepositProductsResponse {
 
-        final class GetFixedDepositProductsCurrency {
-            private GetFixedDepositProductsCurrency() {
-            }
+        private GetFixedDepositProductsResponse() {}
 
-            @ApiModelProperty(example = "USD")
+        static final class GetFixedDepositProductsCurrency {
+
+            private GetFixedDepositProductsCurrency() {}
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer inMultiplesOf;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetFixedDepositProductsMinDepositTermType {
-            private GetFixedDepositProductsMinDepositTermType() {
-            }
+        static final class GetFixedDepositProductsMinDepositTermType {
 
-            @ApiModelProperty(example = "2")
+            private GetFixedDepositProductsMinDepositTermType() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "deposit.term.savingsPeriodFrequencyType.months")
+            @Schema(example = "deposit.term.savingsPeriodFrequencyType.months")
             public String code;
-            @ApiModelProperty(example = "Months")
-            public String value;
+            @Schema(example = "Months")
+            public String description;
         }
 
-        final class GetFixedDepositProductsMaxDepositTermType {
-            private GetFixedDepositProductsMaxDepositTermType() {
-            }
+        static final class GetFixedDepositProductsMaxDepositTermType {
 
-            @ApiModelProperty(example = "3")
+            private GetFixedDepositProductsMaxDepositTermType() {}
+
+            @Schema(example = "3")
             public Integer id;
-            @ApiModelProperty(example = "deposit.term.savingsPeriodFrequencyType.years")
+            @Schema(example = "deposit.term.savingsPeriodFrequencyType.years")
             public String code;
-            @ApiModelProperty(example = "Years")
-            public String value;
+            @Schema(example = "Years")
+            public String description;
         }
 
-        final class GetFixedDepositProductsInterestCompoundingPeriodType {
-            private GetFixedDepositProductsInterestCompoundingPeriodType() {
-            }
+        static final class GetFixedDepositProductsInterestCompoundingPeriodType {
 
-            @ApiModelProperty(example = "4")
+            private GetFixedDepositProductsInterestCompoundingPeriodType() {}
+
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "savings.interest.period.savingsCompoundingInterestPeriodType.monthly")
+            @Schema(example = "savings.interest.period.savingsCompoundingInterestPeriodType.monthly")
             public String code;
-            @ApiModelProperty(example = "Monthly")
-            public String value;
+            @Schema(example = "Monthly")
+            public String description;
         }
 
-        final class GetFixedDepositProductsInterestPostingPeriodType {
-            private GetFixedDepositProductsInterestPostingPeriodType() {
-            }
+        static final class GetFixedDepositProductsInterestPostingPeriodType {
 
-            @ApiModelProperty(example = "4")
+            private GetFixedDepositProductsInterestPostingPeriodType() {}
+
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "savings.interest.posting.period.savingsPostingInterestPeriodType.monthly")
+            @Schema(example = "savings.interest.posting.period.savingsPostingInterestPeriodType.monthly")
             public String code;
-            @ApiModelProperty(example = "Monthly")
-            public String value;
+            @Schema(example = "Monthly")
+            public String description;
         }
 
-        final class GetFixedDepositProductsInterestCalculationType {
-            private GetFixedDepositProductsInterestCalculationType() {
-            }
+        static final class GetFixedDepositProductsInterestCalculationType {
 
-            @ApiModelProperty(example = "1")
+            private GetFixedDepositProductsInterestCalculationType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "savingsInterestCalculationType.dailybalance")
+            @Schema(example = "savingsInterestCalculationType.dailybalance")
             public String code;
-            @ApiModelProperty(example = "Daily Balance")
-            public String value;
+            @Schema(example = "Daily Balance")
+            public String description;
         }
 
-        final class GetFixedDepositProductsInterestCalculationDaysInYearType {
-            private GetFixedDepositProductsInterestCalculationDaysInYearType() {
-            }
+        static final class GetFixedDepositProductsInterestCalculationDaysInYearType {
 
-            @ApiModelProperty(example = "365")
+            private GetFixedDepositProductsInterestCalculationDaysInYearType() {}
+
+            @Schema(example = "365")
             public Integer id;
-            @ApiModelProperty(example = "savingsInterestCalculationDaysInYearType.days365")
+            @Schema(example = "savingsInterestCalculationDaysInYearType.days365")
             public String code;
-            @ApiModelProperty(example = "365 Days")
-            public String value;
+            @Schema(example = "365 Days")
+            public String description;
         }
 
-        final class GetFixedDepositProductsAccountingRule {
-            private GetFixedDepositProductsAccountingRule() {
-            }
+        static final class GetFixedDepositProductsAccountingRule {
 
-            @ApiModelProperty(example = "1")
+            private GetFixedDepositProductsAccountingRule() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "accountingRuleType.none")
+            @Schema(example = "accountingRuleType.none")
             public String code;
-            @ApiModelProperty(example = "NONE")
-            public String value;
+            @Schema(example = "NONE")
+            public String description;
         }
 
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer id;
-        @ApiModelProperty(example = "FD01")
+        @Schema(example = "FD01")
         public String name;
-        @ApiModelProperty(example = "FD01")
+        @Schema(example = "FD01")
         public String shortName;
-        @ApiModelProperty(example = "FD01")
+        @Schema(example = "FD01")
         public String description;
         public GetFixedDepositProductsCurrency currency;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean preClosurePenalApplicable;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer minDepositTerm;
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer maxDepositTerm;
         public GetFixedDepositProductsMinDepositTermType minDepositTermType;
         public GetFixedDepositProductsMaxDepositTermType maxDepositTermType;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Double nominalAnnualInterestRate;
         public GetFixedDepositProductsInterestCompoundingPeriodType interestCompoundingPeriodType;
         public GetFixedDepositProductsInterestPostingPeriodType interestPostingPeriodType;
@@ -284,114 +283,114 @@ final class FixedDepositProductsApiResourceSwagger {
         public GetFixedDepositProductsAccountingRule accountingRule;
     }
 
-    @ApiModel(value = "GetFixedDepositProductsProductIdResponse")
-    public final static class GetFixedDepositProductsProductIdResponse {
-        private GetFixedDepositProductsProductIdResponse() {
-        }
+    @Schema(description = "GetFixedDepositProductsProductIdResponse")
+    public static final class GetFixedDepositProductsProductIdResponse {
 
-        final class GetFixedDepositProductsProductIdCurrency {
-            private GetFixedDepositProductsProductIdCurrency() {
-            }
+        private GetFixedDepositProductsProductIdResponse() {}
 
-            @ApiModelProperty(example = "USD")
+        static final class GetFixedDepositProductsProductIdCurrency {
+
+            private GetFixedDepositProductsProductIdCurrency() {}
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetFixedDepositProductsProductIdInterestCompoundingPeriodType {
-            private GetFixedDepositProductsProductIdInterestCompoundingPeriodType() {
-            }
+        static final class GetFixedDepositProductsProductIdInterestCompoundingPeriodType {
 
-            @ApiModelProperty(example = "1")
+            private GetFixedDepositProductsProductIdInterestCompoundingPeriodType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "savings.interest.period.savingsCompoundingInterestPeriodType.daily")
+            @Schema(example = "savings.interest.period.savingsCompoundingInterestPeriodType.daily")
             public String code;
-            @ApiModelProperty(example = "Daily")
-            public String value;
+            @Schema(example = "Daily")
+            public String description;
         }
 
-        final class GetFixedDepositProductsProductIdAccountingMappings {
-            private GetFixedDepositProductsProductIdAccountingMappings() {
-            }
+        static final class GetFixedDepositProductsProductIdAccountingMappings {
 
-            final class GetFixedDepositProductsProductIdSavingsReferenceAccount {
-                private GetFixedDepositProductsProductIdSavingsReferenceAccount() {
-                }
+            private GetFixedDepositProductsProductIdAccountingMappings() {}
 
-                @ApiModelProperty(example = "12")
+            static final class GetFixedDepositProductsProductIdSavingsReferenceAccount {
+
+                private GetFixedDepositProductsProductIdSavingsReferenceAccount() {}
+
+                @Schema(example = "12")
                 public Integer id;
-                @ApiModelProperty(example = "savings ref")
+                @Schema(example = "savings ref")
                 public String name;
-                @ApiModelProperty(example = "20")
+                @Schema(example = "20")
                 public Integer glCode;
             }
 
-            final class GetFixedDepositProductsProductIdIncomeFromFeeAccount {
-                private GetFixedDepositProductsProductIdIncomeFromFeeAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdIncomeFromFeeAccount {
 
-                @ApiModelProperty(example = "16")
+                private GetFixedDepositProductsProductIdIncomeFromFeeAccount() {}
+
+                @Schema(example = "16")
                 public Integer id;
-                @ApiModelProperty(example = "income from savings fee")
+                @Schema(example = "income from savings fee")
                 public String name;
-                @ApiModelProperty(example = "24")
+                @Schema(example = "24")
                 public Integer glCode;
             }
 
-            final class GetFixedDepositProductsProductIdIncomeFromPenaltyAccount {
-                private GetFixedDepositProductsProductIdIncomeFromPenaltyAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdIncomeFromPenaltyAccount {
 
-                @ApiModelProperty(example = "17")
+                private GetFixedDepositProductsProductIdIncomeFromPenaltyAccount() {}
+
+                @Schema(example = "17")
                 public Integer id;
-                @ApiModelProperty(example = "income from sav penalties")
+                @Schema(example = "income from sav penalties")
                 public String name;
-                @ApiModelProperty(example = "25")
+                @Schema(example = "25")
                 public Integer glCode;
             }
 
-            final class GetFixedDepositProductsProductIdInterestOnSavingsAccount {
-                private GetFixedDepositProductsProductIdInterestOnSavingsAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdInterestOnSavingsAccount {
 
-                @ApiModelProperty(example = "15")
+                private GetFixedDepositProductsProductIdInterestOnSavingsAccount() {}
+
+                @Schema(example = "15")
                 public Integer id;
-                @ApiModelProperty(example = "interest on savings")
+                @Schema(example = "interest on savings")
                 public String name;
-                @ApiModelProperty(example = "23")
+                @Schema(example = "23")
                 public Integer glCode;
             }
 
-            final class GetFixedDepositProductsProductIdSavingsControlAccount {
-                private GetFixedDepositProductsProductIdSavingsControlAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdSavingsControlAccount {
 
-                @ApiModelProperty(example = "13")
+                private GetFixedDepositProductsProductIdSavingsControlAccount() {}
+
+                @Schema(example = "13")
                 public Integer id;
-                @ApiModelProperty(example = "savings ref tool kit")
+                @Schema(example = "savings ref tool kit")
                 public String name;
-                @ApiModelProperty(example = "21")
+                @Schema(example = "21")
                 public Integer glCode;
             }
 
-            final class GetFixedDepositProductsProductIdTransfersInSuspenseAccount {
-                private GetFixedDepositProductsProductIdTransfersInSuspenseAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdTransfersInSuspenseAccount {
 
-                @ApiModelProperty(example = "14")
+                private GetFixedDepositProductsProductIdTransfersInSuspenseAccount() {}
+
+                @Schema(example = "14")
                 public Integer id;
-                @ApiModelProperty(example = "saving transfers")
+                @Schema(example = "saving transfers")
                 public String name;
-                @ApiModelProperty(example = "22")
+                @Schema(example = "22")
                 public Integer glCode;
             }
 
@@ -403,33 +402,33 @@ final class FixedDepositProductsApiResourceSwagger {
             public GetFixedDepositProductsProductIdTransfersInSuspenseAccount transfersInSuspenseAccount;
         }
 
-        final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappings {
-            private GetFixedDepositProductsProductIdFeeToIncomeAccountMappings() {
-            }
+        static final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappings {
 
-            final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsCharge {
-                private GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsCharge() {
-                }
+            private GetFixedDepositProductsProductIdFeeToIncomeAccountMappings() {}
 
-                @ApiModelProperty(example = "11")
+            static final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsCharge {
+
+                private GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsCharge() {}
+
+                @Schema(example = "11")
                 public Integer id;
-                @ApiModelProperty(example = "sav charge")
+                @Schema(example = "sav charge")
                 public String name;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean penalty;
             }
 
-            final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsIncomeAccount {
-                private GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsIncomeAccount() {
-                }
+            static final class GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsIncomeAccount {
 
-                @ApiModelProperty(example = "16")
+                private GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsIncomeAccount() {}
+
+                @Schema(example = "16")
                 public Integer id;
-                @ApiModelProperty(example = "income from savings fee")
+                @Schema(example = "income from savings fee")
                 public String name;
-                @ApiModelProperty(example = "24")
+                @Schema(example = "24")
                 public Integer glCode;
             }
 
@@ -437,21 +436,21 @@ final class FixedDepositProductsApiResourceSwagger {
             public GetFixedDepositProductsProductIdFeeToIncomeAccountMappingsIncomeAccount incomeAccount;
         }
 
-        final class GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappings {
-            private GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappings() {
-            }
+        static final class GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappings {
 
-            final class GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappingsCharge {
-                private GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappingsCharge() {
-                }
+            private GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappings() {}
 
-                @ApiModelProperty(example = "12")
+            static final class GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappingsCharge {
+
+                private GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappingsCharge() {}
+
+                @Schema(example = "12")
                 public Integer id;
-                @ApiModelProperty(example = "sav 2")
+                @Schema(example = "sav 2")
                 public String name;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean penalty;
             }
 
@@ -459,95 +458,95 @@ final class FixedDepositProductsApiResourceSwagger {
             public GetFixedDepositProductsProductIdAccountingMappings.GetFixedDepositProductsProductIdIncomeFromPenaltyAccount incomeAccount;
         }
 
-        final class GetFixedDepositProductsProductIdPreClosurePenalInterestOnType {
-            private GetFixedDepositProductsProductIdPreClosurePenalInterestOnType() {
-            }
+        static final class GetFixedDepositProductsProductIdPreClosurePenalInterestOnType {
 
-            @ApiModelProperty(example = "1")
+            private GetFixedDepositProductsProductIdPreClosurePenalInterestOnType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "preClosurePenalInterestOnType.wholeTerm")
+            @Schema(example = "preClosurePenalInterestOnType.wholeTerm")
             public String code;
-            @ApiModelProperty(example = "Whole term")
-            public String value;
+            @Schema(example = "Whole term")
+            public String description;
         }
 
-        final class GetFixedDepositProductsProductIdMinDepositTermType {
-            private GetFixedDepositProductsProductIdMinDepositTermType() {
-            }
+        static final class GetFixedDepositProductsProductIdMinDepositTermType {
 
-            @ApiModelProperty(example = "1")
+            private GetFixedDepositProductsProductIdMinDepositTermType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "deposit.term.savingsPeriodFrequencyType.weeks")
+            @Schema(example = "deposit.term.savingsPeriodFrequencyType.weeks")
             public String code;
-            @ApiModelProperty(example = "Weeks")
-            public String value;
+            @Schema(example = "Weeks")
+            public String description;
         }
 
-        final class GetFixedDepositProductsProductIdMaxDepositTermType {
-            private GetFixedDepositProductsProductIdMaxDepositTermType() {
-            }
+        static final class GetFixedDepositProductsProductIdMaxDepositTermType {
 
-            @ApiModelProperty(example = "3")
+            private GetFixedDepositProductsProductIdMaxDepositTermType() {}
+
+            @Schema(example = "3")
             public Integer id;
-            @ApiModelProperty(example = "deposit.term.savingsPeriodFrequencyType.years")
+            @Schema(example = "deposit.term.savingsPeriodFrequencyType.years")
             public String code;
-            @ApiModelProperty(example = "Years")
-            public String value;
+            @Schema(example = "Years")
+            public String description;
         }
 
-        final class GetFixedDepositProductsProductIdActiveChart {
-            private GetFixedDepositProductsProductIdActiveChart() {
-            }
+        static final class GetFixedDepositProductsProductIdActiveChart {
 
-            final class GetFixedDepositProductsProductIdChartSlabs {
-                private GetFixedDepositProductsProductIdChartSlabs() {
-                }
+            private GetFixedDepositProductsProductIdActiveChart() {}
 
-                final class GetFixedDepositProductsProductIdPeriodType {
-                    private GetFixedDepositProductsProductIdPeriodType() {
-                    }
+            static final class GetFixedDepositProductsProductIdChartSlabs {
 
-                    @ApiModelProperty(example = "1")
+                private GetFixedDepositProductsProductIdChartSlabs() {}
+
+                static final class GetFixedDepositProductsProductIdPeriodType {
+
+                    private GetFixedDepositProductsProductIdPeriodType() {}
+
+                    @Schema(example = "1")
                     public Integer id;
-                    @ApiModelProperty(example = "interestChartPeriodType.weeks")
+                    @Schema(example = "interestChartPeriodType.weeks")
                     public String code;
-                    @ApiModelProperty(example = "Weeks")
-                    public String value;
+                    @Schema(example = "Weeks")
+                    public String description;
                 }
 
-                @ApiModelProperty(example = "18")
+                @Schema(example = "18")
                 public Integer id;
-                @ApiModelProperty(example = "from 0 to 90 days")
+                @Schema(example = "from 0 to 90 days")
                 public String description;
                 public GetFixedDepositProductsProductIdPeriodType periodType;
-                @ApiModelProperty(example = "0")
+                @Schema(example = "0")
                 public Integer fromPeriod;
-                @ApiModelProperty(example = "90")
+                @Schema(example = "90")
                 public Integer toPeriod;
-                @ApiModelProperty(example = "4.5")
+                @Schema(example = "4.5")
                 public Double annualInterestRate;
                 public GetFixedDepositProductsProductIdCurrency currency;
             }
 
-            @ApiModelProperty(example = "8")
+            @Schema(example = "8")
             public Integer id;
-            @ApiModelProperty(example = "[2014, 1, 1]")
+            @Schema(example = "[2014, 1, 1]")
             public LocalDate fromDate;
-            @ApiModelProperty(example = "8")
+            @Schema(example = "8")
             public Integer savingsProductId;
-            @ApiModelProperty(example = "Fixed deposit product")
+            @Schema(example = "Fixed deposit product")
             public String savingsProductName;
             public Set<GetFixedDepositProductsProductIdChartSlabs> chartSlabs;
             public Set<GetFixedDepositProductsProductIdChartSlabs.GetFixedDepositProductsProductIdPeriodType> periodTypes;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "Fixed deposit product")
+        @Schema(example = "Fixed deposit product")
         public String name;
-        @ApiModelProperty(example = "FD01")
+        @Schema(example = "FD01")
         public String shortName;
-        @ApiModelProperty(example = "Daily compounding using Daily Balance, 5% per year, 365 days in year")
+        @Schema(example = "Daily compounding using Daily Balance, 5% per year, 365 days in year")
         public String description;
         public GetFixedDepositProductsProductIdCurrency currency;
         public GetFixedDepositProductsProductIdInterestCompoundingPeriodType interestCompoundingPeriodType;
@@ -557,26 +556,26 @@ final class FixedDepositProductsApiResourceSwagger {
         public GetFixedDepositProductsProductIdAccountingMappings accountingMappings;
         public Set<GetFixedDepositProductsProductIdFeeToIncomeAccountMappings> feeToIncomeAccountMappings;
         public Set<GetFixedDepositProductsProductIdPenaltyToIncomeAccountMappings> penaltyToIncomeAccountMappings;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean preClosurePenalApplicable;
-        @ApiModelProperty(example = "1.75")
+        @Schema(example = "1.75")
         public Double preClosurePenalInterest;
         public GetFixedDepositProductsProductIdPreClosurePenalInterestOnType preClosurePenalInterestOnType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minDepositTerm;
         public GetFixedDepositProductsProductIdMinDepositTermType minDepositTermType;
-        @ApiModelProperty(example = "5")
+        @Schema(example = "5")
         public Integer maxDepositTerm;
         public GetFixedDepositProductsProductIdMaxDepositTermType maxDepositTermType;
         public GetFixedDepositProductsProductIdActiveChart activeChart;
     }
 
-    @ApiModel(value = "DeleteFixedDepositProductsProductIdResponse")
-    public final static class DeleteFixedDepositProductsProductIdResponse {
-        private DeleteFixedDepositProductsProductIdResponse() {
-        }
+    @Schema(description = "DeleteFixedDepositProductsProductIdResponse")
+    public static final class DeleteFixedDepositProductsProductIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteFixedDepositProductsProductIdResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 }

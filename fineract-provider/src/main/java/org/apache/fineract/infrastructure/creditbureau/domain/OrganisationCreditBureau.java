@@ -30,23 +30,23 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_organisation_creditbureau")
-public class OrganisationCreditBureau extends AbstractPersistableCustom<Long> {
+public class OrganisationCreditBureau extends AbstractPersistableCustom {
 
     private String alias;
 
     @OneToOne
     private CreditBureau creditbureau;
 
-    private boolean is_active;
+    private boolean isActive;
 
     @OneToMany(mappedBy = "organisation_creditbureau", cascade = CascadeType.ALL)
     private List<CreditBureauLoanProductMapping> creditBureauLoanProductMapping = new ArrayList<>();
 
-    public OrganisationCreditBureau(String alias, CreditBureau creditBureau, boolean is_active,
+    public OrganisationCreditBureau(String alias, CreditBureau creditbureau, boolean isActive,
             List<CreditBureauLoanProductMapping> creditBureauLoanProductMapping) {
         this.alias = alias;
-        this.creditbureau = creditBureau;
-        this.is_active = is_active;
+        this.creditbureau = creditbureau;
+        this.isActive = isActive;
         this.creditBureauLoanProductMapping = creditBureauLoanProductMapping;
     }
 
@@ -54,11 +54,11 @@ public class OrganisationCreditBureau extends AbstractPersistableCustom<Long> {
 
     }
 
-    public static OrganisationCreditBureau fromJson(final JsonCommand command, CreditBureau creditBureau) {
+    public static OrganisationCreditBureau fromJson(final JsonCommand command, CreditBureau creditbureau) {
         final String alias = command.stringValueOfParameterNamed("alias");
-        final boolean is_active = command.booleanPrimitiveValueOfParameterNamed("is_active");
+        final boolean isActive = command.booleanPrimitiveValueOfParameterNamed("isActive");
 
-        return new OrganisationCreditBureau(alias, creditBureau, is_active, null);
+        return new OrganisationCreditBureau(alias, creditbureau, isActive, null);
     }
 
     public String getAlias() {
@@ -73,16 +73,16 @@ public class OrganisationCreditBureau extends AbstractPersistableCustom<Long> {
         return this.creditbureau;
     }
 
-    public void setCreditBureau(CreditBureau creditBureau) {
-        this.creditbureau = creditBureau;
+    public void setCreditBureau(CreditBureau creditbureau) {
+        this.creditbureau = creditbureau;
     }
 
     public boolean isActive() {
-        return this.is_active;
+        return this.isActive;
     }
 
-    public void setIsActive(boolean is_active) {
-        this.is_active = is_active;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public List<CreditBureauLoanProductMapping> getCreditBureauLoanProductMapping() {
@@ -92,7 +92,5 @@ public class OrganisationCreditBureau extends AbstractPersistableCustom<Long> {
     public void setCreditBureauLoanProductMapping(List<CreditBureauLoanProductMapping> creditBureauLoanProductMapping) {
         this.creditBureauLoanProductMapping = creditBureauLoanProductMapping;
     }
-
-
 
 }

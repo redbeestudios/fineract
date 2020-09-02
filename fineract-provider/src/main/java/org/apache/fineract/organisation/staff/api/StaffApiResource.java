@@ -20,15 +20,15 @@ package org.apache.fineract.organisation.staff.api;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,18 +69,14 @@ import org.springframework.stereotype.Component;
 @Path("/staff")
 @Component
 @Scope("singleton")
-@Api(tags = {"Staff"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Staff", description = "Allows you to model staff members. At present the key role of significance is whether this staff member is a loan officer or not.")
-})
+@Tag(name = "Staff", description = "Allows you to model staff members. At present the key role of significance is whether this staff member is a loan officer or not.")
 public class StaffApiResource {
 
     /**
-     * The set of parameters that are supported in response for
-     * {@link StaffData}.
+     * The set of parameters that are supported in response for {@link StaffData}.
      */
-    private final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(Arrays.asList("id", "firstname", "lastname", "displayName",
-            "officeId", "officeName", "isLoanOfficer", "externalId", "mobileNo", "allowedOffices", "isActive", "joiningDate"));
+    private final Set<String> responseDataParameters = new HashSet<>(Arrays.asList("id", "firstname", "lastname", "displayName", "officeId",
+            "officeName", "isLoanOfficer", "externalId", "mobileNo", "allowedOffices", "isActive", "joiningDate"));
 
     private final String resourceNameForPermissions = "STAFF";
 
@@ -92,7 +88,6 @@ public class StaffApiResource {
     private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
     private final BulkImportWorkbookService bulkImportWorkbookService;
     private final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService;
-
 
     @Autowired
     public StaffApiResource(final PlatformSecurityContext context, final StaffReadPlatformService readPlatformService,
@@ -107,20 +102,27 @@ public class StaffApiResource {
         this.toApiJsonSerializer = toApiJsonSerializer;
         this.apiRequestParameterHelper = apiRequestParameterHelper;
         this.commandsSourceWritePlatformService = commandsSourceWritePlatformService;
-        this.bulkImportWorkbookService=bulkImportWorkbookService;
-        this.bulkImportWorkbookPopulatorService=bulkImportWorkbookPopulatorService;
+        this.bulkImportWorkbookService = bulkImportWorkbookService;
+        this.bulkImportWorkbookPopulatorService = bulkImportWorkbookPopulatorService;
     }
 
     @GET
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve Staff", notes = "Returns the list of staff members.\n" + "\n" + "Example Requests:\n" + "\n" + "staff\n\n\n\n" + "\n" + "Retrieve a Staff by status\n" + "\n" + "Returns the details of a Staff based on status.\n" + "\n" + "By default it Returns all the ACTIVE Staff.\n" + "\n" + "If status=INACTIVE, then it returns all INACTIVE Staff.\n" + "\n" + "and for status=ALL, it Returns both ACTIVE and INACTIVE Staff.\n" + "\n" + "Example Requests:\n" + "\n" + "staff?status=active")
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = StaffApiResourceSwagger.GetStaffResponse.class, responseContainer = "List"), @ApiResponse(code = 200, message = "GET https://DomainName/api/v1/staff?status={ACTIVE|INACTIVE|ALL}", response = StaffApiResourceSwagger.GetStaffResponse.class)})
-    public String retrieveStaff(@Context final UriInfo uriInfo, @QueryParam("sqlSearch") @ApiParam(value = "sqlSearch") final String sqlSearch,
-            @QueryParam("officeId") @ApiParam(value = "officeId") final Long officeId,
-            @DefaultValue("false") @QueryParam("staffInOfficeHierarchy") @ApiParam(value = "staffInOfficeHierarchy") final boolean staffInOfficeHierarchy,
-            @DefaultValue("false") @QueryParam("loanOfficersOnly") @ApiParam(value = "loanOfficersOnly") final boolean loanOfficersOnly,
-            @DefaultValue("active") @QueryParam("status") @ApiParam(value = "status") final String status) {
+    @Operation(summary = "Retrieve Staff", description = "Returns the list of staff members.\n" + "\n" + "Example Requests:\n" + "\n"
+            + "staff\n\n\n\n" + "\n" + "Retrieve a Staff by status\n" + "\n" + "Returns the details of a Staff based on status.\n" + "\n"
+            + "By default it Returns all the ACTIVE Staff.\n" + "\n" + "If status=INACTIVE, then it returns all INACTIVE Staff.\n" + "\n"
+            + "and for status=ALL, it Returns both ACTIVE and INACTIVE Staff.\n" + "\n" + "Example Requests:\n" + "\n"
+            + "staff?status=active")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = StaffApiResourceSwagger.GetStaffResponse.class)))),
+            @ApiResponse(responseCode = "200", description = "GET https://DomainName/api/v1/staff?status={ACTIVE|INACTIVE|ALL}", content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.GetStaffResponse.class))) })
+    public String retrieveStaff(@Context final UriInfo uriInfo,
+            @QueryParam("sqlSearch") @Parameter(description = "sqlSearch") final String sqlSearch,
+            @QueryParam("officeId") @Parameter(description = "officeId") final Long officeId,
+            @DefaultValue("false") @QueryParam("staffInOfficeHierarchy") @Parameter(description = "staffInOfficeHierarchy") final boolean staffInOfficeHierarchy,
+            @DefaultValue("false") @QueryParam("loanOfficersOnly") @Parameter(description = "loanOfficersOnly") final boolean loanOfficersOnly,
+            @DefaultValue("active") @QueryParam("status") @Parameter(description = "status") final String status) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
 
@@ -132,16 +134,18 @@ public class StaffApiResource {
         }
 
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, staff, this.RESPONSE_DATA_PARAMETERS);
+        return this.toApiJsonSerializer.serialize(settings, staff, this.responseDataParameters);
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Create a staff member", notes = "Creates a staff member.\n" + "\n" + "Mandatory Fields: \n" + "officeId, firstname, lastname\n" + "\n" + "Optional Fields: \n" + "isLoanOfficer, isActive")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = StaffApiResourceSwagger.PostStaffRequest.class )})
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = StaffApiResourceSwagger.PostStaffResponse.class)})
-    public String createStaff(@ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Create a staff member", description = "Creates a staff member.\n" + "\n" + "Mandatory Fields: \n"
+            + "officeId, firstname, lastname\n" + "\n" + "Optional Fields: \n" + "isLoanOfficer, isActive")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.PostStaffRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.PostStaffResponse.class))) })
+    public String createStaff(@Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().createStaff().withJson(apiRequestBodyAsJson).build();
 
@@ -154,9 +158,12 @@ public class StaffApiResource {
     @Path("{staffId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a Staff Member", notes = "Returns the details of a Staff Member.\n" + "\n" + "Example Requests:\n" + "\n" + "staff/1")
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = StaffApiResourceSwagger.GetStaffResponse.class)})
-    public String retreiveStaff(@PathParam("staffId") @ApiParam(value = "staffId") final Long staffId, @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve a Staff Member", description = "Returns the details of a Staff Member.\n" + "\n" + "Example Requests:\n"
+            + "\n" + "staff/1")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.GetStaffResponse.class))) })
+    public String retreiveStaff(@PathParam("staffId") @Parameter(description = "staffId") final Long staffId,
+            @Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
 
@@ -167,17 +174,19 @@ public class StaffApiResource {
             final Collection<OfficeData> allowedOffices = this.officeReadPlatformService.retrieveAllOfficesForDropdown();
             staff = StaffData.templateData(staff, allowedOffices);
         }
-        return this.toApiJsonSerializer.serialize(settings, staff, this.RESPONSE_DATA_PARAMETERS);
+        return this.toApiJsonSerializer.serialize(settings, staff, this.responseDataParameters);
     }
 
     @PUT
     @Path("{staffId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Update a Staff Member", notes = "Updates the details of a staff member.")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = StaffApiResourceSwagger.PutStaffRequest.class )})
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = StaffApiResourceSwagger.PutStaffResponse.class)})
-    public String updateStaff(@PathParam("staffId") @ApiParam(value = "staffId") final Long staffId, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Update a Staff Member", description = "Updates the details of a staff member.")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.PutStaffRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = StaffApiResourceSwagger.PutStaffResponse.class))) })
+    public String updateStaff(@PathParam("staffId") @Parameter(description = "staffId") final Long staffId,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().updateStaff(staffId).withJson(apiRequestBodyAsJson).build();
 
@@ -189,20 +198,18 @@ public class StaffApiResource {
     @GET
     @Path("downloadtemplate")
     @Produces("application/vnd.ms-excel")
-    public Response getStaffTemplate(@QueryParam("officeId")final Long officeId,
-            @QueryParam("dateFormat") final String dateFormat) {
-        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.STAFF.toString(), officeId,null,dateFormat);
+    public Response getStaffTemplate(@QueryParam("officeId") final Long officeId, @QueryParam("dateFormat") final String dateFormat) {
+        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.STAFF.toString(), officeId, null, dateFormat);
     }
 
     @POST
     @Path("uploadtemplate")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String postStaffTemplate(@FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail,
-            @FormDataParam("locale") final String locale,
-            @FormDataParam("dateFormat") final String dateFormat){
-        final Long importDocumentId = this. bulkImportWorkbookService.importWorkbook(GlobalEntityType.STAFF.toString(), uploadedInputStream,
-                fileDetail,locale,dateFormat);
+            @FormDataParam("file") FormDataContentDisposition fileDetail, @FormDataParam("locale") final String locale,
+            @FormDataParam("dateFormat") final String dateFormat) {
+        final Long importDocumentId = this.bulkImportWorkbookService.importWorkbook(GlobalEntityType.STAFF.toString(), uploadedInputStream,
+                fileDetail, locale, dateFormat);
         return this.toApiJsonSerializer.serialize(importDocumentId);
     }
 }

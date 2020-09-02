@@ -27,8 +27,7 @@ import org.apache.fineract.portfolio.loanaccount.loanschedule.data.LoanScheduleP
 import org.joda.time.LocalDate;
 
 /**
- * Domain representation of a Loan Schedule Repayment Period (not used for
- * persistence)
+ * Domain representation of a Loan Schedule Repayment Period (not used for persistence)
  */
 public final class LoanScheduleModelRepaymentPeriod implements LoanScheduleModelPeriod {
 
@@ -155,8 +154,9 @@ public final class LoanScheduleModelRepaymentPeriod implements LoanScheduleModel
     @Override
     public void addInterestAmount(Money interestDue) {
         this.interestDue = this.interestDue.plus(interestDue);
-        this.totalDue = this.totalDue.plus(principalDue);
+        this.totalDue = this.totalDue.plus(interestDue);
     }
+
     @Override
     public Set<LoanInterestRecalcualtionAdditionalDetails> getLoanCompoundingDetails() {
         return this.loanCompoundingDetails;

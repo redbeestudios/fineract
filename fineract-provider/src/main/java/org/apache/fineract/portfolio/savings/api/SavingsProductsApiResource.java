@@ -18,15 +18,15 @@
  */
 package org.apache.fineract.portfolio.savings.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -83,10 +83,9 @@ import org.springframework.util.CollectionUtils;
 @Path("/savingsproducts")
 @Component
 @Scope("singleton")
-@Api(tags = {"Savings Product"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Savings Product", description = "An MFIs savings product offerings are modeled using this API." + "\n" + "When creating savings accounts, the details from the savings product are used to auto fill details of the savings account application process.")
-})
+
+@Tag(name = "Savings Product", description = "An MFIs savings product offerings are modeled using this API." + "\n"
+        + "When creating savings accounts, the details from the savings product are used to auto fill details of the savings account application process.")
 public class SavingsProductsApiResource {
 
     private final SavingsProductReadPlatformService savingProductReadPlatformService;
@@ -130,10 +129,14 @@ public class SavingsProductsApiResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Create a Savings Product", httpMethod = "POST", notes = "Creates a Savings Product\n\n" + "Mandatory Fields: name, shortName, description, currencyCode, digitsAfterDecimal,inMultiplesOf, nominalAnnualInterestRate, interestCompoundingPeriodType, interestCalculationType, interestCalculationDaysInYearType,accountingRule\n\n" + "Mandatory Fields for Cash based accounting (accountingRule = 2): savingsReferenceAccountId, savingsControlAccountId, interestOnSavingsAccountId, incomeFromFeeAccountId, transfersInSuspenseAccountId, incomeFromPenaltyAccountId\n\n" + "Optional Fields: minRequiredOpeningBalance, lockinPeriodFrequency, lockinPeriodFrequencyType, withdrawalFeeForTransfers, paymentChannelToFundSourceMappings, feeToIncomeAccountMappings, penaltyToIncomeAccountMappings, charges, allowOverdraft, overdraftLimit, minBalanceForInterestCalculation,withHoldTax,taxGroupId")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = SavingsProductsApiResourceSwagger.PostSavingsProductsRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SavingsProductsApiResourceSwagger.PostSavingsProductsResponse.class)})
-    public String create(@ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Create a Savings Product", description = "Creates a Savings Product\n\n"
+            + "Mandatory Fields: name, shortName, description, currencyCode, digitsAfterDecimal,inMultiplesOf, nominalAnnualInterestRate, interestCompoundingPeriodType, interestCalculationType, interestCalculationDaysInYearType,accountingRule\n\n"
+            + "Mandatory Fields for Cash based accounting (accountingRule = 2): savingsReferenceAccountId, savingsControlAccountId, interestOnSavingsAccountId, incomeFromFeeAccountId, transfersInSuspenseAccountId, incomeFromPenaltyAccountId\n\n"
+            + "Optional Fields: minRequiredOpeningBalance, lockinPeriodFrequency, lockinPeriodFrequencyType, withdrawalFeeForTransfers, paymentChannelToFundSourceMappings, feeToIncomeAccountMappings, penaltyToIncomeAccountMappings, charges, allowOverdraft, overdraftLimit, minBalanceForInterestCalculation,withHoldTax,taxGroupId")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.PostSavingsProductsRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.PostSavingsProductsResponse.class))) })
+    public String create(@Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().createSavingProduct().withJson(apiRequestBodyAsJson).build();
 
@@ -146,10 +149,12 @@ public class SavingsProductsApiResource {
     @Path("{productId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Update a Savings Product", httpMethod = "PUT", notes = "Updates a Savings Product")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = SavingsProductsApiResourceSwagger.PutSavingsProductsProductIdRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SavingsProductsApiResourceSwagger.PutSavingsProductsProductIdResponse.class)})
-    public String update(@PathParam("productId") @ApiParam(value = "productId") final Long productId, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Update a Savings Product", description = "Updates a Savings Product")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.PutSavingsProductsProductIdRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.PutSavingsProductsProductIdResponse.class))) })
+    public String update(@PathParam("productId") @Parameter(description = "productId") final Long productId,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().updateSavingProduct(productId).withJson(apiRequestBodyAsJson)
                 .build();
@@ -163,8 +168,10 @@ public class SavingsProductsApiResource {
     @GET
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "List Savings Products", httpMethod = "GET", notes = "Lists Savings Products\n\n" + "Example Requests:\n" + "\n" + "savingsproducts\n" + "\n" + "savingsproducts?fields=name")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", responseContainer = "List", response = SavingsProductsApiResourceSwagger.GetSavingsProductsResponse.class)})
+    @Operation(summary = "List Savings Products", description = "Lists Savings Products\n\n" + "Example Requests:\n" + "\n"
+            + "savingsproducts\n" + "\n" + "savingsproducts?fields=name")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.GetSavingsProductsResponse.class)))) })
     public String retrieveAll(@Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(SavingsApiConstants.SAVINGS_PRODUCT_RESOURCE_NAME);
@@ -172,17 +179,19 @@ public class SavingsProductsApiResource {
         final Collection<SavingsProductData> products = this.savingProductReadPlatformService.retrieveAll();
 
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, products,
-                SavingsApiSetConstants.SAVINGS_PRODUCT_RESPONSE_DATA_PARAMETERS);
+        return this.toApiJsonSerializer.serialize(settings, products, SavingsApiSetConstants.SAVINGS_PRODUCT_RESPONSE_DATA_PARAMETERS);
     }
 
     @GET
     @Path("{productId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a Savings Product", httpMethod = "GET", notes = "Retrieves a Savings Product\n\n" + "Example Requests:\n" + "\n" + "savingsproducts/1\n" + "\n" + "savingsproducts/1?template=true\n" + "\n" + "savingsproducts/1?fields=name,description")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SavingsProductsApiResourceSwagger.GetSavingsProductsProductIdResponse.class)})
-    public String retrieveOne(@PathParam("productId") @ApiParam(value = "productId") final Long productId, @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve a Savings Product", description = "Retrieves a Savings Product\n\n" + "Example Requests:\n" + "\n"
+            + "savingsproducts/1\n" + "\n" + "savingsproducts/1?template=true\n" + "\n" + "savingsproducts/1?fields=name,description")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.GetSavingsProductsProductIdResponse.class))) })
+    public String retrieveOne(@PathParam("productId") @Parameter(description = "productId") final Long productId,
+            @Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(SavingsApiConstants.SAVINGS_PRODUCT_RESOURCE_NAME);
 
@@ -219,8 +228,10 @@ public class SavingsProductsApiResource {
     @Path("template")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve Savings Product Template", httpMethod = "GET", notes = "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n" + "\n" + "Field Defaults\n" + "Allowed Value Lists\n" + "Example Request:\n" + "\n" + "savingsproducts/template")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SavingsProductsApiResourceSwagger.GetSavingsProductsTemplateResponse.class)})
+    @Operation(summary = "Retrieve Savings Product Template", description = "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n"
+            + "\n" + "Field Defaults\n" + "Allowed description Lists\n" + "Example Request:\n" + "\n" + "savingsproducts/template")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.GetSavingsProductsTemplateResponse.class))) })
     public String retrieveTemplate(@Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(SavingsApiConstants.SAVINGS_PRODUCT_RESOURCE_NAME);
@@ -228,8 +239,7 @@ public class SavingsProductsApiResource {
         final SavingsProductData savingProduct = handleTemplateRelatedData(null);
 
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, savingProduct,
-                SavingsApiSetConstants.SAVINGS_PRODUCT_RESPONSE_DATA_PARAMETERS);
+        return this.toApiJsonSerializer.serialize(settings, savingProduct, SavingsApiSetConstants.SAVINGS_PRODUCT_RESPONSE_DATA_PARAMETERS);
     }
 
     private SavingsProductData handleTemplateRelatedData(final SavingsProductData savingsProduct) {
@@ -307,9 +317,10 @@ public class SavingsProductsApiResource {
     @Path("{productId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Delete a Savings Product", httpMethod = "DELETE", notes = "Deletes a Savings Product")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SavingsProductsApiResourceSwagger.DeleteSavingsProductsProductIdResponse.class)})
-    public String delete(@PathParam("productId") @ApiParam(value = "productId") final Long productId) {
+    @Operation(summary = "Delete a Savings Product", description = "Deletes a Savings Product")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SavingsProductsApiResourceSwagger.DeleteSavingsProductsProductIdResponse.class))) })
+    public String delete(@PathParam("productId") @Parameter(description = "productId") final Long productId) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().deleteSavingProduct(productId).build();
 

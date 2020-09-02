@@ -18,10 +18,7 @@
  */
 package org.apache.fineract.notification.api;
 
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -46,10 +43,8 @@ import org.springframework.stereotype.Component;
 @Path("/notifications")
 @Component
 @Scope("singleton")
-@Api(tags = {"Notification"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Notification", description = "")
-})
+
+@Tag(name = "Notification", description = "")
 public class NotificationApiResource {
 
     private final PlatformSecurityContext context;
@@ -58,10 +53,8 @@ public class NotificationApiResource {
     private final ToApiJsonSerializer<NotificationData> toApiJsonSerializer;
 
     @Autowired
-    public NotificationApiResource(PlatformSecurityContext context,
-                                   NotificationReadPlatformService notificationReadPlatformService,
-                                   ApiRequestParameterHelper apiRequestParameterHelper,
-                                   ToApiJsonSerializer<NotificationData> toApiJsonSerializer) {
+    public NotificationApiResource(PlatformSecurityContext context, NotificationReadPlatformService notificationReadPlatformService,
+            ApiRequestParameterHelper apiRequestParameterHelper, ToApiJsonSerializer<NotificationData> toApiJsonSerializer) {
         this.context = context;
         this.notificationReadPlatformService = notificationReadPlatformService;
         this.apiRequestParameterHelper = apiRequestParameterHelper;
@@ -69,13 +62,11 @@ public class NotificationApiResource {
     }
 
     @GET
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public String getAllNotifications(@Context final UriInfo uriInfo, @QueryParam("orderBy") final String orderBy,
-                                            @QueryParam("limit") final Integer limit,
-                                            @QueryParam("offset") final Integer offset,
-                                            @QueryParam("sortOrder") final String sortOrder,
-                                            @QueryParam("isRead") final boolean isRead) {
+            @QueryParam("limit") final Integer limit, @QueryParam("offset") final Integer offset,
+            @QueryParam("sortOrder") final String sortOrder, @QueryParam("isRead") final boolean isRead) {
 
         this.context.authenticatedUser();
         final Page<NotificationData> notificationData;
@@ -85,14 +76,13 @@ public class NotificationApiResource {
         } else {
             notificationData = this.notificationReadPlatformService.getAllNotifications(searchParameters);
         }
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
         return this.toApiJsonSerializer.serialize(settings, notificationData);
     }
 
     @PUT
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public void update() {
         this.context.authenticatedUser();
         this.notificationReadPlatformService.updateNotificationReadStatus();

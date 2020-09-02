@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.group.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,86 +26,86 @@ import java.util.Set;
  * Created by Chirag Gupta on 12/10/17.
  */
 final class GroupsApiResourceSwagger {
-    private GroupsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetGroupsTemplateResponse")
-    public final static class GetGroupsTemplateResponse {
-        private GetGroupsTemplateResponse() {
-        }
+    private GroupsApiResourceSwagger() {}
 
-        final class GetGroupsTemplateOfficeOptions {
-            private GetGroupsTemplateOfficeOptions() {
-            }
+    @Schema(description = "GetGroupsTemplateResponse")
+    public static final class GetGroupsTemplateResponse {
 
-            @ApiModelProperty(example = "1")
+        private GetGroupsTemplateResponse() {}
+
+        static final class GetGroupsTemplateOfficeOptions {
+
+            private GetGroupsTemplateOfficeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String name;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String nameDecorated;
         }
 
-        final class GetGroupsTemplateStaffOptions {
-            private GetGroupsTemplateStaffOptions() {
-            }
+        static final class GetGroupsTemplateStaffOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetGroupsTemplateStaffOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "C, Mike")
+            @Schema(example = "C, Mike")
             public String displayName;
         }
 
-        final class GetGroupsTemplateClientOptions {
-            private GetGroupsTemplateClientOptions() {
-            }
+        static final class GetGroupsTemplateClientOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetGroupsTemplateClientOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Petra Yton")
+            @Schema(example = "Petra Yton")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
         }
 
-        final class GetGroupsTemplateDatatables {
-            private GetGroupsTemplateDatatables() {
-            }
+        static final class GetGroupsTemplateDatatables {
 
-            final class GetGroupsTemplateColumnHeaderData {
-                private GetGroupsTemplateColumnHeaderData() {
+            private GetGroupsTemplateDatatables() {}
+
+            static final class GetGroupsTemplateColumnHeaderData {
+
+                private GetGroupsTemplateColumnHeaderData() {}
+
+                static final class GetGroupsTemplateColumnValues {
+
+                    private GetGroupsTemplateColumnValues() {}
                 }
 
-                final class GetGroupsTemplateColumnValues {
-                    private GetGroupsTemplateColumnValues() {
-                    }
-                }
-
-                @ApiModelProperty(example = "group_id")
+                @Schema(example = "group_id")
                 public String columnName;
-                @ApiModelProperty(example = "bigint")
+                @Schema(example = "bigint")
                 public String columnType;
-                @ApiModelProperty(example = "0")
+                @Schema(example = "0")
                 public Integer columnLength;
-                @ApiModelProperty(example = "INTEGER")
+                @Schema(example = "INTEGER")
                 public String columnDisplayType;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean isColumnNullable;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean isColumnPrimaryKey;
                 public Set<GetGroupsTemplateColumnValues> columnValues;
             }
 
-            @ApiModelProperty(example = "m_group")
+            @Schema(example = "m_group")
             public String applicationTableName;
-            @ApiModelProperty(example = "Group Activation Data")
+            @Schema(example = "Group Activation Data")
             public String registeredTableName;
             public Set<GetGroupsTemplateColumnHeaderData> columnHeaderData;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
         public Set<GetGroupsTemplateOfficeOptions> officeOptions;
         public Set<GetGroupsTemplateStaffOptions> staffOptions;
@@ -114,379 +113,378 @@ final class GroupsApiResourceSwagger {
         public Set<GetGroupsTemplateDatatables> datatables;
     }
 
-    @ApiModel(value = "GetGroupsResponse")
+    @Schema(description = "GetGroupsResponse")
     public static final class GetGroupsResponse {
-        private GetGroupsResponse() {
-        }
 
-        final class GetGroupsPageItems {
-            private GetGroupsPageItems() {
-            }
+        private GetGroupsResponse() {}
 
-            final class GetGroupsStatus {
-                private GetGroupsStatus() {
-                }
+        static final class GetGroupsPageItems {
 
-                @ApiModelProperty(example = "100")
+            private GetGroupsPageItems() {}
+
+            static final class GetGroupsStatus {
+
+                private GetGroupsStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "clientStatusType.pending")
+                @Schema(example = "clientStatusType.pending")
                 public String code;
-                @ApiModelProperty(example = "Pending")
-                public String value;
+                @Schema(example = "Pending")
+                public String description;
             }
 
-            @ApiModelProperty(example = "4")
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "AnotherGroup")
+            @Schema(example = "AnotherGroup")
             public String name;
             public GetGroupsStatus status;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean active;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
-            @ApiModelProperty(example = ".4.")
+            @Schema(example = ".4.")
             public String hierarchy;
         }
 
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer totalFilteredRecords;
         public Set<GetGroupsPageItems> pageItems;
     }
 
-    @ApiModel(value = "GetGroupsGroupIdResponse")
-    public final static class GetGroupsGroupIdResponse {
-        private GetGroupsGroupIdResponse() {
-        }
+    @Schema(description = "GetGroupsGroupIdResponse")
+    public static final class GetGroupsGroupIdResponse {
 
-        final class GetGroupsGroupIdTimeline {
-            private GetGroupsGroupIdTimeline() {
-            }
+        private GetGroupsGroupIdResponse() {}
 
-            @ApiModelProperty(example = "[2013, 11, 14]")
+        static final class GetGroupsGroupIdTimeline {
+
+            private GetGroupsGroupIdTimeline() {}
+
+            @Schema(example = "[2013, 11, 14]")
             public LocalDate activatedOnDate;
-            @ApiModelProperty(example = "mifos")
+            @Schema(example = "mifos")
             public String activatedByUsername;
-            @ApiModelProperty(example = "App")
+            @Schema(example = "App")
             public String activatedByFirstname;
-            @ApiModelProperty(example = "Administrator")
+            @Schema(example = "Administrator")
             public String activatedByLastname;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "First Group")
+        @Schema(example = "First Group")
         public String name;
-        @ApiModelProperty(example = "000-1A")
+        @Schema(example = "000-1A")
         public String externalId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Head Office")
+        @Schema(example = "Head Office")
         public String officeName;
-        @ApiModelProperty(example = ".1.")
+        @Schema(example = ".1.")
         public String hierarchy;
         public GetGroupsGroupIdTimeline timeline;
     }
 
-    @ApiModel(value = "PostGroupsRequest")
-    public final static class PostGroupsRequest {
-        private PostGroupsRequest() {
-        }
+    @Schema(description = "PostGroupsRequest")
+    public static final class PostGroupsRequest {
 
-        @ApiModelProperty(example = "1")
+        private PostGroupsRequest() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Pending Group")
+        @Schema(example = "Pending Group")
         public String name;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean active;
     }
 
-    @ApiModel(value = "PostGroupsResponse")
-    public final static class PostGroupsResponse {
-        private PostGroupsResponse() {
-        }
+    @Schema(description = "PostGroupsResponse")
+    public static final class PostGroupsResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostGroupsResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer groupId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "DeleteGroupsGroupIdResponse")
-    public final static class DeleteGroupsGroupIdResponse {
-        private DeleteGroupsGroupIdResponse() {
-        }
+    @Schema(description = "DeleteGroupsGroupIdResponse")
+    public static final class DeleteGroupsGroupIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteGroupsGroupIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer groupId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PostGroupsGroupIdCommandUnassignStaffRequest")
-    public final static class PostGroupsGroupIdCommandUnassignStaffRequest {
-        private PostGroupsGroupIdCommandUnassignStaffRequest() {
-        }
+    @Schema(description = "PostGroupsGroupIdCommandUnassignStaffRequest")
+    public static final class PostGroupsGroupIdCommandUnassignStaffRequest {
 
-        @ApiModelProperty(example = "1")
+        private PostGroupsGroupIdCommandUnassignStaffRequest() {}
+
+        @Schema(example = "1")
         public Integer staffId;
     }
 
-    @ApiModel(value = "PostGroupsGroupIdCommandUnassignStaffResponse")
-    public final static class PostGroupsGroupIdCommandUnassignStaffResponse {
-        private PostGroupsGroupIdCommandUnassignStaffResponse() {
+    @Schema(description = "PostGroupsGroupIdCommandUnassignStaffResponse")
+    public static final class PostGroupsGroupIdCommandUnassignStaffResponse {
+
+        private PostGroupsGroupIdCommandUnassignStaffResponse() {}
+
+        static final class PostGroupsGroupIdCommandUnassignStaffChanges {
+
+            private PostGroupsGroupIdCommandUnassignStaffChanges() {}
         }
 
-        final class PostGroupsGroupIdCommandUnassignStaffChanges {
-            private PostGroupsGroupIdCommandUnassignStaffChanges() {
-            }
-        }
-
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer groupId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
         public PostGroupsGroupIdCommandUnassignStaffChanges changes;
     }
 
-    @ApiModel(value = "PutGroupsGroupIdRequest")
-    public final static class PutGroupsGroupIdRequest {
-        private PutGroupsGroupIdRequest() {
-        }
+    @Schema(description = "PutGroupsGroupIdRequest")
+    public static final class PutGroupsGroupIdRequest {
 
-        @ApiModelProperty(example = "First Group (changed)")
+        private PutGroupsGroupIdRequest() {}
+
+        @Schema(example = "First Group (changed)")
         public String name;
     }
 
-    @ApiModel(value = "PutGroupsGroupIdResponse")
-    public final static class PutGroupsGroupIdResponse {
-        private PutGroupsGroupIdResponse() {
-        }
+    @Schema(description = "PutGroupsGroupIdResponse")
+    public static final class PutGroupsGroupIdResponse {
 
-        final class PutGroupsGroupIdChanges {
-            private PutGroupsGroupIdChanges() {
-            }
+        private PutGroupsGroupIdResponse() {}
 
-            @ApiModelProperty(example = "First Group (changed)")
+        static final class PutGroupsGroupIdChanges {
+
+            private PutGroupsGroupIdChanges() {}
+
+            @Schema(example = "First Group (changed)")
             public String name;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer groupId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
         public PutGroupsGroupIdChanges changes;
     }
 
-    @ApiModel(value = "GetGroupsGroupIdAccountsResponse")
-    public final static class GetGroupsGroupIdAccountsResponse {
-        private GetGroupsGroupIdAccountsResponse() {
-        }
+    @Schema(description = "GetGroupsGroupIdAccountsResponse")
+    public static final class GetGroupsGroupIdAccountsResponse {
 
-        final class GetGroupsGroupIdAccountsLoanAccounts {
-            private GetGroupsGroupIdAccountsLoanAccounts() {
-            }
+        private GetGroupsGroupIdAccountsResponse() {}
 
-            final class GetGroupsGroupIdAccountsStatus {
-                private GetGroupsGroupIdAccountsStatus() {
-                }
+        static final class GetGroupsGroupIdAccountsLoanAccounts {
 
-                @ApiModelProperty(example = "100")
+            private GetGroupsGroupIdAccountsLoanAccounts() {}
+
+            static final class GetGroupsGroupIdAccountsStatus {
+
+                private GetGroupsGroupIdAccountsStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "loanStatusType.submitted.and.pending.approval")
+                @Schema(example = "loanStatusType.submitted.and.pending.approval")
                 public String code;
-                @ApiModelProperty(example = "Submitted and pending approval")
-                public String value;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "Submitted and pending approval")
+                public String description;
+                @Schema(example = "true")
                 public Boolean pendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean waitingForDisbursal;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedObligationsMet;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedWrittenOff;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedRescheduled;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean overpaid;
             }
 
-            final class GetGroupsGroupIdAccountsLoanType {
-                private GetGroupsGroupIdAccountsLoanType() {
-                }
+            static final class GetGroupsGroupIdAccountsLoanType {
 
-                @ApiModelProperty(example = "2")
+                private GetGroupsGroupIdAccountsLoanType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "accountType.group")
+                @Schema(example = "accountType.group")
                 public String code;
-                @ApiModelProperty(example = "Group")
-                public String value;
+                @Schema(example = "Group")
+                public String description;
             }
 
-            @ApiModelProperty(example = "3")
+            @Schema(example = "3")
             public Integer id;
-            @ApiModelProperty(example = "000000003")
+            @Schema(example = "000000003")
             public Long accountNo;
-            @ApiModelProperty(example = "3")
+            @Schema(example = "3")
             public Integer productId;
-            @ApiModelProperty(example = "daily product")
+            @Schema(example = "daily product")
             public String productName;
             public GetGroupsGroupIdAccountsStatus status;
             public GetGroupsGroupIdAccountsLoanType loanType;
         }
 
-        final class GetGroupsGroupIdAccountsSavingAccounts {
-            private GetGroupsGroupIdAccountsSavingAccounts() {
-            }
+        static final class GetGroupsGroupIdAccountsSavingAccounts {
 
-            final class GetGroupsGroupIdAccountsSavingStatus {
-                private GetGroupsGroupIdAccountsSavingStatus() {
-                }
+            private GetGroupsGroupIdAccountsSavingAccounts() {}
 
-                @ApiModelProperty(example = "100")
+            static final class GetGroupsGroupIdAccountsSavingStatus {
+
+                private GetGroupsGroupIdAccountsSavingStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "savingsAccountStatusType.submitted.and.pending.approval")
+                @Schema(example = "savingsAccountStatusType.submitted.and.pending.approval")
                 public String code;
-                @ApiModelProperty(example = "Submitted and pending approval")
-                public String value;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "Submitted and pending approval")
+                public String description;
+                @Schema(example = "true")
                 public Boolean submittedAndPendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean approved;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean rejected;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean withdrawnByApplicant;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
             }
 
-            final class GetGroupsGroupIdAccountsSavingCurrency {
-                private GetGroupsGroupIdAccountsSavingCurrency() {
-                }
+            static final class GetGroupsGroupIdAccountsSavingCurrency {
 
-                @ApiModelProperty(example = "USD")
+                private GetGroupsGroupIdAccountsSavingCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            final class GetGroupsGroupIdAccountsSavingAccountType {
-                private GetGroupsGroupIdAccountsSavingAccountType() {
-                }
+            static final class GetGroupsGroupIdAccountsSavingAccountType {
 
-                @ApiModelProperty(example = "2")
+                private GetGroupsGroupIdAccountsSavingAccountType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "accountType.group")
+                @Schema(example = "accountType.group")
                 public String code;
-                @ApiModelProperty(example = "Group")
-                public String value;
+                @Schema(example = "Group")
+                public String description;
             }
 
-            @ApiModelProperty(example = "9")
+            @Schema(example = "9")
             public Integer id;
-            @ApiModelProperty(example = "000000009")
+            @Schema(example = "000000009")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "p_sav")
+            @Schema(example = "p_sav")
             public String productName;
             public GetGroupsGroupIdAccountsSavingStatus status;
             public GetGroupsGroupIdAccountsSavingCurrency currency;
             public GetGroupsGroupIdAccountsSavingAccountType accountType;
         }
 
-        final class GetGroupsGroupIdAccountsMemberLoanAccounts {
-            private GetGroupsGroupIdAccountsMemberLoanAccounts() {
-            }
+        static final class GetGroupsGroupIdAccountsMemberLoanAccounts {
 
-            final class GetGroupsGroupIdAccountsMemberLoanStatus {
-                private GetGroupsGroupIdAccountsMemberLoanStatus() {
-                }
+            private GetGroupsGroupIdAccountsMemberLoanAccounts() {}
 
-                @ApiModelProperty(example = "200")
+            static final class GetGroupsGroupIdAccountsMemberLoanStatus {
+
+                private GetGroupsGroupIdAccountsMemberLoanStatus() {}
+
+                @Schema(example = "200")
                 public Integer id;
-                @ApiModelProperty(example = "loanStatusType.approved")
+                @Schema(example = "loanStatusType.approved")
                 public String code;
-                @ApiModelProperty(example = "Approved")
-                public String value;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "Approved")
+                public String description;
+                @Schema(example = "false")
                 public Boolean pendingApproval;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean waitingForDisbursal;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedObligationsMet;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedWrittenOff;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedRescheduled;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean overpaid;
             }
 
-            final class GetGroupsGroupIdAccountsMemberLoanType {
-                private GetGroupsGroupIdAccountsMemberLoanType() {
-                }
+            static final class GetGroupsGroupIdAccountsMemberLoanType {
 
-                @ApiModelProperty(example = "3")
+                private GetGroupsGroupIdAccountsMemberLoanType() {}
+
+                @Schema(example = "3")
                 public Integer id;
-                @ApiModelProperty(example = "accountType.jlg")
+                @Schema(example = "accountType.jlg")
                 public String code;
-                @ApiModelProperty(example = "JLG")
-                public String value;
+                @Schema(example = "JLG")
+                public String description;
             }
 
-            @ApiModelProperty(example = "4")
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "000000004")
+            @Schema(example = "000000004")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "testLoan")
+            @Schema(example = "testLoan")
             public String productName;
             public GetGroupsGroupIdAccountsMemberLoanStatus status;
             public GetGroupsGroupIdAccountsMemberLoanType loanType;
         }
 
-        final class GetGroupsGroupIdAccountsMemberSavingsAccounts {
-            private GetGroupsGroupIdAccountsMemberSavingsAccounts() {
-            }
+        static final class GetGroupsGroupIdAccountsMemberSavingsAccounts {
 
+            private GetGroupsGroupIdAccountsMemberSavingsAccounts() {}
 
-            @ApiModelProperty(example = "3")
+            @Schema(example = "3")
             public Integer id;
-            @ApiModelProperty(example = "000000003")
+            @Schema(example = "000000003")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "p_sav")
+            @Schema(example = "p_sav")
             public String productName;
             public GetGroupsGroupIdAccountsSavingAccounts.GetGroupsGroupIdAccountsSavingStatus status;
             public GetGroupsGroupIdAccountsSavingAccounts.GetGroupsGroupIdAccountsSavingCurrency currency;
@@ -499,30 +497,30 @@ final class GroupsApiResourceSwagger {
         public Set<GetGroupsGroupIdAccountsMemberSavingsAccounts> memberSavingsAccounts;
     }
 
-    @ApiModel(value = "PostGroupsGroupIdRequest")
-    public final static class PostGroupsGroupIdRequest {
-        private PostGroupsGroupIdRequest() {
-        }
+    @Schema(description = "PostGroupsGroupIdRequest")
+    public static final class PostGroupsGroupIdRequest {
 
-        final class PostGroupsGroupIdClients {
-            private PostGroupsGroupIdClients() {
-            }
+        private PostGroupsGroupIdRequest() {}
 
-            @ApiModelProperty(example = "1")
+        static final class PostGroupsGroupIdClients {
+
+            private PostGroupsGroupIdClients() {}
+
+            @Schema(example = "1")
             public Integer id;
         }
 
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer destinationGroupId;
         public Set<PostGroupsGroupIdClients> clients;
     }
 
-    @ApiModel(value = "PostGroupsGroupIdResponse")
-    public final static class PostGroupsGroupIdResponse {
-        private PostGroupsGroupIdResponse() {
-        }
+    @Schema(description = "PostGroupsGroupIdResponse")
+    public static final class PostGroupsGroupIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostGroupsGroupIdResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 }

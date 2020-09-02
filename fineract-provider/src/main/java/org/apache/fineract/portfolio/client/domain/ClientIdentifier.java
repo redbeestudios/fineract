@@ -26,17 +26,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.codes.domain.CodeValue;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractAuditableCustom;
-import org.apache.fineract.useradministration.domain.AppUser;
 
 @Entity
 @Table(name = "m_client_identifier", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "document_type_id", "document_key" }, name = "unique_identifier_key"),
-        @UniqueConstraint(columnNames = { "client_id", "document_key", "active" }, name = "unique_active_client_identifier")})
-public class ClientIdentifier extends AbstractAuditableCustom<AppUser, Long> {
+        @UniqueConstraint(columnNames = { "client_id", "document_key", "active" }, name = "unique_active_client_identifier") })
+public class ClientIdentifier extends AbstractAuditableCustom {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -69,14 +68,15 @@ public class ClientIdentifier extends AbstractAuditableCustom<AppUser, Long> {
         //
     }
 
-    private ClientIdentifier(final Client client, final CodeValue documentType, final String documentKey, final String statusName, String description) {
+    private ClientIdentifier(final Client client, final CodeValue documentType, final String documentKey, final String statusName,
+            String description) {
         this.client = client;
         this.documentType = documentType;
         this.documentKey = StringUtils.defaultIfEmpty(documentKey, null);
         this.description = StringUtils.defaultIfEmpty(description, null);
         ClientIdentifierStatus statusEnum = ClientIdentifierStatus.valueOf(statusName.toUpperCase());
         this.active = null;
-        if(statusEnum.isActive()){
+        if (statusEnum.isActive()) {
             this.active = statusEnum.getValue();
         }
         this.status = statusEnum.getValue();
@@ -111,7 +111,7 @@ public class ClientIdentifier extends AbstractAuditableCustom<AppUser, Long> {
         }
 
         final String statusParamName = "status";
-        if(command.isChangeInStringParameterNamed(statusParamName, ClientIdentifierStatus.fromInt(this.status).getCode())){
+        if (command.isChangeInStringParameterNamed(statusParamName, ClientIdentifierStatus.fromInt(this.status).getCode())) {
             final String newValue = command.stringValueOfParameterNamed(descriptionParamName);
             actualChanges.put(descriptionParamName, ClientIdentifierStatus.valueOf(newValue));
             this.status = ClientIdentifierStatus.valueOf(newValue).getValue();

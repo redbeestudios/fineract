@@ -20,7 +20,7 @@ package org.apache.fineract.organisation.provisioning.service;
 
 import java.util.Map;
 import javax.persistence.PersistenceException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResultBuilder;
@@ -31,18 +31,19 @@ import org.apache.fineract.organisation.provisioning.domain.ProvisioningCategory
 import org.apache.fineract.organisation.provisioning.exception.ProvisioningCategoryCannotBeDeletedException;
 import org.apache.fineract.organisation.provisioning.exception.ProvisioningCategoryNotFoundException;
 import org.apache.fineract.organisation.provisioning.serialization.ProvisioningCategoryDefinitionJsonDeserializer;
-import org.apache.fineract.portfolio.charge.service.ChargeWritePlatformServiceJpaRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl implements ProvisioningCategoryWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(ChargeWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl.class);
 
     private final ProvisioningCategoryRepository provisioningCategoryRepository;
 
@@ -65,11 +66,11 @@ public class ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl implement
             this.provisioningCategoryRepository.save(provisioningCategory);
             return new CommandProcessingResultBuilder().withCommandId(command.commandId()).withEntityId(provisioningCategory.getId())
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleDataIntegrityIssues(command, dve.getMostSpecificCause(), dve);
             return CommandProcessingResult.empty();
-        }catch (final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
@@ -79,8 +80,8 @@ public class ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl implement
     public CommandProcessingResult deleteProvisioningCateogry(JsonCommand command) {
         this.fromApiJsonDeserializer.validateForCreate(command.json());
         final ProvisioningCategory provisioningCategory = ProvisioningCategory.fromJson(command);
-        boolean isProvisioningCategoryInUse = isAnyLoanProductsAssociateWithThisProvisioningCategory(provisioningCategory.getId()) ;
-        if(isProvisioningCategoryInUse) {
+        boolean isProvisioningCategoryInUse = isAnyLoanProductsAssociateWithThisProvisioningCategory(provisioningCategory.getId());
+        if (isProvisioningCategoryInUse) {
             throw new ProvisioningCategoryCannotBeDeletedException(
                     "error.msg.provisioningcategory.cannot.be.deleted.it.is.already.used.in.loanproduct",
                     "This provisioning category cannot be deleted, it is already used in loan product");
@@ -100,11 +101,11 @@ public class ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl implement
                 this.provisioningCategoryRepository.save(provisioningCategoryForUpdate);
             }
             return new CommandProcessingResultBuilder().withCommandId(command.commandId()).withEntityId(categoryId).with(changes).build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleDataIntegrityIssues(command, dve.getMostSpecificCause(), dve);
             return CommandProcessingResult.empty();
-        }catch (final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
@@ -113,20 +114,33 @@ public class ProvisioningCategoryWritePlatformServiceJpaRepositoryImpl implement
     private boolean isAnyLoanProductsAssociateWithThisProvisioningCategory(final Long categoryID) {
         final String sql = "select if((exists (select 1 from m_loanproduct_provisioning_details lpd where lpd.category_id = ?)) = 1, 'true', 'false')";
         final String isLoansUsingCharge = this.jdbcTemplate.queryForObject(sql, String.class, new Object[] { categoryID });
-        return new Boolean(isLoansUsingCharge);
+        return Boolean.valueOf(isLoansUsingCharge);
     }
+
     /*
-     * Guaranteed to throw an exception no matter what the data integrity issue
-     * is.
+     * Guaranteed to throw an exception no matter what the data integrity issue is.
      */
-    private void handleDataIntegrityIssues(final JsonCommand command, final Throwable realCause, final Exception dve) {
+    private void handleDataIntegrityIssues(final JsonCommand command, final Throwable realCause,
+            final NonTransientDataAccessException dve) {
 
         if (realCause.getMessage().contains("category_name")) {
             final String name = command.stringValueOfParameterNamed("category_name");
-            throw new PlatformDataIntegrityException("error.msg.provisioning.duplicate.categoryname", "Provisioning Cateory with name `"
-                    + name + "` already exists", "category name", name);
+            throw new PlatformDataIntegrityException("error.msg.provisioning.duplicate.categoryname",
+                    "Provisioning Cateory with name `" + name + "` already exists", "category name", name);
         }
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
+        throw new PlatformDataIntegrityException("error.msg.charge.unknown.data.integrity.issue",
+                "Unknown data integrity issue with resource: " + realCause.getMessage());
+    }
+
+    private void handleDataIntegrityIssues(final JsonCommand command, final Throwable realCause, final PersistenceException dve) {
+
+        if (realCause.getMessage().contains("category_name")) {
+            final String name = command.stringValueOfParameterNamed("category_name");
+            throw new PlatformDataIntegrityException("error.msg.provisioning.duplicate.categoryname",
+                    "Provisioning Cateory with name `" + name + "` already exists", "category name", name);
+        }
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.charge.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource: " + realCause.getMessage());
     }

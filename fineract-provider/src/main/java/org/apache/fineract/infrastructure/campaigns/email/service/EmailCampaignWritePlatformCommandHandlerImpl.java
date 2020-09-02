@@ -32,13 +32,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.campaigns.email.data.EmailCampaignData;
 import org.apache.fineract.infrastructure.campaigns.email.data.EmailCampaignValidator;
 import org.apache.fineract.infrastructure.campaigns.email.data.EmailMessageWithAttachmentData;
@@ -93,13 +94,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampaignWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(EmailCampaignWritePlatformCommandHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EmailCampaignWritePlatformCommandHandlerImpl.class);
 
     private final PlatformSecurityContext context;
 
@@ -154,8 +157,7 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
 
         final Long reportId = command.longValueOfParameterNamed(EmailCampaignValidator.stretchyReportId);
 
-        final Report report = this.reportRepository.findById(reportId)
-                .orElseThrow(() -> new ReportNotFoundException(reportId));
+        final Report report = this.reportRepository.findById(reportId).orElseThrow(() -> new ReportNotFoundException(reportId));
 
         // find all report parameters and store them as json string
         final Set<ReportParameterUsage> reportParameterUsages = report.getReportParameterUsages();
@@ -187,13 +189,14 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
             final EmailCampaign emailCampaign = this.emailCampaignRepository.findById(resourceId)
                     .orElseThrow(() -> new EmailCampaignNotFound(resourceId));
 
-            if (emailCampaign.isActive()) { throw new EmailCampaignMustBeClosedToEditException(emailCampaign.getId()); }
+            if (emailCampaign.isActive()) {
+                throw new EmailCampaignMustBeClosedToEditException(emailCampaign.getId());
+            }
             final Map<String, Object> changes = emailCampaign.update(command);
 
             if (changes.containsKey(EmailCampaignValidator.businessRuleId)) {
                 final Long newValue = command.longValueOfParameterNamed(EmailCampaignValidator.businessRuleId);
-                final Report reportId = this.reportRepository.findById(newValue)
-                        .orElseThrow(() -> new ReportNotFoundException(newValue));
+                final Report reportId = this.reportRepository.findById(newValue).orElseThrow(() -> new ReportNotFoundException(newValue));
                 emailCampaign.updateBusinessRuleId(reportId);
 
             }
@@ -206,8 +209,9 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
                     .withEntityId(resourceId) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
 
@@ -220,7 +224,9 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
         final EmailCampaign emailCampaign = this.emailCampaignRepository.findById(resourceId)
                 .orElseThrow(() -> new EmailCampaignNotFound(resourceId));
 
-        if (emailCampaign.isActive()) { throw new EmailCampaignMustBeClosedToBeDeletedException(emailCampaign.getId()); }
+        if (emailCampaign.isActive()) {
+            throw new EmailCampaignMustBeClosedToBeDeletedException(emailCampaign.getId());
+        }
 
         /*
          * Do not delete but set a boolean is_visible to zero
@@ -293,7 +299,7 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
                 LocalDateTime tenantDateNow = tenantDateTime();
                 LocalDateTime nextTriggerDate = emailCampaignData.getNextTriggerDate().toLocalDateTime();
 
-                logger.info("tenant time " + tenantDateNow.toString() + " trigger time " + nextTriggerDate.toString());
+                LOG.info("tenant time {} trigger time {}", tenantDateNow, nextTriggerDate);
                 if (nextTriggerDate.isBefore(tenantDateNow)) {
                     insertDirectCampaignIntoEmailOutboundTable(emailCampaignData.getParamValue(), emailCampaignData.getEmailSubject(),
                             emailCampaignData.getMessage(), emailCampaignData.getCampaignName(), emailCampaignData.getId());
@@ -311,8 +317,7 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
         // calculate new trigger date and insert into next trigger date
 
         /**
-         * next run time has to be in the future if not calculate a new future
-         * date
+         * next run time has to be in the future if not calculate a new future date
          */
         LocalDate nextRuntime = CalendarUtils.getNextRecurringDate(emailCampaign.getRecurrence(),
                 emailCampaign.getNextTriggerDate().toLocalDate(), nextTriggerDate.toLocalDate());
@@ -364,9 +369,8 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
             if (emailCampaign.isSchedule()) {
 
                 /**
-                 * if recurrence start date is in the future calculate next
-                 * trigger date if not use recurrence start date us next trigger
-                 * date when activating
+                 * if recurrence start date is in the future calculate next trigger date if not use recurrence start
+                 * date us next trigger date when activating
                  */
                 LocalDate nextTriggerDate = null;
                 if (emailCampaign.getRecurrenceStartDateTime().isBefore(tenantDateTime())) {
@@ -389,8 +393,8 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
         }
 
         /*
-         * if campaign is direct insert campaign message into email outbound
-         * table else if its a schedule create a job process for it
+         * if campaign is direct insert campaign message into email outbound table else if its a schedule create a job
+         * process for it
          */
         return new CommandProcessingResultBuilder() //
                 .withCommandId(command.commandId()) //
@@ -444,8 +448,10 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
         final String response = this.genericDataService.generateJsonFromGenericResultsetData(results);
         resultList = new ObjectMapper().readValue(response, new TypeReference<List<HashMap<String, Object>>>() {});
         // loop changes array date to string date
-        for (HashMap<String, Object> entry : resultList) {
-            for (Map.Entry<String, Object> map : entry.entrySet()) {
+        for (Iterator<HashMap<String, Object>> it = resultList.iterator(); it.hasNext();) {
+            HashMap<String, Object> entry = it.next();
+            for (Iterator<Map.Entry<String, Object>> iter = entry.entrySet().iterator(); iter.hasNext();) {
+                Map.Entry<String, Object> map = iter.next();
                 String key = map.getKey();
                 Object ob = map.getValue();
                 if (ob instanceof ArrayList && ((ArrayList) ob).size() == 3) {
@@ -513,9 +519,8 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
         if (emailCampaign.isSchedule()) {
 
             /**
-             * if recurrence start date is in the future calculate next trigger
-             * date if not use recurrence start date us next trigger date when
-             * activating
+             * if recurrence start date is in the future calculate next trigger date if not use recurrence start date us
+             * next trigger date when activating
              */
             LocalDate nextTriggerDate = null;
             if (emailCampaign.getRecurrenceStartDateTime().isBefore(tenantDateTime())) {
@@ -542,9 +547,8 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
 
     }
 
-    private void handleDataIntegrityIssues(@SuppressWarnings("unused") final JsonCommand command,
-            final DataIntegrityViolationException dve) {
-        final Throwable realCause = dve.getMostSpecificCause();
+    private void handleDataIntegrityIssues(@SuppressWarnings("unused") final JsonCommand command, final Throwable realCause,
+            final NonTransientDataAccessException dve) {
 
         throw new PlatformDataIntegrityException("error.msg.email.campaign.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource: " + realCause.getMessage());
@@ -579,7 +583,8 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
 
                 if (isValidEmail(emailMessage.getEmailAddress())) {
 
-                    final EmailCampaign emailCampaign = this.emailCampaignRepository.findById(emailMessage.getEmailCampaign().getId()).orElse(null); //
+                    final EmailCampaign emailCampaign = this.emailCampaignRepository.findById(emailMessage.getEmailCampaign().getId())
+                            .orElse(null); //
 
                     final ScheduledEmailAttachmentFileFormat emailAttachmentFileFormat = ScheduledEmailAttachmentFileFormat
                             .instance(emailCampaign.getEmailAttachmentFileFormat());
@@ -715,8 +720,7 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
     }
 
     /**
-     * This generates the the report and converts it to a file by passing the
-     * parameters below
+     * This generates the the report and converts it to a file by passing the parameters below
      *
      * @param emailCampaign
      * @param emailAttachmentFileFormat
@@ -760,8 +764,7 @@ public class EmailCampaignWritePlatformCommandHandlerImpl implements EmailCampai
     }
 
     /**
-     * This matches the the actual values to the key in the report stretchy
-     * parameters map
+     * This matches the the actual values to the key in the report stretchy parameters map
      *
      * @param stretchyParams
      * @param client

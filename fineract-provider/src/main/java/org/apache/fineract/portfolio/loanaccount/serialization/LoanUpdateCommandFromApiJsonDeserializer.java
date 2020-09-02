@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.exception.InvalidJsonException;
 import org.apache.fineract.infrastructure.core.serialization.AbstractFromApiJsonDeserializer;
 import org.apache.fineract.infrastructure.core.serialization.FromJsonHelper;
@@ -52,7 +52,9 @@ public final class LoanUpdateCommandFromApiJsonDeserializer extends AbstractFrom
     @Override
     public LoanUpdateCommand commandFromApiJson(final String json) {
 
-        if (StringUtils.isBlank(json)) { throw new InvalidJsonException(); }
+        if (StringUtils.isBlank(json)) {
+            throw new InvalidJsonException();
+        }
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
         this.fromApiJsonHelper.checkForUnsupportedParameters(typeOfMap, json, this.supportedParameters);

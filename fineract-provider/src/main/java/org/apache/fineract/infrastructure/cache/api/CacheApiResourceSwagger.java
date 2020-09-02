@@ -18,50 +18,59 @@
  */
 package org.apache.fineract.infrastructure.cache.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 
 /**
  * Created by sanyam on 28/7/17.
  */
 final class CacheApiResourceSwagger {
+
     private CacheApiResourceSwagger() {
 
     }
 
-    @ApiModel(value = "GetCachesResponse")
+    @Schema(description = "GetCachesResponse")
     public static final class GetCachesResponse {
+
         private GetCachesResponse() {
 
         }
+
         public EnumOptionData cacheType;
         public boolean enabled;
     }
 
-    @ApiModel(value = "PutCachesRequest")
+    @Schema(description = "PutCachesRequest")
     public static final class PutCachesRequest {
+
         private PutCachesRequest() {
 
         }
-        @ApiModelProperty(example = "2")
+
+        @Schema(example = "2")
         public Long cacheType;
 
     }
 
-    @ApiModel(value = "PutCachesResponse")
+    @Schema(description = "PutCachesResponse")
     public static final class PutCachesResponse {
+
         private PutCachesResponse() {
 
         }
-        public static final class PutCachechangesSwagger{
+
+        public static final class PutCachechangesSwagger {
+
             private PutCachechangesSwagger() {
 
             }
-            @ApiModelProperty(example = "2")
+
+            @Schema(example = "2")
             public Long cacheType;
 
         }
+
         public PutCachechangesSwagger cacheType;
 
     }

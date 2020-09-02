@@ -27,20 +27,27 @@ import java.util.Collection;
 public class AccountSummaryCollectionData {
 
     private final Collection<LoanAccountSummaryData> loanAccounts;
+    private final Collection<LoanAccountSummaryData> groupLoanIndividualMonitoringAccounts;
     private final Collection<SavingsAccountSummaryData> savingsAccounts;
-    private final Collection<ShareAccountSummaryData> shareAccounts ;
+    private final Collection<ShareAccountSummaryData> shareAccounts;
     private final Collection<GuarantorAccountSummaryData> guarantorAccounts;
 
     private final Collection<LoanAccountSummaryData> memberLoanAccounts;
     private final Collection<SavingsAccountSummaryData> memberSavingsAccounts;
     private final Collection<GuarantorAccountSummaryData> memberGuarantorAccounts;
 
+    /*
+     * METHOD SIGNATURE CHANGE NOTICE: Method's signature was changed for GLIM & GSIM implementation
+     */
     public AccountSummaryCollectionData(final Collection<LoanAccountSummaryData> loanAccounts,
+            final Collection<LoanAccountSummaryData> groupLoanIndividualMonitoringAccounts,
             final Collection<SavingsAccountSummaryData> savingsAccounts, final Collection<ShareAccountSummaryData> shareAccounts,
             final Collection<GuarantorAccountSummaryData> guarantorAccounts) {
+
         this.loanAccounts = defaultLoanAccountsIfEmpty(loanAccounts);
+        this.groupLoanIndividualMonitoringAccounts = groupLoanIndividualMonitoringAccounts;
         this.savingsAccounts = defaultSavingsAccountsIfEmpty(savingsAccounts);
-        this.shareAccounts = defaultShareAccountsIfEmpty(shareAccounts) ;
+        this.shareAccounts = defaultShareAccountsIfEmpty(shareAccounts);
         this.guarantorAccounts = guarantorAccounts;
         this.memberLoanAccounts = null;
         this.memberSavingsAccounts = null;
@@ -48,12 +55,17 @@ public class AccountSummaryCollectionData {
     }
 
     public AccountSummaryCollectionData(final Collection<LoanAccountSummaryData> loanAccounts,
-            final Collection<SavingsAccountSummaryData> savingsAccounts, final Collection<GuarantorAccountSummaryData> guarantorAccounts, final Collection<LoanAccountSummaryData> memberLoanAccounts,
-            final Collection<SavingsAccountSummaryData> memberSavingsAccounts, final Collection<GuarantorAccountSummaryData> memberGuarantorAccounts) {
+            final Collection<LoanAccountSummaryData> groupLoanIndividualMonitoringAccounts,
+            final Collection<SavingsAccountSummaryData> savingsAccounts, final Collection<GuarantorAccountSummaryData> guarantorAccounts,
+            final Collection<LoanAccountSummaryData> memberLoanAccounts, final Collection<SavingsAccountSummaryData> memberSavingsAccounts,
+            final Collection<GuarantorAccountSummaryData> memberGuarantorAccounts) {
+        /* Note to Self: GSIM not passed in */
+
         this.loanAccounts = defaultLoanAccountsIfEmpty(loanAccounts);
+        this.groupLoanIndividualMonitoringAccounts = groupLoanIndividualMonitoringAccounts;
         this.savingsAccounts = defaultSavingsAccountsIfEmpty(savingsAccounts);
         this.guarantorAccounts = guarantorAccounts;
-        this.shareAccounts = null ;
+        this.shareAccounts = null;
         this.memberLoanAccounts = defaultLoanAccountsIfEmpty(memberLoanAccounts);
         this.memberSavingsAccounts = defaultSavingsAccountsIfEmpty(memberSavingsAccounts);
         this.memberGuarantorAccounts = defaultGuarantorAccountsIfEmpty(memberGuarantorAccounts);
@@ -83,7 +95,8 @@ public class AccountSummaryCollectionData {
         return returnCollection;
     }
 
-    private Collection<GuarantorAccountSummaryData> defaultGuarantorAccountsIfEmpty(final Collection<GuarantorAccountSummaryData> collection) {
+    private Collection<GuarantorAccountSummaryData> defaultGuarantorAccountsIfEmpty(
+            final Collection<GuarantorAccountSummaryData> collection) {
         Collection<GuarantorAccountSummaryData> returnCollection = null;
         if (collection != null && !collection.isEmpty()) {
             returnCollection = collection;

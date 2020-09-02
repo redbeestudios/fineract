@@ -23,8 +23,7 @@ import java.util.List;
 
 /**
  *
- * People typically use either of the following settings when calculating there
- * interest using the daily method:
+ * People typically use either of the following settings when calculating there interest using the daily method:
  * <ul>
  * <li>360 and</li>
  * <li>365</li>
@@ -39,7 +38,7 @@ public enum SavingsInterestCalculationDaysInYearType {
     private final Integer value;
     private final String code;
 
-    private SavingsInterestCalculationDaysInYearType(final Integer value, final String code) {
+    SavingsInterestCalculationDaysInYearType(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

@@ -80,8 +80,8 @@ public class ShareProductReadPlatformServiceImpl implements ProductReadPlatformS
 
     @Override
     public Page<ProductData> retrieveAllProducts(Integer offSet, Integer limit) {
-        final Collection<ShareProductMarketPriceData> shareMarketCollection = null ;
-        final Collection<ChargeData> charges = null ;
+        final Collection<ShareProductMarketPriceData> shareMarketCollection = null;
+        final Collection<ChargeData> charges = null;
         ShareProductRowMapper mapper = new ShareProductRowMapper(shareMarketCollection, charges);
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("select SQL_CALC_FOUND_ROWS ");
@@ -137,7 +137,7 @@ public class ShareProductReadPlatformServiceImpl implements ProductReadPlatformS
             }
             return data;
         } catch (final EmptyResultDataAccessException e) {
-            throw new ProductNotFoundException(productId, "share");
+            throw new ProductNotFoundException(productId, "share", e);
         }
     }
 
@@ -200,11 +200,11 @@ public class ShareProductReadPlatformServiceImpl implements ProductReadPlatformS
         }
     }
 
-    private final static class ShareProductRowMapper implements RowMapper<ProductData> {
+    private static final class ShareProductRowMapper implements RowMapper<ProductData> {
 
         Collection<ShareProductMarketPriceData> shareMarketCollection;
         Collection<ChargeData> charges;
-        private StringBuffer buff = new StringBuffer();
+        private StringBuilder buff = new StringBuilder();
 
         ShareProductRowMapper(Collection<ShareProductMarketPriceData> shareMarketCollection, Collection<ChargeData> charges) {
             this.shareMarketCollection = shareMarketCollection;
@@ -243,8 +243,8 @@ public class ShareProductReadPlatformServiceImpl implements ProductReadPlatformS
             final String currencyNameCode = rs.getString("currencyNameCode");
             final String currencyDisplaySymbol = rs.getString("currencyDisplaySymbol");
             final Integer inMultiplesOf = JdbcSupport.getInteger(rs, "currency_multiplesof");
-            final CurrencyData currency = new CurrencyData(currencyCode, currencyName, currencyDigits, inMultiplesOf,
-                    currencyDisplaySymbol, currencyNameCode);
+            final CurrencyData currency = new CurrencyData(currencyCode, currencyName, currencyDigits, inMultiplesOf, currencyDisplaySymbol,
+                    currencyNameCode);
 
             final Long totalShares = rs.getLong("total_shares");
             final Long issuedShares = JdbcSupport.getLongDefaultToNullIfZero(rs, "issued_shares");

@@ -18,15 +18,15 @@
  */
 package org.apache.fineract.portfolio.client.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -59,16 +59,13 @@ import org.springframework.stereotype.Component;
 @Path("/client")
 @Component
 @Scope("singleton")
-@Api(tags = {"Clients Address"})
-@SwaggerDefinition(tags = {
-  @Tag(name = "Clients Address", description = "Address module is an optional module and can be configured into the system by using GlobalConfiguration setting: enable-address. In order to activate Address module, we need to enable the configuration, enable-address by setting its value to true.")
-})
+@Tag(name = "Clients Address", description = "Address module is an optional module and can be configured into the system by using GlobalConfiguration setting: enable-address. In order to activate Address module, we need to enable the configuration, enable-address by setting its value to true.")
 public class ClientAddressApiResources {
-    private final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(Arrays.asList("addressId", "street",
-            "addressLine1", "addressLine2", "addressLine3", "townVillage", "city", "countyDistrict", "stateProvinceId",
-            "countryId", "postalCode", "latitude", "longitude", "createdBy", "createdOn", "updatedBy", "updatedOn",
-            "clientAddressId", "client_id", "address_id", "address_type_id", "isActive", "fieldConfigurationId",
-            "entity", "table", "field", "is_enabled", "is_mandatory", "validation_regex"));
+
+    private final Set<String> responseDataParameters = new HashSet<>(Arrays.asList("addressId", "street", "addressLine1", "addressLine2",
+            "addressLine3", "townVillage", "city", "countyDistrict", "stateProvinceId", "countryId", "postalCode", "latitude", "longitude",
+            "createdBy", "createdOn", "updatedBy", "updatedOn", "clientAddressId", "client_id", "address_id", "address_type_id", "isActive",
+            "fieldConfigurationId", "entity", "table", "field", "is_enabled", "is_mandatory", "validation_regex"));
     private final String resourceNameForPermissions = "Address";
     private final PlatformSecurityContext context;
     private final AddressReadPlatformServiceImpl readPlatformService;
@@ -77,10 +74,8 @@ public class ClientAddressApiResources {
     private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
 
     @Autowired
-    public ClientAddressApiResources(final PlatformSecurityContext context,
-            final AddressReadPlatformServiceImpl readPlatformService,
-            final DefaultToApiJsonSerializer<AddressData> toApiJsonSerializer,
-            final ApiRequestParameterHelper apiRequestParameterHelper,
+    public ClientAddressApiResources(final PlatformSecurityContext context, final AddressReadPlatformServiceImpl readPlatformService,
+            final DefaultToApiJsonSerializer<AddressData> toApiJsonSerializer, final ApiRequestParameterHelper apiRequestParameterHelper,
             final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService) {
         this.context = context;
         this.readPlatformService = readPlatformService;
@@ -98,9 +93,8 @@ public class ClientAddressApiResources {
 
         final AddressData template = this.readPlatformService.retrieveTemplate();
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, template, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializer.serialize(settings, template, this.responseDataParameters);
 
     }
 
@@ -108,11 +102,13 @@ public class ClientAddressApiResources {
     @Path("/{clientid}/addresses")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Create an address for a Client", notes = "Mandatory Fields : \n" + "type and clientId")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = ClientAddressApiResourcesSwagger.PostClientClientIdAddressesRequest.class)})
-    @ApiResponses({ @ApiResponse(code = 200, message = "OK", response = ClientAddressApiResourcesSwagger.PostClientClientIdAddressesResponse.class)})
-    public String AddClientAddress(@QueryParam("type") @ApiParam(value = "type") final long addressTypeId,
-            @PathParam("clientid") @ApiParam(value = "clientId") final long clientid, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Create an address for a Client", description = "Mandatory Fields : \n" + "type and clientId")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = ClientAddressApiResourcesSwagger.PostClientClientIdAddressesRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ClientAddressApiResourcesSwagger.PostClientClientIdAddressesResponse.class))) })
+    public String addClientAddress(@QueryParam("type") @Parameter(description = "type") final long addressTypeId,
+            @PathParam("clientid") @Parameter(description = "clientId") final long clientid,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapper commandRequest = new CommandWrapperBuilder().addClientAddress(clientid, addressTypeId)
                 .withJson(apiRequestBodyAsJson).build();
@@ -126,10 +122,13 @@ public class ClientAddressApiResources {
     @Path("/{clientid}/addresses")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "List all addresses for a Client", notes = "Example Requests:\n" + "\n" +"client/1/addresses\n" + "\n" +    "\n" +"clients/1/addresses?status=false,true&&type=1,2,3" )
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ClientAddressApiResourcesSwagger.GetClientClientIdAddressesResponse.class)})
-    public String getAddresses(@QueryParam("status") @ApiParam(value = "status") final String status, @QueryParam("type") @ApiParam(value = "type") final long addressTypeId,
-                               @PathParam("clientid") @ApiParam(value = "clientId") final long clientid, @Context final UriInfo uriInfo) {
+    @Operation(summary = "List all addresses for a Client", description = "Example Requests:\n" + "\n" + "client/1/addresses\n" + "\n"
+            + "\n" + "clients/1/addresses?status=false,true&&type=1,2,3")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ClientAddressApiResourcesSwagger.GetClientClientIdAddressesResponse.class)))) })
+    public String getAddresses(@QueryParam("status") @Parameter(description = "status") final String status,
+            @QueryParam("type") @Parameter(description = "type") final long addressTypeId,
+            @PathParam("clientid") @Parameter(description = "clientId") final long clientid, @Context final UriInfo uriInfo) {
         Collection<AddressData> address;
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
@@ -144,9 +143,8 @@ public class ClientAddressApiResources {
             address = this.readPlatformService.retrieveAddressbyStatus(clientid, status);
         }
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializer.serialize(settings, address, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializer.serialize(settings, address, this.responseDataParameters);
 
     }
 
@@ -154,13 +152,16 @@ public class ClientAddressApiResources {
     @Path("/{clientid}/addresses")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Update an address for a Client", notes = "All the address fields can be updated by using update client address API\n" + "\n" + "Mandatory Fields\n" + "type and addressId")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = ClientAddressApiResourcesSwagger.PutClientClientIdAddressesRequest.class)})
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ClientAddressApiResourcesSwagger.PutClientClientIdAddressesResponse.class)})
-    public String UpdateClientAddress(@PathParam("clientid") @ApiParam(value = "clientId") final long clientid, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Update an address for a Client", description = "All the address fields can be updated by using update client address API\n"
+            + "\n" + "Mandatory Fields\n" + "type and addressId")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = ClientAddressApiResourcesSwagger.PutClientClientIdAddressesRequest.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ClientAddressApiResourcesSwagger.PutClientClientIdAddressesResponse.class))) })
+    public String updateClientAddress(@PathParam("clientid") @Parameter(description = "clientId") final long clientid,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
-        final CommandWrapper commandRequest = new CommandWrapperBuilder().updateClientAddress(clientid)
-                .withJson(apiRequestBodyAsJson).build();
+        final CommandWrapper commandRequest = new CommandWrapperBuilder().updateClientAddress(clientid).withJson(apiRequestBodyAsJson)
+                .build();
 
         final CommandProcessingResult result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
 

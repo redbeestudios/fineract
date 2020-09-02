@@ -42,17 +42,17 @@ public class UpdateCashierAllocationCommandHandler implements NewCommandSourceHa
     /**
      * Creates a new instance
      *
-     * @param writePlatformService the {@code TellerWritePlatformService} used to access the backend
+     * @param writePlatformService
+     *            the {@code TellerWritePlatformService} used to access the backend
      */
     @Autowired
     public UpdateCashierAllocationCommandHandler(final TellerWritePlatformService writePlatformService) {
-        super();
+
         this.writePlatformService = writePlatformService;
     }
 
     @Override
     public CommandProcessingResult processCommand(final JsonCommand command) {
-        return this.writePlatformService.updateCashierAllocation(command.entityId(),
-                command.subentityId(), command);
+        return this.writePlatformService.updateCashierAllocation(command.entityId(), command.subentityId(), command);
     }
 }

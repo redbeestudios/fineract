@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.fineract.infrastructure.configuration.domain;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "c_external_service", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }, name = "name_UNIQUE") })
-public class ExternalService extends AbstractPersistableCustom<Long> {
+public class ExternalService extends AbstractPersistableCustom {
 
     @Column(name = "name", length = 50)
     private String name;

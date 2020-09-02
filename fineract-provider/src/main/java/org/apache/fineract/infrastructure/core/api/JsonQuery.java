@@ -24,8 +24,8 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.serialization.FromJsonHelper;
 import org.apache.fineract.infrastructure.security.domain.BasicPasswordEncodablePlatformUser;
 import org.apache.fineract.infrastructure.security.domain.PlatformUser;
@@ -35,8 +35,7 @@ import org.joda.time.LocalDate;
 /**
  * Immutable representation of a query.
  *
- * Wraps the provided JSON with convenience functions for extracting parameter
- * values.
+ * Wraps the provided JSON with convenience functions for extracting parameter values.
  */
 public final class JsonQuery {
 
@@ -241,7 +240,7 @@ public final class JsonQuery {
      */
     public boolean booleanPrimitiveValueOfParameterNamed(final String parameterName) {
         final Boolean value = this.fromApiJsonHelper.extractBooleanNamed(parameterName, this.parsedQuery);
-        return (Boolean) ObjectUtils.defaultIfNull(value, Boolean.FALSE);
+        return ObjectUtils.defaultIfNull(value, Boolean.FALSE);
     }
 
     public boolean isChangeInArrayParameterNamed(final String parameterName, final String[] existingValue) {

@@ -42,6 +42,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -49,7 +51,7 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductMixWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(ProductMixWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProductMixWritePlatformServiceJpaRepositoryImpl.class);
     private final PlatformSecurityContext context;
     private final ProductMixDataValidator fromApiJsonDeserializer;
     private final ProductMixRepository productMixRepository;
@@ -91,7 +93,7 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
             changes.put("restrictedProductsForMix", restrictedProductsAsMap.keySet());
             changes.put("removedProductsForMix", removedRestrictions);
             return new CommandProcessingResultBuilder().withProductId(productId).with(changes).withCommandId(command.commandId()).build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
 
             handleDataIntegrityIssues(dve);
             return CommandProcessingResult.empty();
@@ -135,7 +137,9 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
             final Map<String, Object> changes = new LinkedHashMap<>();
 
             final List<ProductMix> existedProductMixes = new ArrayList<>(this.productMixRepository.findByProductId(productId));
-            if (CollectionUtils.isEmpty(existedProductMixes)) { throw new ProductMixNotFoundException(productId); }
+            if (CollectionUtils.isEmpty(existedProductMixes)) {
+                throw new ProductMixNotFoundException(productId);
+            }
             final Set<String> restrictedIds = new HashSet<>(Arrays.asList(command.arrayValueOfParameterNamed("restrictedProducts")));
 
             // updating with empty array means deleting the existed records.
@@ -148,8 +152,8 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
             }
 
             /*
-             * if restrictedProducts array is not empty delete the duplicate ids
-             * which are already exists and update existedProductMixes
+             * if restrictedProducts array is not empty delete the duplicate ids which are already exists and update
+             * existedProductMixes
              */
             final List<ProductMix> productMixesToRemove = updateRestrictedIds(restrictedIds, existedProductMixes);
             final Map<Long, LoanProduct> restrictedProductsAsMap = getRestrictedProducts(restrictedIds);
@@ -163,7 +167,7 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
                 changes.put("removedProductsForMix", getProductIdsFromCollection(productMixesToRemove));
             }
             return new CommandProcessingResultBuilder().with(changes).withProductId(productId).withCommandId(command.commandId()).build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
 
             handleDataIntegrityIssues(dve);
             return CommandProcessingResult.empty();
@@ -171,8 +175,7 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
     }
 
     private LoanProduct findByProductIdIfProvided(final Long productId) {
-        return this.productRepository.findById(productId)
-                .orElseThrow(() -> new LoanProductNotFoundException(productId));
+        return this.productRepository.findById(productId).orElseThrow(() -> new LoanProductNotFoundException(productId));
     }
 
     private Map<Long, LoanProduct> getRestrictedProducts(final Set<String> restrictedIds) {
@@ -187,14 +190,10 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
         return restricrtedProducts;
     }
 
-    private void handleDataIntegrityIssues(final DataIntegrityViolationException dve) {
-        logAsErrorUnexpectedDataIntegrityException(dve);
+    private void handleDataIntegrityIssues(final NonTransientDataAccessException dve) {
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.product.loan.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource.");
-    }
-
-    private void logAsErrorUnexpectedDataIntegrityException(final DataIntegrityViolationException dve) {
-        logger.error(dve.getMessage(), dve);
     }
 
     private List<ProductMix> updateRestrictedIds(final Set<String> restrictedIds, final List<ProductMix> existedProductMixes) {
@@ -219,12 +218,13 @@ public class ProductMixWritePlatformServiceJpaRepositoryImpl implements ProductM
             final Map<String, Object> changes = new LinkedHashMap<>();
 
             final List<ProductMix> existedProductMixes = this.productMixRepository.findByProductId(productId);
-            if (CollectionUtils.isEmpty(existedProductMixes)) { throw new ProductMixNotFoundException(productId); }
+            if (CollectionUtils.isEmpty(existedProductMixes)) {
+                throw new ProductMixNotFoundException(productId);
+            }
             this.productMixRepository.deleteAll(existedProductMixes);
             changes.put("removedProductsForMix", getProductIdsFromCollection(existedProductMixes));
             return new CommandProcessingResultBuilder().with(changes).withProductId(productId).build();
-        } catch (final DataIntegrityViolationException dve) {
-
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleDataIntegrityIssues(dve);
             return CommandProcessingResult.empty();
         }

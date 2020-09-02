@@ -18,7 +18,7 @@
  */
 package org.apache.fineract.infrastructure.creditbureau.data;
 
-public class CreditBureauLoanProductMappingData {
+public final class CreditBureauLoanProductMappingData {
 
     private final long creditbureauLoanProductMappingId;
 
@@ -38,12 +38,11 @@ public class CreditBureauLoanProductMappingData {
 
     private final long stalePeriod;
 
-    private final boolean is_active;
+    private final boolean isActive;
 
-    private CreditBureauLoanProductMappingData(final long creditbureauLoanProductMappingId,
-            final long organisationCreditBureauId, final String alias, final String creditbureauSummary,
-            final String loanProductName, final long loanProductId, final boolean isCreditCheckMandatory,
-            final boolean skipCrediCheckInFailure, final long stalePeriod, final boolean is_active) {
+    private CreditBureauLoanProductMappingData(final long creditbureauLoanProductMappingId, final long organisationCreditBureauId,
+            final String alias, final String creditbureauSummary, final String loanProductName, final long loanProductId,
+            final boolean isCreditCheckMandatory, final boolean skipCrediCheckInFailure, final long stalePeriod, final boolean isActive) {
         this.creditbureauLoanProductMappingId = creditbureauLoanProductMappingId;
         this.organisationCreditBureauId = organisationCreditBureauId;
         this.alias = alias;
@@ -53,16 +52,16 @@ public class CreditBureauLoanProductMappingData {
         this.isCreditCheckMandatory = isCreditCheckMandatory;
         this.skipCrediCheckInFailure = skipCrediCheckInFailure;
         this.stalePeriod = stalePeriod;
-        this.is_active = is_active;
+        this.isActive = isActive;
     }
 
     public static CreditBureauLoanProductMappingData instance(final long creditbureauLoanProductMappingId,
-            final long organisationCreditBureauId, final String alias, final String creditbureauSummary,
-            final String loanProductName, final long loanProductId, final boolean isCreditCheckMandatory,
-            final boolean skipCrediCheckInFailure, final long stalePeriod, final boolean is_active) {
+            final long organisationCreditBureauId, final String alias, final String creditbureauSummary, final String loanProductName,
+            final long loanProductId, final boolean isCreditCheckMandatory, final boolean skipCrediCheckInFailure, final long stalePeriod,
+            final boolean isActive) {
         return new CreditBureauLoanProductMappingData(creditbureauLoanProductMappingId, organisationCreditBureauId, alias,
-                creditbureauSummary, loanProductName, loanProductId, isCreditCheckMandatory, skipCrediCheckInFailure,
-                stalePeriod, is_active);
+                creditbureauSummary, loanProductName, loanProductId, isCreditCheckMandatory, skipCrediCheckInFailure, stalePeriod,
+                isActive);
     }
 
     public static CreditBureauLoanProductMappingData instance1(final String loanProductName, final long loanProductId) {
@@ -105,8 +104,8 @@ public class CreditBureauLoanProductMappingData {
         return this.stalePeriod;
     }
 
-    public boolean isIs_active() {
-        return this.is_active;
+    public boolean isisActive() {
+        return this.isActive;
     }
 
 }

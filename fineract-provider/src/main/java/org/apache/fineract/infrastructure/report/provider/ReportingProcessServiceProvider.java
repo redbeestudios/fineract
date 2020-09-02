@@ -43,12 +43,13 @@ public class ReportingProcessServiceProvider implements ApplicationContextAware 
     Map<String, String> reportingProcessServices = null;
 
     ReportingProcessServiceProvider() {
-        super();
+
     }
 
     public ReportingProcessService findReportingProcessService(final String reportType) {
-        if (this.reportingProcessServices.containsKey(reportType)) { return (ReportingProcessService) this.applicationContext
-                .getBean(this.reportingProcessServices.get(reportType)); }
+        if (this.reportingProcessServices.containsKey(reportType)) {
+            return (ReportingProcessService) this.applicationContext.getBean(this.reportingProcessServices.get(reportType));
+        }
         return null;
     }
 
@@ -70,12 +71,12 @@ public class ReportingProcessServiceProvider implements ApplicationContextAware 
             final String[] reportServiceBeans = this.applicationContext.getBeanNamesForAnnotation(ReportService.class);
             if (ArrayUtils.isNotEmpty(reportServiceBeans)) {
                 for (final String reportName : reportServiceBeans) {
-                    LOGGER.info("Register report service '" + reportName + "' ...");
+                    LOGGER.info("Register report service '{}' ...", reportName);
                     final ReportService service = this.applicationContext.findAnnotationOnBean(reportName, ReportService.class);
                     try {
                         this.reportingProcessServices.put(service.type(), reportName);
                     } catch (final Throwable th) {
-                        LOGGER.error("Unable to register reporting service '" + reportName + "'!", th);
+                        LOGGER.error("Unable to register reporting service '{}'!", reportName, th);
                     }
                 }
             }

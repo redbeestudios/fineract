@@ -59,8 +59,7 @@ public class StandingInstructionHistoryReadPlatformServiceImpl implements Standi
     private final PaginationHelper<StandingInstructionHistoryData> paginationHelper = new PaginationHelper<>();
 
     @Autowired
-    public StandingInstructionHistoryReadPlatformServiceImpl(final RoutingDataSource dataSource,
-            final ColumnValidator columnValidator) {
+    public StandingInstructionHistoryReadPlatformServiceImpl(final RoutingDataSource dataSource, final ColumnValidator columnValidator) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.standingInstructionHistoryMapper = new StandingInstructionHistoryMapper();
         this.columnValidator = columnValidator;
@@ -166,7 +165,7 @@ public class StandingInstructionHistoryReadPlatformServiceImpl implements Standi
 
         private final String schemaSql;
 
-        public StandingInstructionHistoryMapper() {
+        StandingInstructionHistoryMapper() {
             final StringBuilder sqlBuilder = new StringBuilder(400);
             sqlBuilder.append("atsi.id as id,atsi.name as name, ");
             sqlBuilder.append("atsih.status as status, atsih.execution_time as executionTime, ");

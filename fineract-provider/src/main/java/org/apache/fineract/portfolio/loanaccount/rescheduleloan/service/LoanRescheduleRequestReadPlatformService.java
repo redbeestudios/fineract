@@ -30,7 +30,7 @@ public interface LoanRescheduleRequestReadPlatformService {
      *            the loan identifier
      * @return list of LoanRescheduleRequestData objects
      **/
-    public List<LoanRescheduleRequestData> readLoanRescheduleRequests(Long loanId);
+    List<LoanRescheduleRequestData> readLoanRescheduleRequests(Long loanId);
 
     /**
      * get a single loan reschedule request by ID (primary key)
@@ -39,7 +39,7 @@ public interface LoanRescheduleRequestReadPlatformService {
      *            the loan reschedule request identifier
      * @return a LoanRescheduleRequestData object
      **/
-    public LoanRescheduleRequestData readLoanRescheduleRequest(Long requestId);
+    LoanRescheduleRequestData readLoanRescheduleRequest(Long requestId);
 
     /**
      * get all loan reschedule requests filter by loan ID and status enum
@@ -48,7 +48,7 @@ public interface LoanRescheduleRequestReadPlatformService {
      *            the loan identifier
      * @return list of LoanRescheduleRequestData objects
      **/
-    public List<LoanRescheduleRequestData> readLoanRescheduleRequests(Long loanId, Integer statusEnum);
+    List<LoanRescheduleRequestData> readLoanRescheduleRequests(Long loanId, Integer statusEnum);
 
     /**
      * get all loan reschedule reasons
@@ -57,16 +57,15 @@ public interface LoanRescheduleRequestReadPlatformService {
      *            the loan reschedule reason
      * @return list of LoanRescheduleRequestData objects
      **/
-    public LoanRescheduleRequestData retrieveAllRescheduleReasons(String loanRescheduleReason);
+    LoanRescheduleRequestData retrieveAllRescheduleReasons(String loanRescheduleReason);
+
     /**
      * get all loan reschedule request
      *
      * @param command
-     * all/null - give all request
-     * approved - give all approved request
-     * pending - give all  request which is pending for approval
-     * reject - give all rejected requests
+     *            all/null - give all request approved - give all approved request pending - give all request which is
+     *            pending for approval reject - give all rejected requests
      * @return list of LoanRescheduleRequestData objects
      **/
-    public List<LoanRescheduleRequestData> retrieveAllRescheduleRequests(String command);
+    List<LoanRescheduleRequestData> retrieveAllRescheduleRequests(String command);
 }

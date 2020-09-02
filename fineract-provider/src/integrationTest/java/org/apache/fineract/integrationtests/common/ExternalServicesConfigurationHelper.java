@@ -19,8 +19,8 @@
 package org.apache.fineract.integrationtests.common;
 
 import com.google.gson.Gson;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,7 +38,9 @@ public class ExternalServicesConfigurationHelper {
             final ResponseSpecification responseSpec, final String serviceName) {
         final String GET_EXTERNAL_SERVICES_CONFIG_BY_SERVICE_NAME_URL = "/fineract-provider/api/v1/externalservice/" + serviceName + "?"
                 + Utils.TENANT_IDENTIFIER;
-        System.out.println("------------------------ RETRIEVING GLOBAL CONFIGURATION BY ID -------------------------");
+        // system.out.println("------------------------ RETRIEVING GLOBAL
+        // CONFIGURATION
+        // BY ID -------------------------");
         return Utils.performServerGet(requestSpec, responseSpec, GET_EXTERNAL_SERVICES_CONFIG_BY_SERVICE_NAME_URL, "");
     }
 
@@ -46,7 +48,9 @@ public class ExternalServicesConfigurationHelper {
             final ResponseSpecification responseSpec, final String serviceName, final String name, final String value) {
         final String EXTERNAL_SERVICES_CONFIG_UPDATE_URL = "/fineract-provider/api/v1/externalservice/" + serviceName + "?"
                 + Utils.TENANT_IDENTIFIER;
-        System.out.println("---------------------------------UPDATE VALUE FOR GLOBAL CONFIG---------------------------------------------");
+        // system.out.println("---------------------------------UPDATE VALUE FOR
+        // GLOBAL
+        // CONFIG---------------------------------------------");
         HashMap map = Utils.performServerPut(requestSpec, responseSpec, EXTERNAL_SERVICES_CONFIG_UPDATE_URL,
                 updateExternalServicesConfigUpdateValueAsJSON(name, value), "");
 
@@ -56,7 +60,7 @@ public class ExternalServicesConfigurationHelper {
     public static String updateExternalServicesConfigUpdateValueAsJSON(final String name, final String value) {
         final HashMap<String, String> map = new HashMap<>();
         map.put(name, value);
-        System.out.println("map : " + map);
+        // system.out.println("map : " + map);
         return new Gson().toJson(map);
     }
 

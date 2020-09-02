@@ -30,7 +30,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
@@ -42,7 +42,7 @@ import org.joda.time.LocalDate;
 @Table(name = "m_staff", uniqueConstraints = { @UniqueConstraint(columnNames = { "display_name" }, name = "display_name"),
         @UniqueConstraint(columnNames = { "external_id" }, name = "external_id_UNIQUE"),
         @UniqueConstraint(columnNames = { "mobile_no" }, name = "mobile_no_UNIQUE") })
-public class Staff extends AbstractPersistableCustom<Long> {
+public class Staff extends AbstractPersistableCustom {
 
     @Column(name = "firstname", length = 50)
     private String firstname;
@@ -129,7 +129,7 @@ public class Staff extends AbstractPersistableCustom<Long> {
         this.externalId = StringUtils.defaultIfEmpty(externalId, null);
         this.mobileNo = StringUtils.defaultIfEmpty(mobileNo, null);
         this.loanOfficer = isLoanOfficer;
-        this.active = (isActive == null) ? true : isActive;
+        this.active = isActive == null ? true : isActive;
         deriveDisplayName(firstname);
         if (joiningDate != null) {
             this.joiningDate = joiningDate.toDateTimeAtStartOfDay().toDate();

@@ -18,12 +18,11 @@
  */
 package org.apache.fineract.infrastructure.documentmanagement.api;
 
-import com.lowagie.text.pdf.codec.Base64;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
-import io.swagger.annotations.Api;
 import java.io.InputStream;
+import java.util.Base64;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -37,12 +36,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
 import org.apache.fineract.infrastructure.core.domain.Base64EncodedImage;
 import org.apache.fineract.infrastructure.core.serialization.DefaultToApiJsonSerializer;
 import org.apache.fineract.infrastructure.documentmanagement.contentrepository.ContentRepositoryUtils;
-import org.apache.fineract.infrastructure.documentmanagement.contentrepository.ContentRepositoryUtils.IMAGE_FILE_EXTENSION;
+import org.apache.fineract.infrastructure.documentmanagement.contentrepository.ContentRepositoryUtils.ImageFileExtension;
 import org.apache.fineract.infrastructure.documentmanagement.data.ImageData;
 import org.apache.fineract.infrastructure.documentmanagement.exception.InvalidEntityTypeForImageManagementException;
 import org.apache.fineract.infrastructure.documentmanagement.service.ImageReadPlatformService;
@@ -56,7 +55,7 @@ import org.springframework.stereotype.Component;
 @Path("{entity}/{entityId}/images")
 @Component
 @Scope("singleton")
-@Api(value = "DomainName//api//v1//{entity}//{entityId}//images", description = "")
+
 public class ImagesApiResource {
 
     private final PlatformSecurityContext context;
@@ -121,26 +120,28 @@ public class ImagesApiResource {
             @QueryParam("maxWidth") final Integer maxWidth, @QueryParam("maxHeight") final Integer maxHeight,
             @QueryParam("output") final String output) {
         validateEntityTypeforImage(entityName);
-        if (ENTITY_TYPE_FOR_IMAGES.CLIENTS.toString().equalsIgnoreCase(entityName)) {
+        if (EntityTypeForImages.CLIENTS.toString().equalsIgnoreCase(entityName)) {
             this.context.authenticatedUser().validateHasReadPermission("CLIENTIMAGE");
-        } else if (ENTITY_TYPE_FOR_IMAGES.STAFF.toString().equalsIgnoreCase(entityName)) {
+        } else if (EntityTypeForImages.STAFF.toString().equalsIgnoreCase(entityName)) {
             this.context.authenticatedUser().validateHasReadPermission("STAFFIMAGE");
         }
 
-        if (output != null && (output.equals("octet") || output.equals("inline_octet"))) { return downloadClientImage(entityName, entityId,
-                maxWidth, maxHeight, output); }
+        if (output != null && (output.equals("octet") || output.equals("inline_octet"))) {
+            return downloadClientImage(entityName, entityId, maxWidth, maxHeight, output);
+        }
 
         final ImageData imageData = this.imageReadPlatformService.retrieveImage(entityName, entityId);
 
         // TODO: Need a better way of determining image type
-        String imageDataURISuffix = ContentRepositoryUtils.IMAGE_DATA_URI_SUFFIX.JPEG.getValue();
-        if (StringUtils.endsWith(imageData.location(), ContentRepositoryUtils.IMAGE_FILE_EXTENSION.GIF.getValue())) {
-            imageDataURISuffix = ContentRepositoryUtils.IMAGE_DATA_URI_SUFFIX.GIF.getValue();
-        } else if (StringUtils.endsWith(imageData.location(), ContentRepositoryUtils.IMAGE_FILE_EXTENSION.PNG.getValue())) {
-            imageDataURISuffix = ContentRepositoryUtils.IMAGE_DATA_URI_SUFFIX.PNG.getValue();
+        String imageDataURISuffix = ContentRepositoryUtils.ImageDataURIsuffix.JPEG.getValue();
+        if (StringUtils.endsWith(imageData.location(), ContentRepositoryUtils.ImageFileExtension.GIF.getValue())) {
+            imageDataURISuffix = ContentRepositoryUtils.ImageDataURIsuffix.GIF.getValue();
+        } else if (StringUtils.endsWith(imageData.location(), ContentRepositoryUtils.ImageFileExtension.PNG.getValue())) {
+            imageDataURISuffix = ContentRepositoryUtils.ImageDataURIsuffix.PNG.getValue();
         }
 
-        final String clientImageAsBase64Text = imageDataURISuffix + Base64.encodeBytes(imageData.getContentOfSize(maxWidth, maxHeight));
+        byte[] resizedImage = imageData.getContentOfSize(maxWidth, maxHeight);
+        final String clientImageAsBase64Text = imageDataURISuffix + Base64.getMimeEncoder().encodeToString(resizedImage);
         return Response.ok(clientImageAsBase64Text).build();
     }
 
@@ -151,9 +152,9 @@ public class ImagesApiResource {
             @QueryParam("maxWidth") final Integer maxWidth, @QueryParam("maxHeight") final Integer maxHeight,
             @QueryParam("output") String output) {
         validateEntityTypeforImage(entityName);
-        if (ENTITY_TYPE_FOR_IMAGES.CLIENTS.toString().equalsIgnoreCase(entityName)) {
+        if (EntityTypeForImages.CLIENTS.toString().equalsIgnoreCase(entityName)) {
             this.context.authenticatedUser().validateHasReadPermission("CLIENTIMAGE");
-        } else if (ENTITY_TYPE_FOR_IMAGES.STAFF.toString().equalsIgnoreCase(entityName)) {
+        } else if (EntityTypeForImages.STAFF.toString().equalsIgnoreCase(entityName)) {
             this.context.authenticatedUser().validateHasReadPermission("STAFFIMAGE");
         }
 
@@ -161,8 +162,8 @@ public class ImagesApiResource {
 
         final ResponseBuilder response = Response.ok(imageData.getContentOfSize(maxWidth, maxHeight));
         String dispositionType = "inline_octet".equals(output) ? "inline" : "attachment";
-        response.header("Content-Disposition", dispositionType + "; filename=\"" + imageData.getEntityDisplayName()
-                + IMAGE_FILE_EXTENSION.JPEG + "\"");
+        response.header("Content-Disposition",
+                dispositionType + "; filename=\"" + imageData.getEntityDisplayName() + ImageFileExtension.JPEG + "\"");
 
         // TODO: Need a better way of determining image type
 
@@ -171,8 +172,8 @@ public class ImagesApiResource {
     }
 
     /**
-     * This method is added only for consistency with other URL patterns and for
-     * maintaining consistency of usage of the HTTP "verb" at the client side
+     * This method is added only for consistency with other URL patterns and for maintaining consistency of usage of the
+     * HTTP "verb" at the client side
      */
     @PUT
     @Consumes({ MediaType.MULTIPART_FORM_DATA })
@@ -184,8 +185,8 @@ public class ImagesApiResource {
     }
 
     /**
-     * This method is added only for consistency with other URL patterns and for
-     * maintaining consistency of usage of the HTTP "verb" at the client side
+     * This method is added only for consistency with other URL patterns and for maintaining consistency of usage of the
+     * HTTP "verb" at the client side
      *
      * Upload image as a Data URL (essentially a base64 encoded stream)
      */
@@ -207,7 +208,8 @@ public class ImagesApiResource {
     }
 
     /*** Entities for document Management **/
-    public static enum ENTITY_TYPE_FOR_IMAGES {
+    public enum EntityTypeForImages {
+
         STAFF, CLIENTS;
 
         @Override
@@ -217,12 +219,16 @@ public class ImagesApiResource {
     }
 
     private void validateEntityTypeforImage(final String entityName) {
-        if (!checkValidEntityType(entityName)) { throw new InvalidEntityTypeForImageManagementException(entityName); }
+        if (!checkValidEntityType(entityName)) {
+            throw new InvalidEntityTypeForImageManagementException(entityName);
+        }
     }
 
     private static boolean checkValidEntityType(final String entityType) {
-        for (final ENTITY_TYPE_FOR_IMAGES entities : ENTITY_TYPE_FOR_IMAGES.values()) {
-            if (entities.name().equalsIgnoreCase(entityType)) { return true; }
+        for (final EntityTypeForImages entities : EntityTypeForImages.values()) {
+            if (entities.name().equalsIgnoreCase(entityType)) {
+                return true;
+            }
         }
         return false;
     }

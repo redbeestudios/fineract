@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.account.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,75 +26,75 @@ import java.util.Set;
  * Created by Chirag Gupta on 12/01/17.
  */
 final class StandingInstructionHistoryApiResourceSwagger {
-    private StandingInstructionHistoryApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetStandingInstructionRunHistoryResponse")
-    public final static class GetStandingInstructionRunHistoryResponse {
-        private GetStandingInstructionRunHistoryResponse() {
-        }
+    private StandingInstructionHistoryApiResourceSwagger() {}
 
-        final class GetStandingInstructionHistoryPageItemsResponse {
+    @Schema(description = "GetStandingInstructionRunHistoryResponse")
+    public static final class GetStandingInstructionRunHistoryResponse {
 
-            final class GetStandingInstructionHistoryPageItemsFromClient {
-                private GetStandingInstructionHistoryPageItemsFromClient() {
-                }
+        private GetStandingInstructionRunHistoryResponse() {}
 
-                @ApiModelProperty(example = "1")
+        static final class GetStandingInstructionHistoryPageItemsResponse {
+
+            static final class GetStandingInstructionHistoryPageItemsFromClient {
+
+                private GetStandingInstructionHistoryPageItemsFromClient() {}
+
+                @Schema(example = "1")
                 public Long id;
-                @ApiModelProperty(example = "Test client")
+                @Schema(example = "Test client")
                 public String displayName;
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Long officeId;
-                @ApiModelProperty(example = "Head Office")
+                @Schema(example = "Head Office")
                 public String officeName;
             }
 
-            final class GetStandingInstructionHistoryFromAccount {
-                private GetStandingInstructionHistoryFromAccount() {
-                }
+            static final class GetStandingInstructionHistoryFromAccount {
 
-                @ApiModelProperty(example = "2")
+                private GetStandingInstructionHistoryFromAccount() {}
+
+                @Schema(example = "2")
                 public Long id;
-                @ApiModelProperty(example = "000000002")
+                @Schema(example = "000000002")
                 public Long accountNo;
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Long productId;
-                @ApiModelProperty(example = "General Savings")
+                @Schema(example = "General Savings")
                 public String productName;
             }
 
-            final class GetStandingInstructionHistoryToAccount {
-                private GetStandingInstructionHistoryToAccount() {
-                }
+            static final class GetStandingInstructionHistoryToAccount {
 
-                @ApiModelProperty(example = "1")
+                private GetStandingInstructionHistoryToAccount() {}
+
+                @Schema(example = "1")
                 public Long id;
-                @ApiModelProperty(example = "000000001")
+                @Schema(example = "000000001")
                 public Long accountNo;
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Long productId;
-                @ApiModelProperty(example = "General Savings")
+                @Schema(example = "General Savings")
                 public String productName;
             }
 
-            final class GetStandingInstructionHistoryToClient {
-                private GetStandingInstructionHistoryToClient() {
-                }
+            static final class GetStandingInstructionHistoryToClient {
 
-                @ApiModelProperty(example = "1")
+                private GetStandingInstructionHistoryToClient() {}
+
+                @Schema(example = "1")
                 public Long id;
-                @ApiModelProperty(example = "Test client")
+                @Schema(example = "Test client")
                 public String displayName;
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Long officeId;
-                @ApiModelProperty(example = "Head Office")
+                @Schema(example = "Head Office")
                 public String officeName;
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Long standingInstructionId;
-            @ApiModelProperty(example = "ACC Transfer")
+            @Schema(example = "ACC Transfer")
             public String name;
             public StandingInstructionApiResourceSwagger.GetStandingInstructionsResponse.GetPageItemsStandingInstructionSwagger.GetFromOfficeStandingInstructionSwagger fromOffice;
             public GetStandingInstructionHistoryPageItemsFromClient fromClient;
@@ -105,17 +104,17 @@ final class StandingInstructionHistoryApiResourceSwagger {
             public GetStandingInstructionHistoryToAccount toAccount;
             public StandingInstructionApiResourceSwagger.GetStandingInstructionsResponse.GetPageItemsStandingInstructionSwagger.GetToOfficeStandingInstructionSwagger toOffice;
             public GetStandingInstructionHistoryToClient toClient;
-            @ApiModelProperty(example = "10")
+            @Schema(example = "10")
             public Float amount;
-            @ApiModelProperty(example = "success")
+            @Schema(example = "success")
             public String status;
-            @ApiModelProperty(example = "[2014, 6, 30]")
+            @Schema(example = "[2014, 6, 30]")
             public LocalDate executionTime;
-            @ApiModelProperty(example = " ")
+            @Schema(example = " ")
             public String errorLog;
         }
 
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer totalFilteredRecords;
         public Set<GetStandingInstructionHistoryPageItemsResponse> pageItems;
     }

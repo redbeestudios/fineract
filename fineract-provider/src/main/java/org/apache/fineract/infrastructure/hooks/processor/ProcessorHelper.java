@@ -19,6 +19,8 @@
 package org.apache.fineract.infrastructure.hooks.processor;
 
 import com.squareup.okhttp.OkHttpClient;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -36,10 +38,13 @@ import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 @SuppressWarnings("unused")
-public class ProcessorHelper {
+public final class ProcessorHelper {
 
-    private final static Logger logger = LoggerFactory
-            .getLogger(ProcessorHelper.class);
+    private ProcessorHelper() {
+
+    }
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessorHelper.class);
 
     @SuppressWarnings("null")
     public static OkHttpClient configureClient(final OkHttpClient client) {
@@ -51,34 +56,34 @@ public class ProcessorHelper {
             }
 
             @Override
-            public void checkServerTrusted(final X509Certificate[] chain,
-                    final String authType) throws CertificateException {
-            }
+            public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {}
 
             @Override
-            public void checkClientTrusted(final X509Certificate[] chain,
-                    final String authType) throws CertificateException {
-            }
+            public void checkClientTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {}
         } };
 
         SSLContext ctx = null;
         try {
             ctx = SSLContext.getInstance("TLS");
             ctx.init(null, certs, new SecureRandom());
-        } catch (final java.security.GeneralSecurityException ex) {
+        } catch (KeyManagementException ex) {
+            LOG.error("Problem occurred in configureClient function", ex);
+        } catch (NoSuchAlgorithmException e) {
+            LOG.error("No Provider supports a TrustManagerFactorySpi implementation for the specified protocol.", e);
         }
 
         try {
             final HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+
                 @Override
-                public boolean verify(final String hostname,
-                        final SSLSession session) {
+                public boolean verify(final String hostname, final SSLSession session) {
                     return true;
                 }
             };
             client.setHostnameVerifier(hostnameVerifier);
             client.setSslSocketFactory(ctx.getSocketFactory());
         } catch (final Exception e) {
+            LOG.error("Problem occurred in configureClient function", e);
         }
 
         return client;
@@ -93,15 +98,15 @@ public class ProcessorHelper {
     public static Callback createCallback(final String url) {
 
         return new Callback() {
+
             @Override
             public void success(final Object o, final Response response) {
-                logger.info("URL : " + url + "\tStatus : "
-                        + response.getStatus());
+                LOG.info("URL: {}\tStatus: {}", url, response.getStatus());
             }
 
             @Override
             public void failure(final RetrofitError retrofitError) {
-                logger.info(retrofitError.getMessage());
+                LOG.info("Error occured.", retrofitError);
             }
         };
     }
@@ -110,8 +115,7 @@ public class ProcessorHelper {
 
         final OkHttpClient client = ProcessorHelper.createClient();
 
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(url).setClient(new OkClient(client)).build();
+        final RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).setClient(new OkClient(client)).build();
 
         return restAdapter.create(WebHookService.class);
     }
