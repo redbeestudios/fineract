@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.commands.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Collection;
 import java.util.List;
 import org.apache.fineract.commands.data.ProcessingResultLookup;
@@ -30,15 +29,18 @@ import org.joda.time.DateTime;
  * Created by sanyam on 27/7/17.
  */
 final class MakercheckersApiResourceSwagger {
+
     private MakercheckersApiResourceSwagger() {
         // only to initialize swagger documentation
     }
 
-    @ApiModel(value = "GetMakerCheckerResponse")
-    public static final class GetMakerCheckerResponse{
+    @Schema(description = "GetMakerCheckerResponse")
+    public static final class GetMakerCheckerResponse {
+
         private GetMakerCheckerResponse() {
 
         }
+
         public Long id;
         public String actionName;
         public String entityName;
@@ -60,26 +62,29 @@ final class MakercheckersApiResourceSwagger {
         public Long loanId;
         public String url;
 
-
     }
 
-    @ApiModel(value = "GetMakerCheckersSearchTemplateResponse")
-    public static final class GetMakerCheckersSearchTemplateResponse{
+    @Schema(description = "GetMakerCheckersSearchTemplateResponse")
+    public static final class GetMakerCheckersSearchTemplateResponse {
+
         private GetMakerCheckersSearchTemplateResponse() {
 
         }
+
         public Collection<AppUserData> appUsers;
         public List<String> actionNames;
         public List<String> entityNames;
         public Collection<ProcessingResultLookup> processingResults;
     }
 
-    @ApiModel(value = "PostMakerCheckersResponse")
-    public static final class PostMakerCheckersResponse{
+    @Schema(description = "PostMakerCheckersResponse")
+    public static final class PostMakerCheckersResponse {
+
         private PostMakerCheckersResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long auditId;
 
     }

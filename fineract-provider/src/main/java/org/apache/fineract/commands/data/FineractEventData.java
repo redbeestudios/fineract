@@ -18,13 +18,12 @@
  */
 package org.apache.fineract.commands.data;
 
-import org.apache.fineract.commands.domain.CommandWrapper;
-import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import org.apache.fineract.commands.domain.CommandWrapper;
+import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
 
 public class FineractEventData {
 

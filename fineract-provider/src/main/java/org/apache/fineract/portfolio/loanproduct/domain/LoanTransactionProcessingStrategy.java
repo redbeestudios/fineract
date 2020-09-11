@@ -26,7 +26,7 @@ import org.apache.fineract.portfolio.loanproduct.data.TransactionProcessingStrat
 
 @Entity
 @Table(name = "ref_loan_transaction_processing_strategy")
-public class LoanTransactionProcessingStrategy extends AbstractPersistableCustom<Long> {
+public class LoanTransactionProcessingStrategy extends AbstractPersistableCustom {
 
     @Column(name = "code", unique = true)
     private String code;
@@ -35,7 +35,9 @@ public class LoanTransactionProcessingStrategy extends AbstractPersistableCustom
     private String name;
 
     @Column(name = "sort_order")
-    private Integer sortOrder ; //Don't change this name as this property name is used as sort order while retrieving this objects
+    private Integer sortOrder; // Don't change this name as this property name
+                               // is used as sort order while retrieving this
+                               // objects
 
     protected LoanTransactionProcessingStrategy() {
         //

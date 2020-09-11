@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.client.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -28,96 +27,96 @@ import java.util.Set;
  * Created by Chirag Gupta on 01/13/18.
  */
 final class ClientsApiResourceSwagger {
-    private ClientsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetClientsTemplateResponse")
-    public final static class GetClientsTemplateResponse {
-        private GetClientsTemplateResponse() {
-        }
+    private ClientsApiResourceSwagger() {}
 
-        final class GetClientsOfficeOptions {
-            private GetClientsOfficeOptions() {
-            }
+    @Schema(description = "GetClientsTemplateResponse")
+    public static final class GetClientsTemplateResponse {
 
-            @ApiModelProperty(example = "1")
+        private GetClientsTemplateResponse() {}
+
+        static final class GetClientsOfficeOptions {
+
+            private GetClientsOfficeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String name;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String nameDecorated;
         }
 
-        final class GetClientsStaffOptions {
-            private GetClientsStaffOptions() {
-            }
+        static final class GetClientsStaffOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetClientsStaffOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "xyz")
+            @Schema(example = "xyz")
             public String firstname;
-            @ApiModelProperty(example = "sjs")
+            @Schema(example = "sjs")
             public String lastname;
-            @ApiModelProperty(example = "sjs, xyz")
+            @Schema(example = "sjs, xyz")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean isLoanOfficer;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean isActive;
         }
 
-        final class GetClientsSavingProductOptions {
-            private GetClientsSavingProductOptions() {
-            }
+        static final class GetClientsSavingProductOptions {
 
-            @ApiModelProperty(example = "4")
+            private GetClientsSavingProductOptions() {}
+
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "account overdraft")
+            @Schema(example = "account overdraft")
             public String name;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean withdrawalFeeForTransfers;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean allowOverdraft;
         }
 
-        final class GetClientsDataTables {
-            private GetClientsDataTables() {
-            }
+        static final class GetClientsDataTables {
 
-            final class GetClientsColumnHeaderData {
-                private GetClientsColumnHeaderData() {
-                }
+            private GetClientsDataTables() {}
 
-                @ApiModelProperty(example = "client_id")
+            static final class GetClientsColumnHeaderData {
+
+                private GetClientsColumnHeaderData() {}
+
+                @Schema(example = "client_id")
                 public String columnName;
-                @ApiModelProperty(example = "bigint")
+                @Schema(example = "bigint")
                 public String columnType;
-                @ApiModelProperty(example = "0")
+                @Schema(example = "0")
                 public Integer columnLength;
-                @ApiModelProperty(example = "INTEGER")
+                @Schema(example = "INTEGER")
                 public String columnDisplayType;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean isColumnNullable;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean isColumnPrimaryKey;
-                @ApiModelProperty(example = "[]")
+                @Schema(example = "[]")
                 public List<String> columnValues;
             }
 
-            @ApiModelProperty(example = "m_client")
+            @Schema(example = "m_client")
             public String applicationTableName;
-            @ApiModelProperty(example = "Address Details")
+            @Schema(example = "Address Details")
             public String registeredTableName;
             public Set<GetClientsColumnHeaderData> columnHeaderData;
         }
 
-        @ApiModelProperty(example = "[2014, 3, 4]")
+        @Schema(example = "[2014, 3, 4]")
         public LocalDate activationDate;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
         public Set<GetClientsOfficeOptions> officeOptions;
         public Set<GetClientsStaffOptions> staffOptions;
@@ -125,333 +124,333 @@ final class ClientsApiResourceSwagger {
         public Set<GetClientsDataTables> datatables;
     }
 
-    @ApiModel(value = "GetClientsResponse")
-    public final static class GetClientsResponse {
-        private GetClientsResponse() {
-        }
+    @Schema(description = "GetClientsResponse")
+    public static final class GetClientsResponse {
 
-        final class GetClientsPageItemsResponse {
-            private GetClientsPageItemsResponse() {
-            }
+        private GetClientsResponse() {}
 
-            final class GetClientStatus {
-                private GetClientStatus() {
-                }
+        static final class GetClientsPageItemsResponse {
 
-                @ApiModelProperty(example = "100")
+            private GetClientsPageItemsResponse() {}
+
+            static final class GetClientStatus {
+
+                private GetClientStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "clientStatusType.pending")
+                @Schema(example = "clientStatusType.pending")
                 public String code;
-                @ApiModelProperty(example = "Pending")
-                public String value;
+                @Schema(example = "Pending")
+                public String description;
             }
 
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "000000002")
+            @Schema(example = "000000002")
             public String accountNo;
             public GetClientStatus status;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean active;
-            @ApiModelProperty(example = "Home Farm Produce")
+            @Schema(example = "Home Farm Produce")
             public String fullname;
-            @ApiModelProperty(example = "Home Farm Produce")
+            @Schema(example = "Home Farm Produce")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
         }
 
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer totalFilteredRecords;
         public Set<GetClientsPageItemsResponse> pageItems;
     }
 
-    @ApiModel(value = "GetClientsClientIdResponse")
-    public final static class GetClientsClientIdResponse {
-        private GetClientsClientIdResponse() {
-        }
+    @Schema(description = "GetClientsClientIdResponse")
+    public static final class GetClientsClientIdResponse {
 
-        final class GetClientsClientIdStatus {
-            private GetClientsClientIdStatus() {
-            }
+        private GetClientsClientIdResponse() {}
 
-            @ApiModelProperty(example = "300")
+        static final class GetClientsClientIdStatus {
+
+            private GetClientsClientIdStatus() {}
+
+            @Schema(example = "300")
             public Integer id;
-            @ApiModelProperty(example = "clientStatusType.active")
+            @Schema(example = "clientStatusType.active")
             public String code;
-            @ApiModelProperty(example = "Active")
-            public String value;
+            @Schema(example = "Active")
+            public String description;
         }
 
-        final class GetClientsTimeline {
-            private GetClientsTimeline() {
-            }
+        static final class GetClientsTimeline {
 
-            @ApiModelProperty(example = "[2013, 1, 1]")
+            private GetClientsTimeline() {}
+
+            @Schema(example = "[2013, 1, 1]")
             public LocalDate submittedOnDate;
-            @ApiModelProperty(example = "mifos")
+            @Schema(example = "mifos")
             public String submittedByUsername;
-            @ApiModelProperty(example = "App")
+            @Schema(example = "App")
             public String submittedByFirstname;
-            @ApiModelProperty(example = "Administrator")
+            @Schema(example = "Administrator")
             public String submittedByLastname;
-            @ApiModelProperty(example = "[2013, 1, 1]")
+            @Schema(example = "[2013, 1, 1]")
             public LocalDate activatedOnDate;
-            @ApiModelProperty(example = "mifos")
+            @Schema(example = "mifos")
             public String activatedByUsername;
-            @ApiModelProperty(example = "App")
+            @Schema(example = "App")
             public String activatedByFirstname;
-            @ApiModelProperty(example = "Administrator")
+            @Schema(example = "Administrator")
             public String activatedByLastname;
 
         }
 
-        @ApiModelProperty(example = "27")
+        @Schema(example = "27")
         public Integer id;
-        @ApiModelProperty(example = "000000027")
+        @Schema(example = "000000027")
         public Long accountNo;
         public GetClientsClientIdStatus status;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean active;
-        @ApiModelProperty(example = "[2013, 1, 1]")
+        @Schema(example = "[2013, 1, 1]")
         public LocalDate activationDate;
-        @ApiModelProperty(example = "savings")
+        @Schema(example = "savings")
         public String firstname;
-        @ApiModelProperty(example = "test")
+        @Schema(example = "test")
         public String lastname;
-        @ApiModelProperty(example = "savings test")
+        @Schema(example = "savings test")
         public String displayName;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Head Office")
+        @Schema(example = "Head Office")
         public String officeName;
         public GetClientsTimeline timeline;
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer savingsProductId;
-        @ApiModelProperty(example = "account overdraft")
+        @Schema(example = "account overdraft")
         public String savingsProductName;
-        @ApiModelProperty(example = "[]")
+        @Schema(example = "[]")
         public List<String> groups;
     }
 
-    @ApiModel(value = "PostClientsRequest")
-    public final static class PostClientsRequest {
-        private PostClientsRequest() {
-        }
+    @Schema(description = "PostClientsRequest")
+    public static final class PostClientsRequest {
 
-        @ApiModelProperty(example = "1")
+        private PostClientsRequest() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "Client of group")
+        @Schema(example = "Client of group")
         public String fullname;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer groupId;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean active;
-        @ApiModelProperty(example = "04 March 2009")
+        @Schema(example = "04 March 2009")
         public String activationDate;
     }
 
-    @ApiModel(value = "PostClientsResponse")
-    public final static class PostClientsResponse {
-        private PostClientsResponse() {
-        }
+    @Schema(description = "PostClientsResponse")
+    public static final class PostClientsResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostClientsResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer groupId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer clientId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutClientsClientIdRequest")
-    public final static class PutClientsClientIdRequest {
-        private PutClientsClientIdRequest() {
-        }
+    @Schema(description = "PutClientsClientIdRequest")
+    public static final class PutClientsClientIdRequest {
 
-        @ApiModelProperty(example = "786444UUUYYH7")
+        private PutClientsClientIdRequest() {}
+
+        @Schema(example = "786444UUUYYH7")
         public String externalId;
     }
 
-    @ApiModel(value = "PutClientsClientIdResponse")
-    public final static class PutClientsClientIdResponse {
-        private PutClientsClientIdResponse() {
-        }
+    @Schema(description = "PutClientsClientIdResponse")
+    public static final class PutClientsClientIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private PutClientsClientIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
         public PutClientsClientIdRequest changes;
     }
 
-    @ApiModel(value = "DeleteClientsClientIdRequest")
-    public final static class DeleteClientsClientIdRequest {
-        private DeleteClientsClientIdRequest() {
-        }
+    @Schema(description = "DeleteClientsClientIdRequest")
+    public static final class DeleteClientsClientIdRequest {
+
+        private DeleteClientsClientIdRequest() {}
     }
 
-    @ApiModel(value = "DeleteClientsClientIdResponse")
-    public final static class DeleteClientsClientIdResponse {
-        private DeleteClientsClientIdResponse() {
-        }
+    @Schema(description = "DeleteClientsClientIdResponse")
+    public static final class DeleteClientsClientIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteClientsClientIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer clientId;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PostClientsClientIdRequest")
-    public final static class PostClientsClientIdRequest {
-        private PostClientsClientIdRequest() {
-        }
+    @Schema(description = "PostClientsClientIdRequest")
+    public static final class PostClientsClientIdRequest {
 
-        @ApiModelProperty(example = "We cannot accept transfers of clients having loans with less than 1 repayment left")
+        private PostClientsClientIdRequest() {}
+
+        @Schema(example = "We cannot accept transfers of clients having loans with less than 1 repayment left")
         public String note;
     }
 
-    @ApiModel(value = "PostClientsClientIdResponse")
-    public final static class PostClientsClientIdResponse {
-        private PostClientsClientIdResponse() {
-        }
+    @Schema(description = "PostClientsClientIdResponse")
+    public static final class PostClientsClientIdResponse {
 
-        @ApiModelProperty(example = "2")
+        private PostClientsClientIdResponse() {}
+
+        @Schema(example = "2")
         public Integer clientId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "GetClientsClientIdAccountsResponse")
-    public final static class GetClientsClientIdAccountsResponse {
-        private GetClientsClientIdAccountsResponse() {
-        }
+    @Schema(description = "GetClientsClientIdAccountsResponse")
+    public static final class GetClientsClientIdAccountsResponse {
 
-        final class GetClientsLoanAccounts {
-            private GetClientsLoanAccounts() {
-            }
+        private GetClientsClientIdAccountsResponse() {}
 
-            final class GetClientsLoanAccountsStatus {
-                private GetClientsLoanAccountsStatus() {
-                }
+        static final class GetClientsLoanAccounts {
 
-                @ApiModelProperty(example = "300")
+            private GetClientsLoanAccounts() {}
+
+            static final class GetClientsLoanAccountsStatus {
+
+                private GetClientsLoanAccountsStatus() {}
+
+                @Schema(example = "300")
                 public Integer id;
-                @ApiModelProperty(example = "loanStatusType.active")
+                @Schema(example = "loanStatusType.active")
                 public String code;
-                @ApiModelProperty(example = "Active")
-                public String value;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "Active")
+                public String description;
+                @Schema(example = "false")
                 public Boolean pendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean waitingForDisbursal;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedObligationsMet;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedWrittenOff;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closedRescheduled;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean overpaid;
             }
 
-            final class GetClientsLoanAccountsType {
-                private GetClientsLoanAccountsType() {
-                }
+            static final class GetClientsLoanAccountsType {
 
-                @ApiModelProperty(example = "1")
+                private GetClientsLoanAccountsType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "loanType.individual")
+                @Schema(example = "loanType.individual")
                 public String code;
-                @ApiModelProperty(example = "Individual")
-                public String value;
+                @Schema(example = "Individual")
+                public String description;
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "000000001")
+            @Schema(example = "000000001")
             public Long accountNo;
-            @ApiModelProperty(example = "456")
+            @Schema(example = "456")
             public Integer externalId;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "TestOne")
+            @Schema(example = "TestOne")
             public String productName;
             public GetClientsLoanAccountsStatus status;
             public GetClientsLoanAccountsType loanType;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer loanCycle;
         }
 
-        final class GetClientsSavingsAccounts {
-            private GetClientsSavingsAccounts() {
-            }
+        static final class GetClientsSavingsAccounts {
 
-            final class GetClientsSavingsAccountsCurrency {
-                private GetClientsSavingsAccountsCurrency() {
-                }
+            private GetClientsSavingsAccounts() {}
 
-                @ApiModelProperty(example = "USD")
+            static final class GetClientsSavingsAccountsCurrency {
+
+                private GetClientsSavingsAccountsCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            final class GetClientsSavingsAccountsStatus {
-                private GetClientsSavingsAccountsStatus() {
-                }
+            static final class GetClientsSavingsAccountsStatus {
 
-                @ApiModelProperty(example = "100")
+                private GetClientsSavingsAccountsStatus() {}
+
+                @Schema(example = "100")
                 public Integer id;
-                @ApiModelProperty(example = "savingsAccountStatusType.submitted.and.pending.approval")
+                @Schema(example = "savingsAccountStatusType.submitted.and.pending.approval")
                 public String code;
-                @ApiModelProperty(example = "Submitted and pending approval")
-                public String value;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "Submitted and pending approval")
+                public String description;
+                @Schema(example = "true")
                 public Boolean submittedAndPendingApproval;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean approved;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean rejected;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean withdrawnByApplicant;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean active;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean closed;
             }
 
-            @ApiModelProperty(example = "7")
+            @Schema(example = "7")
             public Integer id;
-            @ApiModelProperty(example = "000000007")
+            @Schema(example = "000000007")
             public Long accountNo;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer productId;
-            @ApiModelProperty(example = "Other product")
+            @Schema(example = "Other product")
             public String productName;
             public GetClientsSavingsAccountsStatus status;
             public GetClientsSavingsAccountsCurrency currency;

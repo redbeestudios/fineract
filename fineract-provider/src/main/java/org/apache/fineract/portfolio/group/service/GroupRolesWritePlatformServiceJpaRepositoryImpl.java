@@ -39,12 +39,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GroupRolesWritePlatformServiceJpaRepositoryImpl implements GroupRolesWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(GroupRolesWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GroupRolesWritePlatformServiceJpaRepositoryImpl.class);
 
     private final PlatformSecurityContext context;
     private final GroupRepositoryWrapper groupRepository;
@@ -80,21 +82,24 @@ public class GroupRolesWritePlatformServiceJpaRepositoryImpl implements GroupRol
             final Client client = this.clientRepository.findOneWithNotFoundDetection(clientId);
 
             final Group group = this.groupRepository.findOneWithNotFoundDetection(command.getGroupId());
-            if (!group.hasClientAsMember(client)) { throw new ClientNotInGroupException(clientId, command.getGroupId()); }
+            if (!group.hasClientAsMember(client)) {
+                throw new ClientNotInGroupException(clientId, command.getGroupId());
+            }
             final GroupRole groupRole = GroupRole.createGroupRole(group, client, role);
             this.groupRoleRepository.save(groupRole);
             return new CommandProcessingResultBuilder().withClientId(client.getId()).withGroupId(group.getId())
                     .withEntityId(groupRole.getId()).build();
 
-        } catch (final DataIntegrityViolationException dve) {
-            handleGroupDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleGroupDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
 
     }
 
-    private void handleGroupDataIntegrityIssues(final JsonCommand command, final DataIntegrityViolationException dve) {
-        final Throwable realCause = dve.getMostSpecificCause();
+    private void handleGroupDataIntegrityIssues(final JsonCommand command, final Throwable realCause,
+            final NonTransientDataAccessException dve) {
 
         if (realCause.getMessage().contains("UNIQUE_GROUP_ROLES")) {
             final String clientId = command.stringValueOfParameterNamed(GroupingTypesApiConstants.clientIdParamName);
@@ -106,7 +111,7 @@ public class GroupRolesWritePlatformServiceJpaRepositoryImpl implements GroupRol
                     GroupingTypesApiConstants.clientIdParamName, roleId, clientId, command.getGroupId());
         }
 
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.group.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource.");
     }
@@ -138,7 +143,9 @@ public class GroupRolesWritePlatformServiceJpaRepositoryImpl implements GroupRol
                 Client client = null;
                 if (newValue != null) {
                     client = this.clientRepository.findOneWithNotFoundDetection(newValue);
-                    if (!group.hasClientAsMember(client)) { throw new ClientNotInGroupException(newValue, command.getGroupId()); }
+                    if (!group.hasClientAsMember(client)) {
+                        throw new ClientNotInGroupException(newValue, command.getGroupId());
+                    }
                 }
                 groupRole.updateClient(client);
             }
@@ -146,8 +153,9 @@ public class GroupRolesWritePlatformServiceJpaRepositoryImpl implements GroupRol
             this.groupRoleRepository.saveAndFlush(groupRole);
             return new CommandProcessingResultBuilder().with(actualChanges).withGroupId(group.getId()).withEntityId(groupRole.getId())
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleGroupDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleGroupDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
 

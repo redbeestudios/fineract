@@ -18,37 +18,36 @@
  */
 package org.apache.fineract.portfolio.loanaccount.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 /**
  * Created by Chirag Gupta on 12/30/17.
  */
 final class LoanScheduleApiResourceSwagger {
-    private LoanScheduleApiResourceSwagger() {
+
+    private LoanScheduleApiResourceSwagger() {}
+
+    @Schema(description = "PostLoansLoanIdScheduleRequest")
+    public static final class PostLoansLoanIdScheduleRequest {
+
+        private PostLoansLoanIdScheduleRequest() {}
     }
 
-    @ApiModel(value = "PostLoansLoanIdScheduleRequest")
-    public final static class PostLoansLoanIdScheduleRequest {
-        private PostLoansLoanIdScheduleRequest() {
-        }
-    }
+    @Schema(description = "PostLoansLoanIdScheduleResponse")
+    public static final class PostLoansLoanIdScheduleResponse {
 
-    @ApiModel(value = "PostLoansLoanIdScheduleResponse")
-    public final static class PostLoansLoanIdScheduleResponse {
-        private PostLoansLoanIdScheduleResponse() {
-        }
+        private PostLoansLoanIdScheduleResponse() {}
 
-        final class PostLoanChanges {
-            private PostLoanChanges() {
-            }
+        static final class PostLoanChanges {
 
-            @ApiModelProperty(example = "[21, 22]")
+            private PostLoanChanges() {}
+
+            @Schema(example = "[21, 22]")
             public List<Integer> removedEntityIds;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer loanId;
         public PostLoanChanges changes;
     }

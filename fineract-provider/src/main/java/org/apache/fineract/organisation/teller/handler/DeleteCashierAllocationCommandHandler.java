@@ -42,17 +42,17 @@ public class DeleteCashierAllocationCommandHandler implements NewCommandSourceHa
     /**
      * Creates a new instance.
      *
-     * @param writePlatformService the {@code CashierWritePlatformService} used to access the backend
+     * @param writePlatformService
+     *            the {@code CashierWritePlatformService} used to access the backend
      */
     @Autowired
     public DeleteCashierAllocationCommandHandler(final TellerWritePlatformService writePlatformService) {
-        super();
+
         this.writePlatformService = writePlatformService;
     }
 
     @Override
     public CommandProcessingResult processCommand(final JsonCommand command) {
-        return this.writePlatformService.deleteCashierAllocation(command.entityId(),
-                command.subentityId(), command);
+        return this.writePlatformService.deleteCashierAllocation(command.entityId(), command.subentityId(), command);
     }
 }

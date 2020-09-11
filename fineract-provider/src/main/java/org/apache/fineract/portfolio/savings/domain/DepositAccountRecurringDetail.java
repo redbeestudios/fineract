@@ -43,7 +43,7 @@ import org.joda.time.LocalDate;
 
 @Entity
 @Table(name = "m_deposit_account_recurring_detail")
-public class DepositAccountRecurringDetail extends AbstractPersistableCustom<Long> {
+public class DepositAccountRecurringDetail extends AbstractPersistableCustom {
 
     @Column(name = "mandatory_recommended_deposit_amount", scale = 6, precision = 19, nullable = true)
     private BigDecimal mandatoryRecommendedDepositAmount;
@@ -100,7 +100,8 @@ public class DepositAccountRecurringDetail extends AbstractPersistableCustom<Lon
 
     public Map<String, Object> update(final JsonCommand command) {
         final Map<String, Object> actualChanges = new LinkedHashMap<>(10);
-        if (command.isChangeInBigDecimalParameterNamed(mandatoryRecommendedDepositAmountParamName, this.mandatoryRecommendedDepositAmount)) {
+        if (command.isChangeInBigDecimalParameterNamed(mandatoryRecommendedDepositAmountParamName,
+                this.mandatoryRecommendedDepositAmount)) {
             final BigDecimal newValue = command.bigDecimalValueOfParameterNamed(mandatoryRecommendedDepositAmountParamName);
             actualChanges.put(mandatoryRecommendedDepositAmountParamName, newValue);
             this.mandatoryRecommendedDepositAmount = newValue;
@@ -119,8 +120,8 @@ public class DepositAccountRecurringDetail extends AbstractPersistableCustom<Lon
         RecurringDepositAccount depositAccount = (RecurringDepositAccount) this.account;
         if (depositAccount.isNotActive()) {
             final String defaultUserMessage = "Updates to the recommended deposit amount are allowed only when the underlying account is active.";
-            final ApiParameterError error = ApiParameterError.generalError("error.msg."
-                    + DepositsApiConstants.RECURRING_DEPOSIT_ACCOUNT_RESOURCE_NAME + ".is.not.active", defaultUserMessage);
+            final ApiParameterError error = ApiParameterError.generalError(
+                    "error.msg." + DepositsApiConstants.RECURRING_DEPOSIT_ACCOUNT_RESOURCE_NAME + ".is.not.active", defaultUserMessage);
             final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
             dataValidationErrors.add(error);
             throw new PlatformApiDataValidationException(dataValidationErrors);

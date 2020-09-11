@@ -19,29 +19,29 @@
 package org.apache.fineract.integrationtests;
 
 import com.google.gson.Gson;
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.fineract.integrationtests.common.Utils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TemplateIntegrationTest {
 
-    private final String GET_TEMPLATES_URL = "/fineract-provider/api/v1/templates?tenantIdentifier=default";
-    private final String GET_TEMPLATE_ID_URL = "/fineract-provider/api/v1/templates/%s?tenantIdentifier=default";
-    private final String RESPONSE_ATTRIBUTE_NAME = "name";
+    private static final String GET_TEMPLATES_URL = "/fineract-provider/api/v1/templates?tenantIdentifier=default";
+
+    private static final String RESPONSE_ATTRIBUTE_NAME = "name";
 
     private ResponseSpecification responseSpec;
     private RequestSpecification requestSpec;
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         Utils.initializeRESTAssured();
@@ -50,7 +50,7 @@ public class TemplateIntegrationTest {
         this.responseSpec = new ResponseSpecBuilder().expectStatusCode(200).build();
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void test() {
 
@@ -61,22 +61,23 @@ public class TemplateIntegrationTest {
         map.put("text", "Hello {{template}}");
         map.put("mappers", metadata);
 
-        ArrayList<?> get = Utils.performServerGet(this.requestSpec, this.responseSpec, this.GET_TEMPLATES_URL, "");
+        ArrayList<?> get = Utils.performServerGet(this.requestSpec, this.responseSpec, GET_TEMPLATES_URL, "");
         final int entriesBeforeTest = get.size();
 
-        final Integer id = Utils.performServerPost(this.requestSpec, this.responseSpec, this.GET_TEMPLATES_URL, new Gson().toJson(map), "resourceId");
+        final Integer id = Utils.performServerPost(this.requestSpec, this.responseSpec, GET_TEMPLATES_URL, new Gson().toJson(map),
+                "resourceId");
 
-        final String templateUrlForId = String.format(this.GET_TEMPLATE_ID_URL, id);
+        final String templateUrlForId = String.format("/fineract-provider/api/v1/templates/%s?tenantIdentifier=default", id);
 
-        final String getrequest2 = Utils.performServerGet(this.requestSpec, this.responseSpec, templateUrlForId, this.RESPONSE_ATTRIBUTE_NAME);
+        final String getrequest2 = Utils.performServerGet(this.requestSpec, this.responseSpec, templateUrlForId, RESPONSE_ATTRIBUTE_NAME);
 
-        Assert.assertTrue(getrequest2.equals("foo"));
+        Assertions.assertTrue(getrequest2.equals("foo"));
 
         Utils.performServerDelete(this.requestSpec, this.responseSpec, templateUrlForId, "");
 
-        get = Utils.performServerGet(this.requestSpec, this.responseSpec, this.GET_TEMPLATES_URL, "");
+        get = Utils.performServerGet(this.requestSpec, this.responseSpec, GET_TEMPLATES_URL, "");
         final int entriesAfterTest = get.size();
 
-        Assert.assertEquals(entriesBeforeTest, entriesAfterTest);
+        Assertions.assertEquals(entriesBeforeTest, entriesAfterTest);
     }
 }

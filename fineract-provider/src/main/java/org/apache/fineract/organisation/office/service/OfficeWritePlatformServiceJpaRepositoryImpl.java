@@ -20,7 +20,7 @@ package org.apache.fineract.organisation.office.service;
 
 import java.util.Map;
 import javax.persistence.PersistenceException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResult;
 import org.apache.fineract.infrastructure.core.data.CommandProcessingResultBuilder;
@@ -45,13 +45,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OfficeWritePlatformServiceJpaRepositoryImpl implements OfficeWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(OfficeWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OfficeWritePlatformServiceJpaRepositoryImpl.class);
 
     private final PlatformSecurityContext context;
     private final OfficeCommandFromApiJsonDeserializer fromApiJsonDeserializer;
@@ -110,11 +111,11 @@ public class OfficeWritePlatformServiceJpaRepositoryImpl implements OfficeWriteP
                     .withEntityId(office.getId()) //
                     .withOfficeId(office.getId()) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleOfficeDataIntegrityIssues(command, dve.getMostSpecificCause(), dve);
             return CommandProcessingResult.empty();
-        }catch (final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleOfficeDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
@@ -159,11 +160,11 @@ public class OfficeWritePlatformServiceJpaRepositoryImpl implements OfficeWriteP
                     .withOfficeId(office.getId()) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleOfficeDataIntegrityIssues(command, dve.getMostSpecificCause(), dve);
             return CommandProcessingResult.empty();
-        }catch (final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleOfficeDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
@@ -224,36 +225,36 @@ public class OfficeWritePlatformServiceJpaRepositoryImpl implements OfficeWriteP
     }
 
     /*
-     * Guaranteed to throw an exception no matter what the data integrity issue
-     * is.
+     * Guaranteed to throw an exception no matter what the data integrity issue is.
      */
     private void handleOfficeDataIntegrityIssues(final JsonCommand command, final Throwable realCause, final Exception dve) {
 
         if (realCause.getMessage().contains("externalid_org")) {
             final String externalId = command.stringValueOfParameterNamed("externalId");
-            throw new PlatformDataIntegrityException("error.msg.office.duplicate.externalId", "Office with externalId `" + externalId
-                    + "` already exists", "externalId", externalId);
+            throw new PlatformDataIntegrityException("error.msg.office.duplicate.externalId",
+                    "Office with externalId `" + externalId + "` already exists", "externalId", externalId);
         } else if (realCause.getMessage().contains("name_org")) {
             final String name = command.stringValueOfParameterNamed("name");
             throw new PlatformDataIntegrityException("error.msg.office.duplicate.name", "Office with name `" + name + "` already exists",
                     "name", name);
         }
 
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.office.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource.");
     }
 
     /*
-     * used to restrict modifying operations to office that are either the users
-     * office or lower (child) in the office hierarchy
+     * used to restrict modifying operations to office that are either the users office or lower (child) in the office
+     * hierarchy
      */
     private Office validateUserPriviledgeOnOfficeAndRetrieve(final AppUser currentUser, final Long officeId) {
 
         final Long userOfficeId = currentUser.getOffice().getId();
         final Office userOffice = this.officeRepositoryWrapper.findOfficeHierarchy(userOfficeId);
-        if (userOffice.doesNotHaveAnOfficeInHierarchyWithId(officeId)) { throw new NoAuthorizationException(
-                "User does not have sufficient priviledges to act on the provided office."); }
+        if (userOffice.doesNotHaveAnOfficeInHierarchyWithId(officeId)) {
+            throw new NoAuthorizationException("User does not have sufficient priviledges to act on the provided office.");
+        }
 
         Office officeToReturn = userOffice;
         if (!userOffice.identifiedBy(officeId)) {

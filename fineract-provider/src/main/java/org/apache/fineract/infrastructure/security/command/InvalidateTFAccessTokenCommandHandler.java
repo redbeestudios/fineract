@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.commands.annotation.CommandType;
 import org.apache.fineract.commands.handler.NewCommandSourceHandler;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
@@ -47,21 +47,18 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @CommandType(entity = "TWOFACTOR_ACCESSTOKEN", action = "INVALIDATE")
 @Profile("twofactor")
 public class InvalidateTFAccessTokenCommandHandler implements NewCommandSourceHandler {
-
 
     private final TwoFactorService twoFactorService;
     private final PlatformSecurityContext securityContext;
     private final FromJsonHelper fromJsonHelper;
 
     @Autowired
-    public InvalidateTFAccessTokenCommandHandler(TwoFactorService twoFactorService,
-                                                 PlatformSecurityContext securityContext,
-                                                 FromJsonHelper fromJsonHelper) {
+    public InvalidateTFAccessTokenCommandHandler(TwoFactorService twoFactorService, PlatformSecurityContext securityContext,
+            FromJsonHelper fromJsonHelper) {
         this.twoFactorService = twoFactorService;
         this.securityContext = securityContext;
         this.fromJsonHelper = fromJsonHelper;
@@ -76,9 +73,7 @@ public class InvalidateTFAccessTokenCommandHandler implements NewCommandSourceHa
 
         final TFAccessToken accessToken = twoFactorService.invalidateAccessToken(user, command);
 
-        return new CommandProcessingResultBuilder()
-                .withCommandId(command.commandId())
-                .withResourceIdAsString(accessToken.getToken())
+        return new CommandProcessingResultBuilder().withCommandId(command.commandId()).withResourceIdAsString(accessToken.getToken())
                 .build();
     }
 
@@ -88,8 +83,7 @@ public class InvalidateTFAccessTokenCommandHandler implements NewCommandSourceHa
         }
 
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
-        this.fromJsonHelper.checkForUnsupportedParameters(typeOfMap, json,
-                new HashSet<>(Collections.singletonList("token")));
+        this.fromJsonHelper.checkForUnsupportedParameters(typeOfMap, json, new HashSet<>(Collections.singletonList("token")));
         final JsonElement element = this.fromJsonHelper.parse(json);
 
         final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
@@ -99,7 +93,7 @@ public class InvalidateTFAccessTokenCommandHandler implements NewCommandSourceHa
         final String token = this.fromJsonHelper.extractStringNamed("token", element);
         baseDataValidator.reset().parameter("token").value(token).notNull().notBlank();
 
-        if(!dataValidationErrors.isEmpty()) {
+        if (!dataValidationErrors.isEmpty()) {
             throw new PlatformApiDataValidationException(dataValidationErrors);
         }
     }

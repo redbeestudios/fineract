@@ -55,7 +55,7 @@ public class RecurringDepositProduct extends FixedDepositProduct {
     private DepositProductRecurringDetail recurringDetail;
 
     protected RecurringDepositProduct() {
-        super();
+
     }
 
     public static RecurringDepositProduct createNew(final String name, final String shortName, final String description,
@@ -129,7 +129,9 @@ public class RecurringDepositProduct extends FixedDepositProduct {
     }
 
     private void throwExceptionIfValidationWarningsExist(final List<ApiParameterError> dataValidationErrors) {
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
     }
 
     public DepositProductRecurringDetail depositRecurringDetail() {

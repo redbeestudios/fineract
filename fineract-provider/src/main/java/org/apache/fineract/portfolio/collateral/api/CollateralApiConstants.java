@@ -21,25 +21,31 @@ package org.apache.fineract.portfolio.collateral.api;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CollateralApiConstants {
+public final class CollateralApiConstants {
+
+    private CollateralApiConstants() {
+
+    }
 
     public static final String COLLATERAL_CODE_NAME = "LoanCollateral";
 
     /***
      * Enum of all parameters passed in while creating/updating a collateral
      ***/
-    public static enum COLLATERAL_JSON_INPUT_PARAMS {
-        LOAN_ID("loanId"), COLLATERAL_ID("collateralId"), COLLATERAL_TYPE_ID("collateralTypeId"), VALUE("value"), DESCRIPTION("description");
+    public enum CollateralJSONinputParams {
+
+        LOAN_ID("loanId"), COLLATERAL_ID("collateralId"), COLLATERAL_TYPE_ID("collateralTypeId"), VALUE("value"), DESCRIPTION(
+                "description");
 
         private final String value;
 
-        private COLLATERAL_JSON_INPUT_PARAMS(final String value) {
+        private CollateralJSONinputParams(final String value) {
             this.value = value;
         }
 
         private static final Set<String> values = new HashSet<>();
         static {
-            for (final COLLATERAL_JSON_INPUT_PARAMS type : COLLATERAL_JSON_INPUT_PARAMS.values()) {
+            for (final CollateralJSONinputParams type : CollateralJSONinputParams.values()) {
                 values.add(type.value);
             }
         }

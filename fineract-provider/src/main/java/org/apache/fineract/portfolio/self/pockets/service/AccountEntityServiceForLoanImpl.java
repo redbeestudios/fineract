@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountEntityServiceForLoanImpl implements AccountEntityService {
 
-    private final String KEY = EntityAccountType.LOAN.name();
+    private final String key = EntityAccountType.LOAN.name();
 
     private final PlatformSecurityContext context;
     private final AppuserLoansMapperReadService appuserLoansMapperReadService;
@@ -38,8 +38,7 @@ public class AccountEntityServiceForLoanImpl implements AccountEntityService {
 
     @Autowired
     public AccountEntityServiceForLoanImpl(final PlatformSecurityContext context,
-            final AppuserLoansMapperReadService appuserLoansMapperReadService,
-            final LoanReadPlatformService loanReadPlatformService) {
+            final AppuserLoansMapperReadService appuserLoansMapperReadService, final LoanReadPlatformService loanReadPlatformService) {
 
         this.context = context;
         this.appuserLoansMapperReadService = appuserLoansMapperReadService;
@@ -49,13 +48,12 @@ public class AccountEntityServiceForLoanImpl implements AccountEntityService {
 
     @Override
     public String getKey() {
-        return KEY;
+        return key;
     }
 
     @Override
     public void validateSelfUserAccountMapping(Long accountId) {
-        if (!this.appuserLoansMapperReadService.isLoanMappedToUser(accountId,
-                this.context.authenticatedUser().getId())) {
+        if (!this.appuserLoansMapperReadService.isLoanMappedToUser(accountId, this.context.authenticatedUser().getId())) {
             throw new LoanNotFoundException(accountId);
         }
     }

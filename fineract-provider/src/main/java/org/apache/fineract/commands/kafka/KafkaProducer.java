@@ -18,13 +18,11 @@
  */
 package org.apache.fineract.commands.kafka;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -35,8 +33,8 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class KafkaProducer {
 
     private static final String COMMAND_ATTRIBUTE = "\"command\":{";
-    private final static Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
-    private final KafkaTemplate<String,String> kafkaTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
@@ -51,7 +49,8 @@ public class KafkaProducer {
         try {
             String payload = objectMapper.writeValueAsString(message);
 
-            // This is because not all objects "CommandNotification" has the command attribute with nested objects. In those cases we don't need to unwrap the object "command"
+            // This is because not all objects "CommandNotification" has the command attribute with nested objects. In
+            // those cases we don't need to unwrap the object "command"
             if (!payload.contains(COMMAND_ATTRIBUTE)) {
                 payload = this.objectMapper.writeValueAsString(message);
             }
@@ -66,21 +65,18 @@ public class KafkaProducer {
                 public void onSuccess(SendResult<String, String> result) {
 
                     logger.info("Message sent to kafka successfully. Message type: {} ; Topic: [{}] ; Offset: [{}]",
-                            result.getProducerRecord().value(),
-                            result.getRecordMetadata().topic(),
-                            result.getRecordMetadata().offset());
+                            result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().offset());
                 }
+
                 @Override
                 public void onFailure(Throwable ex) {
 
-                    logger.error("Unable to send message to kafka. Message type: {} ; due to: {}",
-                            message.toString(),
-                            ex.getMessage());
+                    logger.error("Unable to send message to kafka. Message type: {} ; due to: {}", message.toString(), ex.getMessage());
                 }
             });
 
         } catch (JsonProcessingException ex) {
-            logger.error("Error occurred during deserialization message: {}, stackTrace: ", message,  ex);
+            logger.error("Error occurred during deserialization message: {}, stackTrace: ", message, ex);
             throw new RuntimeException("Error during deserialization", ex);
         }
 

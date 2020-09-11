@@ -34,7 +34,7 @@ import org.apache.fineract.useradministration.domain.AppUser;
 
 @Entity
 @Table(name = "m_survey_scorecards")
-public class Scorecard extends AbstractPersistableCustom<Long> {
+public class Scorecard extends AbstractPersistableCustom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
@@ -65,7 +65,7 @@ public class Scorecard extends AbstractPersistableCustom<Long> {
     private Integer value;
 
     public Scorecard() {
-        super();
+
     }
 
     public Survey getSurvey() {

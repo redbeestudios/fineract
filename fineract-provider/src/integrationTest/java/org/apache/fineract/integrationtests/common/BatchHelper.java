@@ -20,31 +20,33 @@ package org.apache.fineract.integrationtests.common;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.fineract.batch.domain.BatchRequest;
 import org.apache.fineract.batch.domain.BatchResponse;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Helper class for {@link org.apache.fineract.integrationtests.BatchApiTest}. It
- * takes care of creation of {@code BatchRequest} list and posting this list to
- * the server.
+ * Helper class for {@link org.apache.fineract.integrationtests.BatchApiTest}. It takes care of creation of
+ * {@code BatchRequest} list and posting this list to the server.
  *
  * @author Rishabh Shukla
  *
  * @see org.apache.fineract.integrationtests.BatchApiTest
  */
-public class BatchHelper {
+public final class BatchHelper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BatchHelper.class);
     private static final String BATCH_API_URL = "/fineract-provider/api/v1/batches?" + Utils.TENANT_IDENTIFIER;
     private static final String BATCH_API_URL_EXT = BATCH_API_URL + "&enclosingTransaction=true";
 
     private BatchHelper() {
-        super();
+
     }
 
     /**
@@ -71,16 +73,15 @@ public class BatchHelper {
      * Returns the converted string response into JSON.
      *
      * @param json
-     * @return List<BatchResponse>
+     * @return {@code List<BatchResponse>}
      */
     private static List<BatchResponse> fromJsonString(final String json) {
         return new Gson().fromJson(json, new TypeToken<List<BatchResponse>>() {}.getType());
     }
 
     /**
-     * Returns a list of BatchResponse with query parameter enclosing
-     * transaction set to false by posting the jsonified BatchRequest to the
-     * server.
+     * Returns a list of BatchResponse with query parameter enclosing transaction set to false by posting the jsonified
+     * BatchRequest to the server.
      *
      * @param requestSpec
      * @param responseSpec
@@ -94,9 +95,8 @@ public class BatchHelper {
     }
 
     /**
-     * Returns a list of BatchResponse with query parameter enclosing
-     * transaction set to true by posting the jsonified BatchRequest to the
-     * server.
+     * Returns a list of BatchResponse with query parameter enclosing transaction set to true by posting the jsonified
+     * BatchRequest to the server.
      *
      * @param requestSpec
      * @param responseSpec
@@ -110,11 +110,10 @@ public class BatchHelper {
     }
 
     /**
-     * Returns a BatchResponse based on the given BatchRequest, by posting the
-     * request to the server.
+     * Returns a BatchResponse based on the given BatchRequest, by posting the request to the server.
      *
      * @param BatchRequest
-     * @return List<BatchResponse>
+     * @return {@code List<BatchResponse>}
      */
     public static List<BatchResponse> postWithSingleRequest(final RequestSpecification requestSpec,
             final ResponseSpecification responseSpec, final BatchRequest br) {
@@ -127,16 +126,15 @@ public class BatchHelper {
                 jsonifiedRequest);
 
         // Verifies that the response result is there
-        Assert.assertNotNull(response);
-        Assert.assertTrue(response.size() > 0);
+        Assertions.assertNotNull(response);
+        Assertions.assertTrue(response.size() > 0);
 
         return response;
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.CreateClientCommandStrategy}
-     * Request as one of the request in Batch.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.CreateClientCommandStrategy} Request as
+     * one of the request in Batch.
      *
      * @param reqId
      * @param externalId
@@ -165,9 +163,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.CreateClientCommandStrategy}
-     * Request as one of the request in Batch.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.CreateClientCommandStrategy} Request as
+     * one of the request in Batch.
      *
      * @param reqId
      * @param externalId
@@ -188,18 +185,17 @@ public class BatchHelper {
         }
 
         final String body = "{ \"officeId\": 1, \"firstname\": \"Petra\", \"lastname\": \"Yton\"," + "\"externalId\": \"" + externalId
-                + "\",  \"dateFormat\": \"dd MMMM yyyy\", \"locale\": \"en\"," + "\"active\": true, \"activationDate\": \"04 March 2010\", \"submittedOnDate\": \"04 March 2010\"}";
+                + "\",  \"dateFormat\": \"dd MMMM yyyy\", \"locale\": \"en\","
+                + "\"active\": true, \"activationDate\": \"04 March 2010\", \"submittedOnDate\": \"04 March 2010\"}";
 
         br.setBody(body);
 
         return br;
     }
 
-
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.UpdateClientCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.UpdateClientCommandStrategy} Request with
+     * given requestId and reference.
      *
      * @param reqId
      * @param clientId
@@ -219,9 +215,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.ApplyLoanCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.ApplyLoanCommandStrategy} Request with
+     * given requestId and reference.
      *
      * @param requestId
      * @param reference
@@ -250,9 +245,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.ApplySavingsCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.ApplySavingsCommandStrategy} Request with
+     * given requestId and reference.
      *
      * @param requestId
      * @param reference
@@ -276,9 +270,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.CreateChargeCommandStrategy}
-     * Request with given requestId and reference
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.CreateChargeCommandStrategy} Request with
+     * given requestId and reference
      *
      * @param requestId
      * @param reference
@@ -300,9 +293,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.CollectChargesCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.CollectChargesCommandStrategy} Request
+     * with given requestId and reference.
      *
      * @param requestId
      * @param reference
@@ -322,9 +314,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.ActivateClientCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.ActivateClientCommandStrategy} Request
+     * with given requestId and reference.
      *
      *
      * @param requestId
@@ -345,9 +336,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.ApproveLoanCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.ApproveLoanCommandStrategy} Request with
+     * given requestId and reference.
      *
      *
      * @param requestId
@@ -368,9 +358,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.DisburseLoanCommandStrategy}
-     * Request with given requestId and reference.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.DisburseLoanCommandStrategy} Request with
+     * given requestId and reference.
      *
      *
      * @param requestId
@@ -390,9 +379,8 @@ public class BatchHelper {
     }
 
     /**
-     * Creates and returns a
-     * {@link org.apache.fineract.batch.command.internal.RepayLoanCommandStrategy}
-     * Request with given requestId.
+     * Creates and returns a {@link org.apache.fineract.batch.command.internal.RepayLoanCommandStrategy} Request with
+     * given requestId.
      *
      *
      * @param requestId
@@ -406,15 +394,14 @@ public class BatchHelper {
         br.setReference(reference);
         br.setRelativeUrl("loans/$.loanId/transactions?command=repayment");
         br.setMethod("POST");
-        br.setBody("{\"locale\": \"en\", \"dateFormat\": \"dd MMMM yyyy\", " +
-                "\"transactionDate\": \"15 September 2013\",  \"transactionAmount\": 500}");
+        br.setBody("{\"locale\": \"en\", \"dateFormat\": \"dd MMMM yyyy\", "
+                + "\"transactionDate\": \"15 September 2013\",  \"transactionAmount\": 500}");
 
         return br;
     }
 
     /**
-     * Checks that the client with given externalId is not created on the
-     * server.
+     * Checks that the client with given externalId is not created on the server.
      *
      * @param requestSpec
      * @param responseSpec
@@ -422,9 +409,9 @@ public class BatchHelper {
      */
     public static void verifyClientCreatedOnServer(final RequestSpecification requestSpec, final ResponseSpecification responseSpec,
             final String externalId) {
-        System.out.println("------------------------------CHECK CLIENT DETAILS------------------------------------\n");
+        LOG.info("------------------------------CHECK CLIENT DETAILS------------------------------------\n");
         final String CLIENT_URL = "/fineract-provider/api/v1/clients?externalId=" + externalId + "&" + Utils.TENANT_IDENTIFIER;
         final Integer responseRecords = Utils.performServerGet(requestSpec, responseSpec, CLIENT_URL, "totalFilteredRecords");
-        Assert.assertEquals("No records found with given externalId", (long) responseRecords, (long) 0);
+        Assertions.assertEquals((long) 0, (long) responseRecords, "No records found with given externalId");
     }
 }

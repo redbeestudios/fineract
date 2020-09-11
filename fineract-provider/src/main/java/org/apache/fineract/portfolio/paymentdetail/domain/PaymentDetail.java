@@ -24,7 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.portfolio.paymentdetail.PaymentDetailConstants;
@@ -34,7 +34,7 @@ import org.apache.fineract.portfolio.paymenttype.domain.PaymentType;
 
 @Entity
 @Table(name = "m_payment_detail")
-public final class PaymentDetail extends AbstractPersistableCustom<Long> {
+public final class PaymentDetail extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "payment_type_id", nullable = false)
@@ -55,7 +55,7 @@ public final class PaymentDetail extends AbstractPersistableCustom<Long> {
     @Column(name = "bank_number", length = 50)
     private String bankNumber;
 
-    protected PaymentDetail() {
+    PaymentDetail() {
 
     }
 

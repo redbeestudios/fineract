@@ -29,8 +29,9 @@ import org.apache.fineract.infrastructure.codes.domain.CodeValue;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
-@Table(name = "acc_rule_tags", uniqueConstraints = { @UniqueConstraint(columnNames = { "acc_rule_id", "tag_id", "acc_type_enum" }, name = "UNIQUE_ACCOUNT_RULE_TAGS") })
-public class AccountingTagRule extends AbstractPersistableCustom<Long> {
+@Table(name = "acc_rule_tags", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "acc_rule_id", "tag_id", "acc_type_enum" }, name = "UNIQUE_ACCOUNT_RULE_TAGS") })
+public class AccountingTagRule extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "acc_rule_id", nullable = false)

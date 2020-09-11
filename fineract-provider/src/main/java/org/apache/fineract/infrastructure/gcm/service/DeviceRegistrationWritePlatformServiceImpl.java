@@ -19,7 +19,7 @@
 package org.apache.fineract.infrastructure.gcm.service;
 
 import javax.persistence.PersistenceException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.fineract.infrastructure.core.exception.PlatformDataIntegrityException;
 import org.apache.fineract.infrastructure.core.service.DateUtils;
 import org.apache.fineract.infrastructure.gcm.domain.DeviceRegistration;
@@ -30,22 +30,20 @@ import org.apache.fineract.portfolio.client.domain.ClientRepositoryWrapper;
 import org.apache.openjpa.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DeviceRegistrationWritePlatformServiceImpl implements
-        DeviceRegistrationWritePlatformService {
+public class DeviceRegistrationWritePlatformServiceImpl implements DeviceRegistrationWritePlatformService {
 
     private final DeviceRegistrationRepositoryWrapper deviceRegistrationRepository;
     private final ClientRepositoryWrapper clientRepositoryWrapper;
     private final PlatformSecurityContext context;
 
     @Autowired
-    public DeviceRegistrationWritePlatformServiceImpl(
-            final DeviceRegistrationRepositoryWrapper deviceRegistrationRepository,
-            final ClientRepositoryWrapper clientRepositoryWrapper,
-            final PlatformSecurityContext context) {
+    public DeviceRegistrationWritePlatformServiceImpl(final DeviceRegistrationRepositoryWrapper deviceRegistrationRepository,
+            final ClientRepositoryWrapper clientRepositoryWrapper, final PlatformSecurityContext context) {
         this.deviceRegistrationRepository = deviceRegistrationRepository;
         this.clientRepositoryWrapper = clientRepositoryWrapper;
         this.context = context;
@@ -53,63 +51,49 @@ public class DeviceRegistrationWritePlatformServiceImpl implements
 
     @Transactional
     @Override
-    public DeviceRegistration registerDevice(Long clientId,
-            String registrationId) {
+    public DeviceRegistration registerDevice(Long clientId, String registrationId) {
         this.context.authenticatedUser();
-        Client client = this.clientRepositoryWrapper
-                .findOneWithNotFoundDetection(clientId);
+        Client client = this.clientRepositoryWrapper.findOneWithNotFoundDetection(clientId);
         try {
-            DeviceRegistration deviceRegistration = DeviceRegistration
-                    .instance(client, registrationId);
+            DeviceRegistration deviceRegistration = DeviceRegistration.instance(client, registrationId);
             this.deviceRegistrationRepository.save(deviceRegistration);
             return deviceRegistration;
         } catch (final EntityExistsException dve) {
-            handleDataIntegrityIssues(registrationId, dve, dve);
+            handleDataIntegrityIssues(registrationId, dve);
             return null;
-        } catch (final DataIntegrityViolationException dve) {
-            handleDataIntegrityIssues(registrationId,
-                    dve.getMostSpecificCause(), dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            handleDataIntegrityIssues(registrationId, dve.getMostSpecificCause());
             return null;
         } catch (final PersistenceException dve) {
             Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
-            handleDataIntegrityIssues(registrationId, throwable, dve);
+            handleDataIntegrityIssues(registrationId, throwable);
             return null;
         } catch (final Exception dve) {
             Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
-            handleDataIntegrityIssues(registrationId, throwable, dve);
+            handleDataIntegrityIssues(registrationId, throwable);
             return null;
         }
 
     }
 
-    private void handleDataIntegrityIssues(final String registrationId,
-            final Throwable realCause,
-            @SuppressWarnings("unused") final Exception dve) {
+    private void handleDataIntegrityIssues(final String registrationId, final Throwable realCause) {
 
         if (realCause.getMessage().contains("registration_key")) {
-            throw new PlatformDataIntegrityException(
-                    "error.msg.duplicate.device.registration.id",
-                    "Registration id : " + registrationId + " already exist.",
-                    "name", registrationId);
+            throw new PlatformDataIntegrityException("error.msg.duplicate.device.registration.id",
+                    "Registration id : " + registrationId + " already exist.", "name", registrationId);
         }
 
-        throw new PlatformDataIntegrityException(
-                "error.msg.charge.unknown.data.integrity.issue",
-                "Unknown data integrity issue with resource: "
-                        + realCause.getMessage());
+        throw new PlatformDataIntegrityException("error.msg.charge.unknown.data.integrity.issue",
+                "Unknown data integrity issue with resource: " + realCause.getMessage());
     }
 
     @Override
-    public DeviceRegistration updateDeviceRegistration(Long id, Long clientId,
-            String registrationId) {
-        DeviceRegistration deviceRegistration = this.deviceRegistrationRepository
-                .findOneWithNotFoundDetection(id);
-        Client client = this.clientRepositoryWrapper
-                .findOneWithNotFoundDetection(clientId);
+    public DeviceRegistration updateDeviceRegistration(Long id, Long clientId, String registrationId) {
+        DeviceRegistration deviceRegistration = this.deviceRegistrationRepository.findOneWithNotFoundDetection(id);
+        Client client = this.clientRepositoryWrapper.findOneWithNotFoundDetection(clientId);
         deviceRegistration.setClient(client);
         deviceRegistration.setRegistrationId(registrationId);
-        deviceRegistration.setUpdatedOnDate(DateUtils
-                .getLocalDateTimeOfTenant().toDate());
+        deviceRegistration.setUpdatedOnDate(DateUtils.getLocalDateTimeOfTenant().toDate());
         return deviceRegistration;
     }
 

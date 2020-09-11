@@ -18,32 +18,38 @@
  */
 package org.apache.fineract.infrastructure.bulkimport.importhandler;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import java.util.List;
 import org.apache.fineract.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import org.apache.fineract.infrastructure.core.data.ApiParameterError;
-import org.apache.fineract.infrastructure.core.exception.AbstractPlatformDomainRuleException;
-import org.apache.fineract.infrastructure.core.exception.AbstractPlatformResourceNotFoundException;
-import org.apache.fineract.infrastructure.core.exception.AbstractPlatformServiceUnavailableException;
-import org.apache.fineract.infrastructure.core.exception.PlatformApiDataValidationException;
-import org.apache.fineract.infrastructure.core.exception.PlatformDataIntegrityException;
+import org.apache.fineract.infrastructure.core.exception.AbstractPlatformException;
 import org.apache.fineract.infrastructure.core.exception.UnsupportedParameterException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
 import org.joda.time.LocalDate;
 
-public class ImportHandlerUtils {
+public final class ImportHandlerUtils {
+
+    private ImportHandlerUtils() {
+
+    }
 
     public static Integer getNumberOfRows(Sheet sheet, int primaryColumn) {
         Integer noOfEntries = 0;
         // getLastRowNum and getPhysicalNumberOfRows showing false values
         // sometimes
-        while (sheet.getRow(noOfEntries+1) !=null && sheet.getRow(noOfEntries+1).getCell(primaryColumn) != null) {
+        while (sheet.getRow(noOfEntries + 1) != null && sheet.getRow(noOfEntries + 1).getCell(primaryColumn) != null) {
             noOfEntries++;
         }
 
@@ -51,269 +57,282 @@ public class ImportHandlerUtils {
     }
 
     public static boolean isNotImported(Row row, int statusColumn) {
-        if (readAsString(statusColumn,row)!=null) {
+        if (readAsString(statusColumn, row) != null) {
             return !readAsString(statusColumn, row).equals(TemplatePopulateImportConstants.STATUS_CELL_IMPORTED);
-        }else {
+        } else {
             return true;
         }
     }
 
     public static Long readAsLong(int colIndex, Row row) {
         Cell c = row.getCell(colIndex);
-        if (c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
+        if (c == null || c.getCellType() == CellType.BLANK) {
             return null;
+        }
         FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-        if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-            if(eval!=null) {
+        if (c.getCellType() == CellType.FORMULA) {
+            if (eval != null) {
                 CellValue val = null;
                 try {
                     val = eval.evaluate(c);
                 } catch (NullPointerException npe) {
                     return null;
                 }
-                return ((Double)val.getNumberValue()).longValue();
+                return ((Double) val.getNumberValue()).longValue();
             }
-        }
-        else if (c.getCellType()==Cell.CELL_TYPE_NUMERIC){
+        } else if (c.getCellType() == CellType.NUMERIC) {
             return ((Double) c.getNumericCellValue()).longValue();
-        }
-        else {
+        } else {
             return Long.parseLong(row.getCell(colIndex).getStringCellValue());
         }
         return null;
     }
 
-
     public static String readAsString(int colIndex, Row row) {
 
         Cell c = row.getCell(colIndex);
-        if (c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
+        if (c == null || c.getCellType() == CellType.BLANK) {
             return null;
+        }
         FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-        if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-            if (eval!=null) {
+        if (c.getCellType() == CellType.FORMULA) {
+            if (eval != null) {
                 CellValue val = null;
                 try {
                     val = eval.evaluate(c);
-                } catch(NullPointerException npe) {
+                } catch (NullPointerException npe) {
                     return null;
                 }
 
                 String res = trimEmptyDecimalPortion(val.getStringValue());
-                if (res!=null) {
+                if (res != null) {
                     if (!res.equals("")) {
                         return res.trim();
                     } else {
                         return null;
                     }
-                }else {
+                } else {
                     return null;
                 }
-            }else {
+            } else {
                 return null;
             }
-        }else if(c.getCellType()==Cell.CELL_TYPE_STRING) {
+        } else if (c.getCellType() == CellType.STRING) {
             String res = trimEmptyDecimalPortion(c.getStringCellValue().trim());
             return res.trim();
 
-        }else if(c.getCellType()==Cell.CELL_TYPE_NUMERIC) {
+        } else if (c.getCellType() == CellType.NUMERIC) {
             return ((Double) row.getCell(colIndex).getNumericCellValue()).intValue() + "";
-        }else if (c.getCellType()==Cell.CELL_TYPE_BOOLEAN){
-            return c.getBooleanCellValue()+"";
-        }else {
+        } else if (c.getCellType() == CellType.BOOLEAN) {
+            return c.getBooleanCellValue() + "";
+        } else {
             return null;
         }
     }
 
-
     public static String trimEmptyDecimalPortion(String result) {
-        if(result != null && result.endsWith(".0"))
-            return    result.split("\\.")[0];
-        else
+        if (result != null && result.endsWith(".0")) {
+            return Iterables.get(Splitter.on("\\.").split(result), 0);
+        } else {
             return result;
+        }
     }
 
     public static LocalDate readAsDate(int colIndex, Row row) {
         Cell c = row.getCell(colIndex);
-        if(c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
+        if (c == null || c.getCellType() == CellType.BLANK) {
             return null;
+        }
 
-        LocalDate localDate=new LocalDate(c.getDateCellValue());
+        LocalDate localDate = new LocalDate(c.getDateCellValue());
         return localDate;
     }
 
     public static Boolean readAsBoolean(int colIndex, Row row) {
-            Cell c = row.getCell(colIndex);
-            if(c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
-                return false;
-            FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-            if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-                if(eval!=null) {
-                    CellValue val = null;
-                    try {
-                        val = eval.evaluate(c);
-                    } catch (NullPointerException npe) {
-                        return false;
-                    }
-                    return val.getBooleanValue();
-                }
-                return false;
-            }else if(c.getCellType()==Cell.CELL_TYPE_BOOLEAN)
-                return c.getBooleanCellValue();
-            else {
-                String booleanString = row.getCell(colIndex).getStringCellValue().trim();
-                if (booleanString.equalsIgnoreCase("TRUE"))
-                    return true;
-                else
+        Cell c = row.getCell(colIndex);
+        if (c == null || c.getCellType() == CellType.BLANK) {
+            return false;
+        }
+        FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
+        if (c.getCellType() == CellType.FORMULA) {
+            if (eval != null) {
+                CellValue val = null;
+                try {
+                    val = eval.evaluate(c);
+                } catch (NullPointerException npe) {
                     return false;
+                }
+                return val.getBooleanValue();
+            }
+            return false;
+        } else if (c.getCellType() == CellType.BOOLEAN) {
+            return c.getBooleanCellValue();
+        } else {
+            String booleanString = row.getCell(colIndex).getStringCellValue().trim();
+            if (booleanString.equalsIgnoreCase("TRUE")) {
+                return true;
+            } else {
+                return false;
             }
         }
+    }
 
     public static Integer readAsInt(int colIndex, Row row) {
-            Cell c = row.getCell(colIndex);
-            if (c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
-                return null;
-            FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-            if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-                if(eval!=null) {
-                    CellValue val = null;
-                    try {
-                        val = eval.evaluate(c);
-                    } catch (NullPointerException npe) {
-                        return null;
-                    }
-                    return ((Double)val.getNumberValue()).intValue();
+        Cell c = row.getCell(colIndex);
+        if (c == null || c.getCellType() == CellType.BLANK) {
+            return null;
+        }
+        FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
+        if (c.getCellType() == CellType.FORMULA) {
+            if (eval != null) {
+                CellValue val = null;
+                try {
+                    val = eval.evaluate(c);
+                } catch (NullPointerException npe) {
+                    return null;
                 }
-                return null;
-            }else if (c.getCellType()==Cell.CELL_TYPE_NUMERIC) {
-                return ((Double) c.getNumericCellValue()).intValue();
-            }else {
-                return Integer.parseInt(row.getCell(colIndex).getStringCellValue());
+                return ((Double) val.getNumberValue()).intValue();
             }
+            return null;
+        } else if (c.getCellType() == CellType.NUMERIC) {
+            return ((Double) c.getNumericCellValue()).intValue();
+        } else {
+            return Integer.parseInt(row.getCell(colIndex).getStringCellValue());
+        }
     }
 
     public static Double readAsDouble(int colIndex, Row row) {
         Cell c = row.getCell(colIndex);
-        if (c == null || c.getCellType() == Cell.CELL_TYPE_BLANK)
+        if (c == null || c.getCellType() == CellType.BLANK) {
             return 0.0;
+        }
         FormulaEvaluator eval = row.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-        if(c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-                if (eval!=null) {
-                    CellValue val = null;
-                    try {
-                        val = eval.evaluate(c);
-                    } catch (NullPointerException npe) {
-                        return 0.0;
-                    }
-                    return val.getNumberValue();
-                }else {
+        if (c.getCellType() == CellType.FORMULA) {
+            if (eval != null) {
+                CellValue val = null;
+                try {
+                    val = eval.evaluate(c);
+                } catch (NullPointerException npe) {
                     return 0.0;
                 }
-        } else if (c.getCellType()==Cell.CELL_TYPE_NUMERIC) {
+                return val.getNumberValue();
+            } else {
+                return 0.0;
+            }
+        } else if (c.getCellType() == CellType.NUMERIC) {
             return row.getCell(colIndex).getNumericCellValue();
-        }else {
+        } else {
             return Double.parseDouble(row.getCell(colIndex).getStringCellValue());
         }
     }
 
     public static void writeString(int colIndex, Row row, String value) {
-        if(value!=null)
+        if (value != null) {
             row.createCell(colIndex).setCellValue(value);
+        }
     }
 
     public static CellStyle getCellStyle(Workbook workbook, IndexedColors color) {
+        CellReference cellReference = new CellReference("A1");
+        Sheet predefined = workbook.getSheet(color.toString());
+        // if we have already defined this style, return it and don't create
+        // another one
+        if (predefined != null) {
+            Row row = predefined.getRow(cellReference.getRow());
+            Cell cell = row.getCell(cellReference.getCol());
+            return cell.getCellStyle();
+        }
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(color.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        Sheet cache = workbook.createSheet(color.toString());
+        workbook.setSheetVisibility(workbook.getSheetIndex(cache), SheetVisibility.VERY_HIDDEN);
+        Row row = cache.createRow(cellReference.getRow());
+        Cell cell = row.createCell(cellReference.getCol());
+        cell.setCellStyle(style);
+
         return style;
     }
 
-    public static String getDefaultUserMessages(List<ApiParameterError> ApiParameterErrorList){
-        StringBuffer defaultUserMessages=new StringBuffer();
-        for (ApiParameterError error:ApiParameterErrorList) {
-            defaultUserMessages=defaultUserMessages.append(error.getDefaultUserMessage()+'\t');
+    public static String getDefaultUserMessages(List<ApiParameterError> ApiParameterErrorList) {
+        StringBuilder defaultUserMessages = new StringBuilder();
+        for (ApiParameterError error : ApiParameterErrorList) {
+            defaultUserMessages = defaultUserMessages.append(error.getDefaultUserMessage() + '\t');
         }
         return defaultUserMessages.toString();
     }
-    public static String getErrorList(List<String> errorList){
-        StringBuffer errors=new StringBuffer();
-        for (String error: errorList) {
-                errors=errors.append(error);
+
+    public static String getErrorList(List<String> errorList) {
+        StringBuilder errors = new StringBuilder();
+        for (String error : errorList) {
+            errors = errors.append(error);
         }
         return errors.toString();
     }
 
-    public static void writeErrorMessage(Sheet sheet,Integer rowIndex,String errorMessage,int statusColumn){
+    public static void writeErrorMessage(Sheet sheet, Integer rowIndex, String errorMessage, int statusColumn) {
         Cell statusCell = sheet.getRow(rowIndex).createCell(statusColumn);
         statusCell.setCellValue(errorMessage);
         statusCell.setCellStyle(getCellStyle(sheet.getWorkbook(), IndexedColors.RED));
     }
 
     public static String getErrorMessage(RuntimeException re) {
-        if (re instanceof AbstractPlatformDomainRuleException){
-            AbstractPlatformDomainRuleException abstractPlatformDomainRuleException= (AbstractPlatformDomainRuleException) re;
-            return abstractPlatformDomainRuleException.getDefaultUserMessage();
-        }else if (re instanceof AbstractPlatformResourceNotFoundException){
-            AbstractPlatformResourceNotFoundException abstractPlatformResourceNotFoundException= (AbstractPlatformResourceNotFoundException) re;
-            return  abstractPlatformResourceNotFoundException.getDefaultUserMessage();
-        }else if (re instanceof AbstractPlatformServiceUnavailableException) {
-            AbstractPlatformServiceUnavailableException abstractPlatformServiceUnavailableException = (AbstractPlatformServiceUnavailableException) re;
-            return abstractPlatformServiceUnavailableException.getDefaultUserMessage();
-        }else if (re instanceof PlatformDataIntegrityException){
-            PlatformDataIntegrityException platformDataIntegrityException= (PlatformDataIntegrityException) re;
-            return platformDataIntegrityException.getDefaultUserMessage();
-        }else if (re instanceof PlatformApiDataValidationException){
-            PlatformApiDataValidationException platformApiDataValidationException=(PlatformApiDataValidationException) re;
-            return getDefaultUserMessages(platformApiDataValidationException.getErrors());
-        }else if (re instanceof UnsupportedParameterException ){
-            UnsupportedParameterException unsupportedParameterException= (UnsupportedParameterException) re;
-            return  getErrorList(unsupportedParameterException.getUnsupportedParameters());
-        }else {
-            if (re.getMessage()!=null) {
+        if (re instanceof AbstractPlatformException) {
+            AbstractPlatformException abstractPlatformException = (AbstractPlatformException) re;
+            return abstractPlatformException.getDefaultUserMessage();
+        } else if (re instanceof UnsupportedParameterException) {
+            UnsupportedParameterException unsupportedParameterException = (UnsupportedParameterException) re;
+            return getErrorList(unsupportedParameterException.getUnsupportedParameters());
+        } else {
+            if (re.getMessage() != null) {
                 return re.getMessage();
-            }else {
+            } else {
                 return re.getClass().getCanonicalName();
             }
         }
     }
 
-    public static Long getIdByName (Sheet sheet, String name) {
+    public static Long getIdByName(Sheet sheet, String name) {
         String sheetName = sheet.getSheetName();
-        if(!sheetName.equals(TemplatePopulateImportConstants.PRODUCT_SHEET_NAME)) {
+        if (!sheetName.equals(TemplatePopulateImportConstants.PRODUCT_SHEET_NAME)) {
             for (Row row : sheet) {
                 for (Cell cell : row) {
-                    if(name!=null) {
-                        if (cell.getCellType() == Cell.CELL_TYPE_STRING && cell.getRichStringCellValue().getString().trim().equals(name)) {
-                            if (sheetName.equals(TemplatePopulateImportConstants.OFFICE_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.GL_ACCOUNTS_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.EXTRAS_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.SHARED_PRODUCTS_SHEET_NAME)||
-                                    sheetName.equals(TemplatePopulateImportConstants.ROLES_SHEET_NAME)) {
-                                if (row.getCell(cell.getColumnIndex() - 1).getCellType() == Cell.CELL_TYPE_NUMERIC)
+                    if (name != null) {
+                        if (cell.getCellType() == CellType.STRING && cell.getRichStringCellValue().getString().trim().equals(name)) {
+                            if (sheetName.equals(TemplatePopulateImportConstants.OFFICE_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.GL_ACCOUNTS_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.EXTRAS_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.SHARED_PRODUCTS_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.ROLES_SHEET_NAME)) {
+                                if (row.getCell(cell.getColumnIndex() - 1).getCellType() == CellType.NUMERIC) {
                                     return ((Double) row.getCell(cell.getColumnIndex() - 1).getNumericCellValue()).longValue();
+                                }
                                 return 0L;
-                            } else if (sheetName.equals(TemplatePopulateImportConstants.CLIENT_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.CENTER_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.GROUP_SHEET_NAME) ||
-                                    sheetName.equals(TemplatePopulateImportConstants.STAFF_SHEET_NAME))
-                                if (row.getCell(cell.getColumnIndex() + 1).getCellType() == Cell.CELL_TYPE_NUMERIC)
+                            } else if (sheetName.equals(TemplatePopulateImportConstants.CLIENT_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.CENTER_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.GROUP_SHEET_NAME)
+                                    || sheetName.equals(TemplatePopulateImportConstants.STAFF_SHEET_NAME)) {
+                                if (row.getCell(cell.getColumnIndex() + 1).getCellType() == CellType.NUMERIC) {
                                     return ((Double) row.getCell(cell.getColumnIndex() + 1).getNumericCellValue()).longValue();
+                                }
+                            }
                             return 0L;
                         }
-                    }else {
+                    } else {
                         return 0L;
                     }
                 }
             }
         } else if (sheetName.equals(TemplatePopulateImportConstants.PRODUCT_SHEET_NAME)) {
-            for(Row row : sheet) {
-                for(int i = 0; i < 2; i++) {
+            for (Row row : sheet) {
+                for (int i = 0; i < 2; i++) {
                     if (name != null) {
                         Cell cell = row.getCell(i);
-                        if (cell.getCellType() == Cell.CELL_TYPE_STRING && cell.getRichStringCellValue().getString().trim().equals(name)) {
+                        if (cell.getCellType() == CellType.STRING && cell.getRichStringCellValue().getString().trim().equals(name)) {
                             return ((Double) row.getCell(cell.getColumnIndex() - 1).getNumericCellValue()).longValue();
                         }
-                    }else {
+                    } else {
                         return 0L;
                     }
                 }
@@ -321,18 +340,16 @@ public class ImportHandlerUtils {
         }
         return 0L;
     }
+
     public static String getCodeByName(Sheet sheet, String name) {
         String sheetName = sheet.getSheetName();
         sheetName.equals(TemplatePopulateImportConstants.EXTRAS_SHEET_NAME);
         {
             for (Row row : sheet) {
                 for (Cell cell : row) {
-                    if (name!=null) {
-                        if (cell.getCellType() == Cell.CELL_TYPE_STRING
-                                && cell.getRichStringCellValue().getString().trim()
-                                .equals(name)) {
-                            return row.getCell(cell.getColumnIndex() - 1)
-                                    .getStringCellValue().toString();
+                    if (name != null) {
+                        if (cell.getCellType() == CellType.STRING && cell.getRichStringCellValue().getString().trim().equals(name)) {
+                            return row.getCell(cell.getColumnIndex() - 1).getStringCellValue().toString();
 
                         }
                     }
@@ -343,40 +360,41 @@ public class ImportHandlerUtils {
     }
 
     public static String getFrequencyId(String frequency) {
-        if (frequency!=null) {
-            if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_DAILY))
+        if (frequency != null) {
+            if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_DAILY)) {
                 frequency = "1";
-            else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_WEEKLY))
+            } else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_WEEKLY)) {
                 frequency = "2";
-            else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_MONTHLY))
+            } else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_MONTHLY)) {
                 frequency = "3";
-            else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_YEARLY))
+            } else if (frequency.equalsIgnoreCase(TemplatePopulateImportConstants.FREQUENCY_YEARLY)) {
                 frequency = "4";
+            }
             return frequency;
-        }else {
+        } else {
             return null;
         }
     }
 
     public static String getRepeatsOnDayId(String repeatsOnDay) {
-        if (repeatsOnDay!=null) {
-            if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.MONDAY))
+        if (repeatsOnDay != null) {
+            if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.MONDAY)) {
                 repeatsOnDay = "1";
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.TUESDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.TUESDAY)) {
                 repeatsOnDay = "2";
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.WEDNESDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.WEDNESDAY)) {
                 repeatsOnDay = "3";
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.THURSDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.THURSDAY)) {
                 repeatsOnDay = "4";
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.FRIDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.FRIDAY)) {
                 repeatsOnDay = "5";
-
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.SATURDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.SATURDAY)) {
                 repeatsOnDay = "6";
-            else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.SUNDAY))
+            } else if (repeatsOnDay.equalsIgnoreCase(TemplatePopulateImportConstants.SUNDAY)) {
                 repeatsOnDay = "7";
+            }
             return repeatsOnDay;
-        }else {
+        } else {
             return null;
         }
     }

@@ -18,134 +18,133 @@
  */
 package org.apache.fineract.portfolio.products.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 
 /**
  * Created by Chirag Gupta on 01/01/18.
  */
 final class ProductsApiResourceSwagger {
-    private ProductsApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetProductsTypeProductIdResponse")
-    public final static class GetProductsTypeProductIdResponse {
-        private GetProductsTypeProductIdResponse() {
-        }
+    private ProductsApiResourceSwagger() {}
 
-        final class GetProductsCurrency {
-            private GetProductsCurrency() {
-            }
+    @Schema(description = "GetProductsTypeProductIdResponse")
+    public static final class GetProductsTypeProductIdResponse {
 
-            @ApiModelProperty(example = "USD")
+        private GetProductsTypeProductIdResponse() {}
+
+        static final class GetProductsCurrency {
+
+            private GetProductsCurrency() {}
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "100")
+            @Schema(example = "100")
             public Integer inMultiplesOf;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetProductsMarketPrice {
-            private GetProductsMarketPrice() {
-            }
+        static final class GetProductsMarketPrice {
 
-            @ApiModelProperty(example = "4")
+            private GetProductsMarketPrice() {}
+
+            @Schema(example = "4")
             public Integer id;
-            @ApiModelProperty(example = "Feb 1, 2016")
+            @Schema(example = "Feb 1, 2016")
             public String fromDate;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer shareValue;
         }
 
-        final class GetProductsCharges {
-            private GetProductsCharges() {
-            }
+        static final class GetProductsCharges {
 
-            final class GetChargesCurrency {
-                private GetChargesCurrency() {
-                }
+            private GetProductsCharges() {}
 
-                @ApiModelProperty(example = "USD")
+            static final class GetChargesCurrency {
+
+                private GetChargesCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            final class GetChargeTimeType {
-                private GetChargeTimeType() {
-                }
+            static final class GetChargeTimeType {
 
-                @ApiModelProperty(example = "13")
+                private GetChargeTimeType() {}
+
+                @Schema(example = "13")
                 public Integer id;
-                @ApiModelProperty(example = "chargeTimeType.activation")
+                @Schema(example = "chargeTimeType.activation")
                 public String code;
-                @ApiModelProperty(example = "Share Account Activate")
-                public String value;
+                @Schema(example = "Share Account Activate")
+                public String description;
             }
 
-            final class GetChargeAppliesTo {
-                private GetChargeAppliesTo() {
-                }
+            static final class GetChargeAppliesTo {
 
-                @ApiModelProperty(example = "4")
+                private GetChargeAppliesTo() {}
+
+                @Schema(example = "4")
                 public Integer id;
-                @ApiModelProperty(example = "chargeAppliesTo.shares")
+                @Schema(example = "chargeAppliesTo.shares")
                 public String code;
-                @ApiModelProperty(example = "Shares")
-                public String value;
+                @Schema(example = "Shares")
+                public String description;
             }
 
-            final class GetChargeCalculationType {
-                private GetChargeCalculationType() {
-                }
+            static final class GetChargeCalculationType {
 
-                @ApiModelProperty(example = "1")
+                private GetChargeCalculationType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "chargeCalculationType.flat")
+                @Schema(example = "chargeCalculationType.flat")
                 public String code;
-                @ApiModelProperty(example = "Flat")
-                public String value;
+                @Schema(example = "Flat")
+                public String description;
             }
 
-            final class GetChargePaymentMode {
-                private GetChargePaymentMode() {
-                }
+            static final class GetChargePaymentMode {
 
-                @ApiModelProperty(example = "0")
+                private GetChargePaymentMode() {}
+
+                @Schema(example = "0")
                 public Integer id;
-                @ApiModelProperty(example = "chargepaymentmode.regular")
+                @Schema(example = "chargepaymentmode.regular")
                 public String code;
-                @ApiModelProperty(example = "Regular")
-                public String value;
+                @Schema(example = "Regular")
+                public String description;
             }
 
-            @ApiModelProperty(example = "20")
+            @Schema(example = "20")
             public Integer id;
-            @ApiModelProperty(example = "Share Account Activation Flat")
+            @Schema(example = "Share Account Activation Flat")
             public String name;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean active;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean penalty;
             public GetChargesCurrency currency;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer amount;
             public GetChargeTimeType chargeTimeType;
             public GetChargeAppliesTo chargeAppliesTo;
@@ -153,77 +152,77 @@ final class ProductsApiResourceSwagger {
             public GetChargePaymentMode chargePaymentMode;
         }
 
-        final class GetLockPeriodTypeEnum {
-            private GetLockPeriodTypeEnum() {
-            }
+        static final class GetLockPeriodTypeEnum {
 
-            @ApiModelProperty(example = "0")
+            private GetLockPeriodTypeEnum() {}
+
+            @Schema(example = "0")
             public Integer id;
-            @ApiModelProperty(example = "Days")
-            public String value;
+            @Schema(example = "Days")
+            public String description;
         }
 
-        final class GetProductsAccountingRule {
-            private GetProductsAccountingRule() {
-            }
+        static final class GetProductsAccountingRule {
 
-            @ApiModelProperty(example = "2")
+            private GetProductsAccountingRule() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "accountingRuleType.cash")
+            @Schema(example = "accountingRuleType.cash")
             public String code;
-            @ApiModelProperty(example = "CASH BASED")
-            public String value;
+            @Schema(example = "CASH BASED")
+            public String description;
         }
 
-        final class GetProductsAccountingMappings {
-            private GetProductsAccountingMappings() {
-            }
+        static final class GetProductsAccountingMappings {
 
-            final class GetShareReferenceId {
-                private GetShareReferenceId() {
-                }
+            private GetProductsAccountingMappings() {}
 
-                @ApiModelProperty(example = "1")
+            static final class GetShareReferenceId {
+
+                private GetShareReferenceId() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "ASSET_ED1461237837829")
+                @Schema(example = "ASSET_ED1461237837829")
                 public String glCode;
             }
 
-            final class GetIncomeFromFeeAccountId {
-                private GetIncomeFromFeeAccountId() {
-                }
+            static final class GetIncomeFromFeeAccountId {
 
-                @ApiModelProperty(example = "14")
+                private GetIncomeFromFeeAccountId() {}
+
+                @Schema(example = "14")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "INCOME_OY1461237869836")
+                @Schema(example = "INCOME_OY1461237869836")
                 public String glCode;
             }
 
-            final class GetShareEquityId {
-                private GetShareEquityId() {
-                }
+            static final class GetShareEquityId {
 
-                @ApiModelProperty(example = "66")
+                private GetShareEquityId() {}
+
+                @Schema(example = "66")
                 public Integer id;
-                @ApiModelProperty(example = "Equity Account")
+                @Schema(example = "Equity Account")
                 public String name;
-                @ApiModelProperty(example = "EQUITY1")
+                @Schema(example = "EQUITY1")
                 public String glCode;
             }
 
-            final class GetShareSuspenseId {
-                private GetShareSuspenseId() {
-                }
+            static final class GetShareSuspenseId {
 
-                @ApiModelProperty(example = "8")
+                private GetShareSuspenseId() {}
+
+                @Schema(example = "8")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "LIABILITY_MA1461237860198")
+                @Schema(example = "LIABILITY_MA1461237860198")
                 public String glCode;
             }
 
@@ -233,178 +232,178 @@ final class ProductsApiResourceSwagger {
             public GetShareSuspenseId shareSuspenseId;
         }
 
-        final class GetProductsMinimumActivePeriodFrequencyTypeOptions {
-            private GetProductsMinimumActivePeriodFrequencyTypeOptions() {
-            }
+        static final class GetProductsMinimumActivePeriodFrequencyTypeOptions {
 
-            @ApiModelProperty(example = "0")
+            private GetProductsMinimumActivePeriodFrequencyTypeOptions() {}
+
+            @Schema(example = "0")
             public Integer id;
-            @ApiModelProperty(example = "savings.lockin.sharePeriodFrequencyType.days")
+            @Schema(example = "savings.lockin.sharePeriodFrequencyType.days")
             public String code;
-            @ApiModelProperty(example = "Days")
-            public String value;
+            @Schema(example = "Days")
+            public String description;
         }
 
-        final class GetProductsAccountingMappingOptions {
-            private GetProductsAccountingMappingOptions() {
-            }
+        static final class GetProductsAccountingMappingOptions {
 
-            final class GetProductsLiabilityAccountOptions {
-                private GetProductsLiabilityAccountOptions() {
-                }
+            private GetProductsAccountingMappingOptions() {}
 
-                final class GetProductsLiabilityType {
-                    private GetProductsLiabilityType() {
-                    }
+            static final class GetProductsLiabilityAccountOptions {
 
-                    @ApiModelProperty(example = "2")
+                private GetProductsLiabilityAccountOptions() {}
+
+                static final class GetProductsLiabilityType {
+
+                    private GetProductsLiabilityType() {}
+
+                    @Schema(example = "2")
                     public Integer id;
-                    @ApiModelProperty(example = "accountType.liability")
+                    @Schema(example = "accountType.liability")
                     public String code;
-                    @ApiModelProperty(example = "LIABILITY")
-                    public String value;
+                    @Schema(example = "LIABILITY")
+                    public String description;
                 }
 
-                final class GetProductsLiabilityUsage {
-                    private GetProductsLiabilityUsage() {
-                    }
+                static final class GetProductsLiabilityUsage {
 
-                    @ApiModelProperty(example = "1")
+                    private GetProductsLiabilityUsage() {}
+
+                    @Schema(example = "1")
                     public Integer id;
-                    @ApiModelProperty(example = "accountUsage.detail")
+                    @Schema(example = "accountUsage.detail")
                     public String code;
-                    @ApiModelProperty(example = "DETAIL")
-                    public String value;
+                    @Schema(example = "DETAIL")
+                    public String description;
                 }
 
-                final class GetProductsTagId {
-                    private GetProductsTagId() {
-                    }
+                static final class GetProductsTagId {
 
-                    @ApiModelProperty(example = "0")
+                    private GetProductsTagId() {}
+
+                    @Schema(example = "0")
                     public Integer id;
-                    @ApiModelProperty(example = "false")
+                    @Schema(example = "false")
                     public Boolean isActive;
                 }
 
-                @ApiModelProperty(example = "4")
+                @Schema(example = "4")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "LIABILITY_2T1461237838897")
+                @Schema(example = "LIABILITY_2T1461237838897")
                 public String glCode;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean disabled;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean manualEntriesAllowed;
                 public GetProductsLiabilityType type;
                 public GetProductsLiabilityUsage usage;
-                @ApiModelProperty(example = "DEFAULT_DESCRIPTION")
+                @Schema(example = "DEFAULT_DESCRIPTION")
                 public String description;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String nameDecorated;
                 public GetProductsTagId tagId;
             }
 
-            final class GetProductsAssetAccountOptions {
-                private GetProductsAssetAccountOptions() {
-                }
+            static final class GetProductsAssetAccountOptions {
 
-                final class GetAssetType {
-                    private GetAssetType() {
-                    }
+                private GetProductsAssetAccountOptions() {}
 
-                    @ApiModelProperty(example = "1")
+                static final class GetAssetType {
+
+                    private GetAssetType() {}
+
+                    @Schema(example = "1")
                     public Integer id;
-                    @ApiModelProperty(example = "accountType.asset")
+                    @Schema(example = "accountType.asset")
                     public String code;
-                    @ApiModelProperty(example = "ASSET")
-                    public String value;
+                    @Schema(example = "ASSET")
+                    public String description;
                 }
 
-                @ApiModelProperty(example = "1")
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "ASSET_ED1461237837829")
+                @Schema(example = "ASSET_ED1461237837829")
                 public String glCode;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean disabled;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean manualEntriesAllowed;
                 public GetAssetType type;
                 public GetProductsLiabilityAccountOptions.GetProductsLiabilityUsage usage;
-                @ApiModelProperty(example = "DEFAULT_DESCRIPTION")
+                @Schema(example = "DEFAULT_DESCRIPTION")
                 public String description;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String nameDecorated;
                 public GetProductsLiabilityAccountOptions.GetProductsTagId tagId;
             }
 
-            final class GetProductsIncomeAccountOptions {
-                private GetProductsIncomeAccountOptions() {
-                }
+            static final class GetProductsIncomeAccountOptions {
 
-                final class GetIncomeType {
-                    private GetIncomeType() {
-                    }
+                private GetProductsIncomeAccountOptions() {}
 
-                    @ApiModelProperty(example = "1")
+                static final class GetIncomeType {
+
+                    private GetIncomeType() {}
+
+                    @Schema(example = "1")
                     public Integer id;
-                    @ApiModelProperty(example = "accountType.income")
+                    @Schema(example = "accountType.income")
                     public String code;
-                    @ApiModelProperty(example = "INCOME")
-                    public String value;
+                    @Schema(example = "INCOME")
+                    public String description;
                 }
 
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String name;
-                @ApiModelProperty(example = "INCOME_9O1461237838422")
+                @Schema(example = "INCOME_9O1461237838422")
                 public String glCode;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean disabled;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean manualEntriesAllowed;
                 public GetIncomeType type;
                 public GetProductsLiabilityAccountOptions.GetProductsLiabilityUsage usage;
-                @ApiModelProperty(example = "DEFAULT_DESCRIPTION")
+                @Schema(example = "DEFAULT_DESCRIPTION")
                 public String description;
-                @ApiModelProperty(example = "ACCOUNT_NAME_1FJBQ")
+                @Schema(example = "ACCOUNT_NAME_1FJBQ")
                 public String nameDecorated;
                 public GetProductsLiabilityAccountOptions.GetProductsTagId tagId;
             }
 
-            final class GetProductsEquityAccountOptions {
-                private GetProductsEquityAccountOptions() {
-                }
+            static final class GetProductsEquityAccountOptions {
 
-                final class GetEquityType {
-                    private GetEquityType() {
-                    }
+                private GetProductsEquityAccountOptions() {}
 
-                    @ApiModelProperty(example = "3")
+                static final class GetEquityType {
+
+                    private GetEquityType() {}
+
+                    @Schema(example = "3")
                     public Integer id;
-                    @ApiModelProperty(example = "accountType.equity")
+                    @Schema(example = "accountType.equity")
                     public String code;
-                    @ApiModelProperty(example = "EQUITY")
-                    public String value;
+                    @Schema(example = "EQUITY")
+                    public String description;
                 }
 
-                @ApiModelProperty(example = "66")
+                @Schema(example = "66")
                 public Integer id;
-                @ApiModelProperty(example = "Equity Account")
+                @Schema(example = "Equity Account")
                 public String name;
-                @ApiModelProperty(example = "EQUITY1")
+                @Schema(example = "EQUITY1")
                 public String glCode;
-                @ApiModelProperty(example = "false")
+                @Schema(example = "false")
                 public Boolean disabled;
-                @ApiModelProperty(example = "true")
+                @Schema(example = "true")
                 public Boolean manualEntriesAllowed;
                 public GetEquityType type;
                 public GetProductsLiabilityAccountOptions.GetProductsLiabilityUsage usage;
-                @ApiModelProperty(example = "Equity Account")
+                @Schema(example = "Equity Account")
                 public String nameDecorated;
                 public GetProductsLiabilityAccountOptions.GetProductsTagId tagId;
             }
@@ -415,37 +414,37 @@ final class ProductsApiResourceSwagger {
             public Set<GetProductsEquityAccountOptions> equityAccountOptions;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "Share Product")
+        @Schema(example = "Share Product")
         public String name;
-        @ApiModelProperty(example = "SP")
+        @Schema(example = "SP")
         public String shortName;
-        @ApiModelProperty(example = "SP")
+        @Schema(example = "SP")
         public String description;
         public GetProductsCurrency currency;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Integer totalShares;
-        @ApiModelProperty(example = "50")
+        @Schema(example = "50")
         public Integer totalSharesIssued;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer unitPrice;
-        @ApiModelProperty(example = "50")
+        @Schema(example = "50")
         public Integer shareCapital;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minimumShares;
-        @ApiModelProperty(example = "10")
+        @Schema(example = "10")
         public Integer nominalShares;
-        @ApiModelProperty(example = "50")
+        @Schema(example = "50")
         public Integer maximumShares;
         public Set<GetProductsMarketPrice> marketPrice;
         public Set<GetProductsCharges> charges;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean allowDividendCalculationForInactiveClients;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer lockinPeriod;
         public GetLockPeriodTypeEnum lockPeriodTypeEnum;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minimumActivePeriod;
         public GetLockPeriodTypeEnum minimumActivePeriodForDividendsTypeEnum;
         public GetProductsAccountingRule accountingRule;
@@ -457,139 +456,139 @@ final class ProductsApiResourceSwagger {
         public GetProductsAccountingMappingOptions accountingMappingOptions;
     }
 
-    @ApiModel(value = "GetProductsTypeResponse")
+    @Schema(description = "GetProductsTypeResponse")
     public static final class GetProductsTypeResponse {
-        private GetProductsTypeResponse() {
-        }
 
-        final class GetProductsPageItems {
-            private GetProductsPageItems() {
-            }
+        private GetProductsTypeResponse() {}
 
-            @ApiModelProperty(example = "1")
+        static final class GetProductsPageItems {
+
+            private GetProductsPageItems() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Share Product")
+            @Schema(example = "Share Product")
             public String name;
-            @ApiModelProperty(example = "Share Product Description")
+            @Schema(example = "Share Product Description")
             public String shortName;
-            @ApiModelProperty(example = "100")
+            @Schema(example = "100")
             public Integer totalShares;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer totalFilteredRecords;
         public Set<GetProductsPageItems> pageItems;
     }
 
-    @ApiModel(value = "PostProductsTypeRequest")
-    public final static class PostProductsTypeRequest {
-        private PostProductsTypeRequest() {
-        }
+    @Schema(description = "PostProductsTypeRequest")
+    public static final class PostProductsTypeRequest {
 
-        final class PostProductsMarketPricePeriods {
-            private PostProductsMarketPricePeriods() {
-            }
+        private PostProductsTypeRequest() {}
 
-            @ApiModelProperty(example = "en")
+        static final class PostProductsMarketPricePeriods {
+
+            private PostProductsMarketPricePeriods() {}
+
+            @Schema(example = "en")
             public String locale;
-            @ApiModelProperty(example = "dd MMMM yyyy")
+            @Schema(example = "dd MMMM yyyy")
             public String dateFormat;
-            @ApiModelProperty(example = "04 May 2016")
+            @Schema(example = "04 May 2016")
             public String fromDate;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer shareValue;
         }
 
-        final class PostProductsChargesSelected {
-            private PostProductsChargesSelected() {
-            }
+        static final class PostProductsChargesSelected {
 
-            @ApiModelProperty(example = "20")
+            private PostProductsChargesSelected() {}
+
+            @Schema(example = "20")
             public Integer id;
         }
 
-        @ApiModelProperty(example = "Share Product")
+        @Schema(example = "Share Product")
         public String name;
-        @ApiModelProperty(example = "SP")
+        @Schema(example = "SP")
         public String shortName;
-        @ApiModelProperty(example = "Description")
+        @Schema(example = "Description")
         public String description;
-        @ApiModelProperty(example = "USD")
+        @Schema(example = "USD")
         public String currencyCode;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer digitsAfterDecimal;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer inMultiplesOf;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "1000")
+        @Schema(example = "1000")
         public Integer totalShares;
-        @ApiModelProperty(example = "1000")
+        @Schema(example = "1000")
         public Integer sharesIssued;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer unitPrice;
-        @ApiModelProperty(example = "10")
+        @Schema(example = "10")
         public Integer minimumShares;
-        @ApiModelProperty(example = "20")
+        @Schema(example = "20")
         public Integer nominalShares;
-        @ApiModelProperty(example = "30")
+        @Schema(example = "30")
         public Integer maximumShares;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer minimumActivePeriodForDividends;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Integer minimumactiveperiodFrequencyType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer lockinPeriodFrequency;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer lockinPeriodFrequencyType;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean allowDividendCalculationForInactiveClients;
         public Set<PostProductsMarketPricePeriods> marketPricePeriods;
         public Set<PostProductsChargesSelected> chargesSelected;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer accountingRule;
     }
 
-    @ApiModel(value = "PostProductsTypeResponse")
-    public final static class PostProductsTypeResponse {
-        private PostProductsTypeResponse() {
-        }
+    @Schema(description = "PostProductsTypeResponse")
+    public static final class PostProductsTypeResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostProductsTypeResponse() {}
+
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutProductsTypeProductIdRequest")
-    public final static class PutProductsTypeProductIdRequest {
-        private PutProductsTypeProductIdRequest() {
-        }
+    @Schema(description = "PutProductsTypeProductIdRequest")
+    public static final class PutProductsTypeProductIdRequest {
 
-        @ApiModelProperty(example = "Share Product Description.")
+        private PutProductsTypeProductIdRequest() {}
+
+        @Schema(example = "Share Product Description.")
         public String description;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "5.0")
+        @Schema(example = "5.0")
         public Double unitPrice;
     }
 
-    @ApiModel(value = "PutProductsTypeProductIdResponse")
-    public final static class PutProductsTypeProductIdResponse {
-        private PutProductsTypeProductIdResponse() {
-        }
+    @Schema(description = "PutProductsTypeProductIdResponse")
+    public static final class PutProductsTypeProductIdResponse {
 
-        final class PutProductsChanges {
-            private PutProductsChanges() {
-            }
+        private PutProductsTypeProductIdResponse() {}
 
-            @ApiModelProperty(example = "Share Product Description.")
+        static final class PutProductsChanges {
+
+            private PutProductsChanges() {}
+
+            @Schema(example = "Share Product Description.")
             public String description;
-            @ApiModelProperty(example = "5.0")
+            @Schema(example = "5.0")
             public Double unitPrice;
-            @ApiModelProperty(example = "en")
+            @Schema(example = "en")
             public String locale;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
         public PutProductsChanges changes;
     }

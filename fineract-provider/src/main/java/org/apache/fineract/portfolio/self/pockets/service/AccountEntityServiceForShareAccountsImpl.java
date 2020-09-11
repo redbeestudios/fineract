@@ -30,12 +30,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountEntityServiceForShareAccountsImpl implements AccountEntityService {
 
-    private final String KEY = EntityAccountType.SHARES.name();
+    private final String key = EntityAccountType.SHARES.name();
 
     private final PlatformSecurityContext context;
     private final AppUserShareAccountsMapperReadPlatformService appUserShareAccountsMapperReadPlatformService;
     private final ShareAccountReadPlatformService shareAccountReadPlatformService;
-
 
     @Autowired
     public AccountEntityServiceForShareAccountsImpl(final PlatformSecurityContext context,
@@ -48,7 +47,7 @@ public class AccountEntityServiceForShareAccountsImpl implements AccountEntitySe
 
     @Override
     public String getKey() {
-        return KEY;
+        return key;
     }
 
     @Override

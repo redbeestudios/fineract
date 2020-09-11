@@ -38,7 +38,7 @@ import org.joda.time.LocalDate;
 
 @Entity
 @Table(name = "m_deposit_account_on_hold_transaction")
-public class DepositAccountOnHoldTransaction extends AbstractPersistableCustom<Long> {
+public class DepositAccountOnHoldTransaction extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "savings_account_id", nullable = true)
@@ -113,7 +113,7 @@ public class DepositAccountOnHoldTransaction extends AbstractPersistableCustom<L
 
     public LocalDate getTransactionDate() {
         LocalDate transactionDate = null;
-        if(this.transactionDate !=null){
+        if (this.transactionDate != null) {
             transactionDate = LocalDate.fromDateFields(this.transactionDate);
         }
         return transactionDate;

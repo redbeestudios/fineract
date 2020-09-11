@@ -18,21 +18,21 @@
  */
 package org.apache.fineract.integrationtests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.fineract.integrationtests.common.CommonConstants;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.WorkingDaysHelper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class WorkingDaysTest {
@@ -41,7 +41,7 @@ public class WorkingDaysTest {
     private RequestSpecification requestSpec;
     private ResponseSpecification generalResponseSpec;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Utils.initializeRESTAssured();
         this.requestSpec = new RequestSpecBuilder().setContentType(ContentType.JSON).build();
@@ -54,15 +54,15 @@ public class WorkingDaysTest {
     @Test
     public void updateWorkingDays() {
         HashMap response = (HashMap) WorkingDaysHelper.updateWorkingDays(requestSpec, responseSpec);
-        Assert.assertNotNull(response.get("resourceId"));
+        Assertions.assertNotNull(response.get("resourceId"));
     }
 
     @Test
     public void updateWorkingDaysWithWrongRecurrencePattern() {
         final List<HashMap> error = (List) WorkingDaysHelper.updateWorkingDaysWithWrongRecurrence(requestSpec, generalResponseSpec,
                 CommonConstants.RESPONSE_ERROR);
-        assertEquals("Verify wrong recurrence pattern error", "error.msg.recurring.rule.parsing.error",
-                error.get(0).get("userMessageGlobalisationCode"));
+        assertEquals("error.msg.recurring.rule.parsing.error", error.get(0).get("userMessageGlobalisationCode"),
+                "Verify wrong recurrence pattern error");
     }
 
 }

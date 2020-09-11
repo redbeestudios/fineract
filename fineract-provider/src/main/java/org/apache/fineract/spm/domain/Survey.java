@@ -34,13 +34,13 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_surveys")
-public class Survey extends AbstractPersistableCustom<Long> {
+public class Survey extends AbstractPersistableCustom {
 
-    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequenceNo")
     private List<Component> components;
 
-    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequenceNo")
     private List<Question> questions;
 
@@ -65,7 +65,7 @@ public class Survey extends AbstractPersistableCustom<Long> {
     private Date validTo;
 
     public Survey() {
-        super();
+
     }
 
     public List<Component> getComponents() {
@@ -81,9 +81,9 @@ public class Survey extends AbstractPersistableCustom<Long> {
     }
 
     public void setQuestions(List<Question> questions) {
-        if(this.questions != null){
-            this.questions.clear();;
-        }else{
+        if (this.questions != null) {
+            this.questions.clear();
+        } else {
             this.questions = new ArrayList<>();
         }
 

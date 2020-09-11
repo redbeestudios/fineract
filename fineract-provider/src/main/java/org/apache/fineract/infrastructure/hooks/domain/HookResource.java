@@ -27,7 +27,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_hook_registered_events")
-public class HookResource extends AbstractPersistableCustom<Long> {
+public class HookResource extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "hook_id", referencedColumnName = "id", nullable = false)
@@ -43,13 +43,11 @@ public class HookResource extends AbstractPersistableCustom<Long> {
         //
     }
 
-    public static HookResource createNewWithoutHook(final String entityName,
-            final String actionName) {
+    public static HookResource createNewWithoutHook(final String entityName, final String actionName) {
         return new HookResource(null, entityName, actionName);
     }
 
-    private HookResource(final Hook hook, final String entityName,
-            final String actionName) {
+    private HookResource(final Hook hook, final String entityName, final String actionName) {
         this.hook = hook;
         this.entityName = entityName;
         this.actionName = actionName;

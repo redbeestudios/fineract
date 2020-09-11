@@ -26,15 +26,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.fineract.infrastructure.core.domain.AbstractAuditableCustom;
 import org.apache.fineract.organisation.staff.domain.Staff;
-import org.apache.fineract.useradministration.domain.AppUser;
 import org.joda.time.LocalDate;
 
 @Entity
 @Table(name = "m_savings_officer_assignment_history")
-public class SavingsOfficerAssignmentHistory extends AbstractAuditableCustom<AppUser, Long> {
+public class SavingsOfficerAssignmentHistory extends AbstractAuditableCustom {
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
@@ -112,7 +111,7 @@ public class SavingsOfficerAssignmentHistory extends AbstractAuditableCustom<App
     }
 
     public LocalDate getEndDate() {
-        return (LocalDate) ObjectUtils.defaultIfNull(new LocalDate(this.endDate), null);
+        return ObjectUtils.defaultIfNull(new LocalDate(this.endDate), null);
     }
 
 }

@@ -33,16 +33,20 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 @SuppressWarnings("unused")
-public class TrustModifier {
+public final class TrustModifier {
+
+    private TrustModifier() {
+
+    }
 
     private static final TrustingHostnameVerifier TRUSTING_HOSTNAME_VERIFIER = new TrustingHostnameVerifier();
     private static SSLSocketFactory factory;
 
     /**
-     * Call this with any HttpURLConnection, and it will modify the trust
-     * settings if it is an HTTPS connection.
+     * Call this with any HttpURLConnection, and it will modify the trust settings if it is an HTTPS connection.
      */
-    public static void relaxHostChecking(final HttpURLConnection conn) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+    public static void relaxHostChecking(final HttpURLConnection conn)
+            throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
         if (conn instanceof HttpsURLConnection) {
             final HttpsURLConnection httpsConnection = (HttpsURLConnection) conn;
@@ -52,8 +56,8 @@ public class TrustModifier {
         }
     }
 
-    static synchronized SSLSocketFactory prepFactory(final HttpsURLConnection httpsConnection) throws NoSuchAlgorithmException,
-            KeyStoreException, KeyManagementException {
+    static synchronized SSLSocketFactory prepFactory(final HttpsURLConnection httpsConnection)
+            throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 
         if (factory == null) {
             final SSLContext ctx = SSLContext.getInstance("TLS");

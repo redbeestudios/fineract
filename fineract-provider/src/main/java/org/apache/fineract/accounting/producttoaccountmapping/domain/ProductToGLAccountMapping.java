@@ -32,9 +32,9 @@ import org.apache.fineract.portfolio.paymenttype.domain.PaymentType;
 @Entity
 @Table(name = "acc_product_mapping", uniqueConstraints = { @UniqueConstraint(columnNames = { "product_id", "product_type",
         "financial_account_type", "payment_type" }, name = "financial_action") })
-public class ProductToGLAccountMapping extends AbstractPersistableCustom<Long> {
+public class ProductToGLAccountMapping extends AbstractPersistableCustom {
 
-    @ManyToOne(optional=true)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "gl_account_id")
     private GLAccount glAccount;
 
@@ -64,17 +64,18 @@ public class ProductToGLAccountMapping extends AbstractPersistableCustom<Long> {
         //
     }
 
-    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType, final int financialAccountType) {
+    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType,
+            final int financialAccountType) {
         this(glAccount, productId, productType, financialAccountType, null, null);
     }
 
-    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType,
-            final int financialAccountType, final Charge charge) {
+    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType, final int financialAccountType,
+            final Charge charge) {
         this(glAccount, productId, productType, financialAccountType, null, charge);
     }
 
-    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType,
-            final int financialAccountType, final PaymentType paymentType) {
+    public ProductToGLAccountMapping(final GLAccount glAccount, final Long productId, final int productType, final int financialAccountType,
+            final PaymentType paymentType) {
         this(glAccount, productId, productType, financialAccountType, paymentType, null);
     }
 

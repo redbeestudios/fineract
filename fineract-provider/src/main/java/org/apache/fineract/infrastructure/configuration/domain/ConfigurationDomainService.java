@@ -92,4 +92,10 @@ public interface ConfigurationDomainService {
     Integer retrieveOTPCharacterLength();
 
     Integer retrieveOTPLiveTime();
+
+    boolean isSubRatesEnabled();
+
+    boolean isFirstRepaymentDateAfterRescheduleAllowedOnHoliday();
+
+    boolean isInterestToBeAppropriatedEquallyWhenGreaterThanEMI();
 }

@@ -28,18 +28,18 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_hook_templates")
-public class HookTemplate extends AbstractPersistableCustom<Long> {
+public class HookTemplate extends AbstractPersistableCustom {
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "template", orphanRemoval = true, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "template", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Schema> fields = new HashSet<>();
 
     private HookTemplate(final String name) {

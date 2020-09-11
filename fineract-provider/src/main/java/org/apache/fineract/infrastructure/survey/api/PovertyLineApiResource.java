@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.infrastructure.survey.api;
 
-import io.swagger.annotations.Api;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -37,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Path("/povertyLine")
 @Component
 @Scope("singleton")
-@Api(value = "Poverty Line")
+
 public class PovertyLineApiResource {
 
     private final DefaultToApiJsonSerializer<PpiPovertyLineData> toApiJsonSerializer;
@@ -49,7 +48,8 @@ public class PovertyLineApiResource {
 
     @Autowired
     PovertyLineApiResource(final PlatformSecurityContext context, final DefaultToApiJsonSerializer<PpiPovertyLineData> toApiJsonSerializer,
-            final PovertyLineService readService, final DefaultToApiJsonSerializer<LikeliHoodPovertyLineData> likelihoodToApiJsonSerializer) {
+            final PovertyLineService readService,
+            final DefaultToApiJsonSerializer<LikeliHoodPovertyLineData> likelihoodToApiJsonSerializer) {
 
         this.context = context;
         this.toApiJsonSerializer = toApiJsonSerializer;

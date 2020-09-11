@@ -28,7 +28,7 @@ import org.apache.fineract.portfolio.charge.domain.Charge;
 
 @Entity
 @Table(name = "m_loan_tranche_charges")
-public class LoanTrancheCharge extends AbstractPersistableCustom<Long> {
+public class LoanTrancheCharge extends AbstractPersistableCustom {
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "loan_id", nullable = false)
@@ -43,21 +43,23 @@ public class LoanTrancheCharge extends AbstractPersistableCustom<Long> {
     }
 
     LoanTrancheCharge(Charge chargeDefinition) {
-        this.charge = chargeDefinition ;
+        this.charge = chargeDefinition;
     }
+
     public LoanTrancheCharge(Charge charge, Loan loan) {
         this.charge = charge;
-        this.loan = loan ;
+        this.loan = loan;
     }
 
     public static LoanTrancheCharge createLoanTrancheCharge(Charge chargeDefinition) {
-        return new LoanTrancheCharge(chargeDefinition) ;
+        return new LoanTrancheCharge(chargeDefinition);
     }
+
     public static LoanTrancheCharge createLoanTrancheChargeWithLoan(Charge chargeDefinition, Loan loan) {
-        return new LoanTrancheCharge(chargeDefinition, loan) ;
+        return new LoanTrancheCharge(chargeDefinition, loan);
     }
 
     public Charge getCharge() {
-        return charge ;
+        return charge;
     }
 }

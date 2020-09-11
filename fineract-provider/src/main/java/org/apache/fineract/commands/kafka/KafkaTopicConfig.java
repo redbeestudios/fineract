@@ -28,22 +28,12 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic topicClients(
-            @Value("${kafka.partitions}") int partitions,
-            @Value("${kafka.replicas}") int replicas) {
-        return TopicBuilder.name(KafkaTopicConstants.TOPIC_CLIENTS)
-                .partitions(partitions)
-                .replicas(replicas)
-                .build();
+    public NewTopic topicClients(@Value("${kafka.partitions}") int partitions, @Value("${kafka.replicas}") int replicas) {
+        return TopicBuilder.name(KafkaTopicConstants.TOPIC_CLIENTS).partitions(partitions).replicas(replicas).build();
     }
 
     @Bean
-    public NewTopic topicDeathLetters(
-            @Value("${kafka.partitions}") int partitions,
-            @Value("${kafka.replicas}") int replicas) {
-        return TopicBuilder.name(KafkaTopicConstants.TOPIC_DEATH_LETTER)
-                .partitions(partitions)
-                .replicas(replicas)
-                .build();
+    public NewTopic topicDeathLetters(@Value("${kafka.partitions}") int partitions, @Value("${kafka.replicas}") int replicas) {
+        return TopicBuilder.name(KafkaTopicConstants.TOPIC_DEATH_LETTER).partitions(partitions).replicas(replicas).build();
     }
 }

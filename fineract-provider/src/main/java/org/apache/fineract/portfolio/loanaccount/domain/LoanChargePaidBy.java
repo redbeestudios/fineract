@@ -29,13 +29,13 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_loan_charge_paid_by")
-public class LoanChargePaidBy extends AbstractPersistableCustom<Long> {
+public class LoanChargePaidBy extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "loan_transaction_id", nullable = false)
     private LoanTransaction loanTransaction;
 
-    @ManyToOne(cascade= CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "loan_charge_id", nullable = false)
     private LoanCharge loanCharge;
 
@@ -80,7 +80,6 @@ public class LoanChargePaidBy extends AbstractPersistableCustom<Long> {
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
-
 
     public Integer getInstallmentNumber() {
         return this.installmentNumber;

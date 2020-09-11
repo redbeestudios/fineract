@@ -25,8 +25,7 @@ public enum ClientIdentifierStatus {
 
     INACTIVE(100, "clientIdentifierStatusType.inactive"), //
     ACTIVE(200, "clientIdentifierStatusType.active"), //
-    INVALID(0,"clientIdentifierStatusType.invalid");
-
+    INVALID(0, "clientIdentifierStatusType.invalid");
 
     private final Integer value;
     private final String code;
@@ -45,14 +44,14 @@ public enum ClientIdentifierStatus {
         return enumeration;
     }
 
-    private ClientIdentifierStatus(final Integer value, final String code) {
+    ClientIdentifierStatus(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }
 
-//    public boolean hasStateOf(final ClientIdentifierStatus state) {
-//        return this.value.equals(state.getValue());
-//    }
+    // public boolean hasStateOf(final ClientIdentifierStatus state) {
+    // return this.value.equals(state.getValue());
+    // }
 
     public Integer getValue() {
         return this.value;

@@ -54,7 +54,8 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class LoanSchedularServiceImpl implements LoanSchedularService {
 
-    private final static Logger logger = LoggerFactory.getLogger(LoanSchedularServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoanSchedularServiceImpl.class);
+
     private final ConfigurationDomainService configurationDomainService;
     private final LoanReadPlatformService loanReadPlatformService;
     private final LoanWritePlatformService loanWritePlatformService;
@@ -63,14 +64,13 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
 
     @Autowired
     public LoanSchedularServiceImpl(final ConfigurationDomainService configurationDomainService,
-                                    final LoanReadPlatformService loanReadPlatformService, final LoanWritePlatformService loanWritePlatformService,
-                                    final OfficeReadPlatformService officeReadPlatformService,
-                                    final ApplicationContext applicationContext) {
+            final LoanReadPlatformService loanReadPlatformService, final LoanWritePlatformService loanWritePlatformService,
+            final OfficeReadPlatformService officeReadPlatformService, final ApplicationContext applicationContext) {
         this.configurationDomainService = configurationDomainService;
         this.loanReadPlatformService = loanReadPlatformService;
         this.loanWritePlatformService = loanWritePlatformService;
         this.officeReadPlatformService = officeReadPlatformService;
-        this.applicationContext=applicationContext;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -80,10 +80,9 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
         final Long penaltyWaitPeriodValue = this.configurationDomainService.retrievePenaltyWaitPeriod();
         final Boolean backdatePenalties = this.configurationDomainService.isBackdatePenaltiesEnabled();
         final Collection<OverdueLoanScheduleData> overdueLoanScheduledInstallments = this.loanReadPlatformService
-                .retrieveAllLoansWithOverdueInstallments(penaltyWaitPeriodValue,backdatePenalties);
+                .retrieveAllLoansWithOverdueInstallments(penaltyWaitPeriodValue, backdatePenalties);
 
         if (!overdueLoanScheduledInstallments.isEmpty()) {
-            final StringBuilder sb = new StringBuilder();
             final Map<Long, Collection<OverdueLoanScheduleData>> overdueScheduleData = new HashMap<>();
             for (final OverdueLoanScheduleData overdueInstallment : overdueLoanScheduledInstallments) {
                 if (overdueScheduleData.containsKey(overdueInstallment.getLoanId())) {
@@ -95,6 +94,7 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
                 }
             }
 
+            List<Throwable> exceptions = new ArrayList<>();
             for (final Long loanId : overdueScheduleData.keySet()) {
                 try {
                     this.loanWritePlatformService.applyOverdueChargesForLoan(loanId, overdueScheduleData.get(loanId));
@@ -102,99 +102,74 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
                 } catch (final PlatformApiDataValidationException e) {
                     final List<ApiParameterError> errors = e.getErrors();
                     for (final ApiParameterError error : errors) {
-                        logger.error("Apply Charges due for overdue loans failed for account:" + loanId + " with message "
-                                + error.getDeveloperMessage());
-                        sb.append("Apply Charges due for overdue loans failed for account:").append(loanId).append(" with message ")
-                                .append(error.getDeveloperMessage());
+                        LOG.error("Apply Charges due for overdue loans failed for account {} with message: {}", loanId,
+                                error.getDeveloperMessage(), e);
                     }
-                } catch (final AbstractPlatformDomainRuleException ex) {
-                    logger.error("Apply Charges due for overdue loans failed for account:" + loanId + " with message "
-                            + ex.getDefaultUserMessage());
-                    sb.append("Apply Charges due for overdue loans failed for account:").append(loanId).append(" with message ")
-                            .append(ex.getDefaultUserMessage());
+                    exceptions.add(e);
+                } catch (final AbstractPlatformDomainRuleException e) {
+                    LOG.error("Apply Charges due for overdue loans failed for account {} with message: {}", loanId,
+                            e.getDefaultUserMessage(), e);
+                    exceptions.add(e);
                 } catch (Exception e) {
-                    Throwable realCause = e;
-                    if (e.getCause() != null) {
-                        realCause = e.getCause();
-                    }
-                    logger.error("Apply Charges due for overdue loans failed for account:" + loanId + " with message "
-                            + realCause.getMessage());
-                    sb.append("Apply Charges due for overdue loans failed for account:").append(loanId).append(" with message ")
-                            .append(realCause.getMessage());
+                    LOG.error("Apply Charges due for overdue loans failed for account {}", loanId, e);
+                    exceptions.add(e);
                 }
             }
-            if (sb.length() > 0) { throw new JobExecutionException(sb.toString()); }
+            if (!exceptions.isEmpty()) {
+                throw new JobExecutionException(exceptions);
+            }
         }
     }
 
     @Override
     @CronTarget(jobName = JobName.RECALCULATE_INTEREST_FOR_LOAN)
     public void recalculateInterest() throws JobExecutionException {
-        Integer maxNumberOfRetries = ThreadLocalContextUtil.getTenant()
-                .getConnection().getMaxRetriesOnDeadlock();
-        Integer maxIntervalBetweenRetries = ThreadLocalContextUtil.getTenant()
-                .getConnection().getMaxIntervalBetweenRetries();
-        Collection<Long> loanIds = this.loanReadPlatformService
-                .fetchLoansForInterestRecalculation();
+        Integer maxNumberOfRetries = ThreadLocalContextUtil.getTenant().getConnection().getMaxRetriesOnDeadlock();
+        Integer maxIntervalBetweenRetries = ThreadLocalContextUtil.getTenant().getConnection().getMaxIntervalBetweenRetries();
+        Collection<Long> loanIds = this.loanReadPlatformService.fetchLoansForInterestRecalculation();
         int i = 0;
         if (!loanIds.isEmpty()) {
-            final StringBuilder sb = new StringBuilder();
+            List<Throwable> errors = new ArrayList<>();
             for (Long loanId : loanIds) {
-                logger.info("Loan ID " + loanId);
+                LOG.info("recalculateInterest: Loan ID = {}", loanId);
                 Integer numberOfRetries = 0;
                 while (numberOfRetries <= maxNumberOfRetries) {
                     try {
-                        this.loanWritePlatformService
-                                .recalculateInterest(loanId);
+                        this.loanWritePlatformService.recalculateInterest(loanId);
                         numberOfRetries = maxNumberOfRetries + 1;
-                    } catch (CannotAcquireLockException
-                            | ObjectOptimisticLockingFailureException exception) {
-                        logger.info("Recalulate interest job has been retried  "
-                                + numberOfRetries + " time(s)");
-                        /***
-                         * Fail if the transaction has been retired for
-                         * maxNumberOfRetries
-                         **/
+                    } catch (CannotAcquireLockException | ObjectOptimisticLockingFailureException exception) {
+                        LOG.info("Recalulate interest job has been retried {} time(s)", numberOfRetries);
+                        // Fail if the transaction has been retried for
+                        // maxNumberOfRetries
                         if (numberOfRetries >= maxNumberOfRetries) {
-                            logger.warn("Recalulate interest job has been retried for the max allowed attempts of "
-                                    + numberOfRetries
-                                    + " and will be rolled back");
-                            sb.append("Recalulate interest job has been retried for the max allowed attempts of "
-                                    + numberOfRetries
-                                    + " and will be rolled back");
+                            LOG.error("Recalulate interest job has been retried for the max allowed attempts of {} and will be rolled back",
+                                    numberOfRetries);
+                            errors.add(exception);
                             break;
                         }
-                        /***
-                         * Else sleep for a random time (between 1 to 10
-                         * seconds) and continue
-                         **/
+                        // Else sleep for a random time (between 1 to 10
+                        // seconds) and continue
                         try {
                             Random random = new Random();
-                            int randomNum = random
-                                    .nextInt(maxIntervalBetweenRetries + 1);
+                            int randomNum = random.nextInt(maxIntervalBetweenRetries + 1);
                             Thread.sleep(1000 + (randomNum * 1000));
                             numberOfRetries = numberOfRetries + 1;
                         } catch (InterruptedException e) {
-                            sb.append("Interest recalculation for loans failed " + exception.getMessage()) ;
+                            LOG.error("Interest recalculation for loans retry failed due to InterruptedException", e);
+                            errors.add(e);
                             break;
                         }
                     } catch (Exception e) {
-                        Throwable realCause = e;
-                        if (e.getCause() != null) {
-                            realCause = e.getCause();
-                        }
-                        logger.error("Interest recalculation for loans failed for account:"    + loanId + " with message "
-                                + realCause.getMessage());
-                        sb.append("Interest recalculation for loans failed for account:").append(loanId).append(" with message ")
-                                .append(realCause.getMessage());
+                        LOG.error("Interest recalculation for loans failed for account {}", loanId, e);
                         numberOfRetries = maxNumberOfRetries + 1;
+                        errors.add(e);
                     }
                     i++;
                 }
-                logger.info("Loans count " + i);
+                LOG.info("recalculateInterest: Loans count {}", i);
             }
-            if (sb.length() > 0) {
-                throw new JobExecutionException(sb.toString());
+            if (!errors.isEmpty()) {
+                throw new JobExecutionException(errors);
             }
         }
 
@@ -203,98 +178,100 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
     @Override
     @CronTarget(jobName = JobName.RECALCULATE_INTEREST_FOR_LOAN)
     public void recalculateInterest(Map<String, String> jobParameters) {
-        //gets the officeId
+        // gets the officeId
         final String officeId = jobParameters.get("officeId");
-        logger.info(officeId);
-        Long officeIdLong=Long.valueOf(officeId);
-        //gets the Office object
-        final OfficeData office = this.officeReadPlatformService.retrieveOffice(officeIdLong);
-        if(office == null)
-            throw new OfficeNotFoundException(officeIdLong);
-        final int threadPoolSize=Integer.parseInt(jobParameters.get("thread-pool-size"));
-        final int batchSize=Integer.parseInt(jobParameters.get("batch-size"));
+        LOG.info("recalculateInterest: officeId={}", officeId);
+        Long officeIdLong = Long.valueOf(officeId);
 
-        recalculateInterest(office,threadPoolSize,batchSize);
+        // gets the Office object
+        final OfficeData office = this.officeReadPlatformService.retrieveOffice(officeIdLong);
+        if (office == null) {
+            throw new OfficeNotFoundException(officeIdLong);
+        }
+        final int threadPoolSize = Integer.parseInt(jobParameters.get("thread-pool-size"));
+        final int batchSize = Integer.parseInt(jobParameters.get("batch-size"));
+
+        recalculateInterest(office, threadPoolSize, batchSize);
     }
 
-    @Override
-    public void recalculateInterest(OfficeData office, int threadPoolSize, int batchSize) {
+    private void recalculateInterest(OfficeData office, int threadPoolSize, int batchSize) {
         final int pageSize = batchSize * threadPoolSize;
 
-        //initialise the executor service with fetched configurations
+        // initialise the executor service with fetched configurations
         final ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         Long maxLoanIdInList = 0L;
         final String officeHierarchy = office.getHierarchy() + "%";
 
-        //Get the loanIds from service
-        List<Long> loanIds = Collections.synchronizedList(this.loanReadPlatformService
-                .fetchLoansForInterestRecalculation(pageSize, maxLoanIdInList, officeHierarchy));
+        // get the loanIds from service
+        List<Long> loanIds = Collections.synchronizedList(
+                this.loanReadPlatformService.fetchLoansForInterestRecalculation(pageSize, maxLoanIdInList, officeHierarchy));
 
-
-        // gets the loanIds data set iteratively and call addAccuruals for that paginated dataset
+        // gets the loanIds data set iteratively and call addAccuruals for that
+        // paginated dataset
         do {
             int totalFilteredRecords = loanIds.size();
-            logger.info("Starting accrual - total filtered records - " + totalFilteredRecords);
-            recalculateInterest(loanIds, threadPoolSize, batchSize,
-                    executorService);
-            maxLoanIdInList+= pageSize+1;
-            loanIds = Collections.synchronizedList(this.loanReadPlatformService
-                    .fetchLoansForInterestRecalculation(pageSize, maxLoanIdInList, officeHierarchy));
+            LOG.info("Starting accrual - total filtered records - {}", totalFilteredRecords);
+            recalculateInterest(loanIds, threadPoolSize, batchSize, executorService);
+            maxLoanIdInList += pageSize + 1;
+            loanIds = Collections.synchronizedList(
+                    this.loanReadPlatformService.fetchLoansForInterestRecalculation(pageSize, maxLoanIdInList, officeHierarchy));
         } while (!CollectionUtils.isEmpty(loanIds));
 
-        //shutdown the executor when done
+        // shutdown the executor when done
         executorService.shutdownNow();
     }
 
-    private void recalculateInterest(List<Long> loanIds,
-                                     int threadPoolSize, int batchSize, final ExecutorService executorService) {
-        //StringBuilder sb = new StringBuilder();
+    private void recalculateInterest(List<Long> loanIds, int threadPoolSize, int batchSize, final ExecutorService executorService) {
 
-        List<Callable<Object>> posters = new ArrayList<Callable<Object>>();
+        List<Callable<Void>> posters = new ArrayList<>();
         int fromIndex = 0;
         // get the size of current paginated dataset
         int size = loanIds.size();
-        //calculate the batch size
-        double toGetCeilValue = (double) (size / threadPoolSize);
+        // calculate the batch size
+        double toGetCeilValue = size / threadPoolSize;
         batchSize = (int) Math.ceil(toGetCeilValue);
 
-        if(batchSize == 0)
+        if (batchSize == 0) {
             return;
+        }
 
-        int toIndex = (batchSize > size - 1)? size : batchSize ;
-        while(toIndex < size && loanIds.get(toIndex - 1).equals(loanIds.get(toIndex))) {
-            toIndex ++;
+        int toIndex = (batchSize > size - 1) ? size : batchSize;
+        while (toIndex < size && loanIds.get(toIndex - 1).equals(loanIds.get(toIndex))) {
+            toIndex++;
         }
         boolean lastBatch = false;
-        int loopCount = size/batchSize+1;
+        int loopCount = size / batchSize + 1;
 
-        for (long i=0; i < loopCount; i++) {
+        for (long i = 0; i < loopCount; i++) {
             List<Long> subList = safeSubList(loanIds, fromIndex, toIndex);
             RecalculateInterestPoster poster = (RecalculateInterestPoster) this.applicationContext.getBean("recalculateInterestPoster");
             poster.setLoanIds(subList);
             poster.setLoanWritePlatformService(loanWritePlatformService);
-            posters.add(Executors.callable(poster));
-            if(lastBatch)
+            posters.add(poster);
+            if (lastBatch) {
                 break;
-            if(toIndex + batchSize > size - 1)
+            }
+            if (toIndex + batchSize > size - 1) {
                 lastBatch = true;
+            }
             fromIndex = fromIndex + (toIndex - fromIndex);
-            toIndex = (toIndex + batchSize > size - 1)? size : toIndex + batchSize;
-            while(toIndex < size && loanIds.get(toIndex - 1).equals(loanIds.get(toIndex))) {
-                toIndex ++;
+            toIndex = (toIndex + batchSize > size - 1) ? size : toIndex + batchSize;
+            while (toIndex < size && loanIds.get(toIndex - 1).equals(loanIds.get(toIndex))) {
+                toIndex++;
             }
         }
 
         try {
-            List<Future<Object>> responses = executorService.invokeAll(posters);
+            List<Future<Void>> responses = executorService.invokeAll(posters);
             checkCompletion(responses);
         } catch (InterruptedException e1) {
-            logger.error("Interrupted while recalculateInterest", e1);
+            LOG.error("Interrupted while recalculateInterest", e1);
         }
     }
-    //break the lists into sub lists
-    public <T> List<T> safeSubList(List<T> list, int fromIndex, int toIndex) {
+
+    // break the lists into sub lists
+    private <T> List<T> safeSubList(List<T> list, int fromIndex, int toIndex) {
         int size = list.size();
         if (fromIndex >= size || toIndex <= 0 || fromIndex >= toIndex) {
             return Collections.emptyList();
@@ -305,30 +282,28 @@ public class LoanSchedularServiceImpl implements LoanSchedularService {
 
         return list.subList(fromIndex, toIndex);
     }
-    //checks the execution of task by each thread in the executor service
-    private void checkCompletion(List<Future<Object>> responses) {
+
+    // checks the execution of task by each thread in the executor service
+    private void checkCompletion(List<Future<Void>> responses) {
         try {
-            for(Future f : responses) {
+            for (Future<Void> f : responses) {
                 f.get();
             }
             boolean allThreadsExecuted = false;
             int noOfThreadsExecuted = 0;
-            for (Future<Object> future : responses) {
+            for (Future<Void> future : responses) {
                 if (future.isDone()) {
                     noOfThreadsExecuted++;
                 }
             }
             allThreadsExecuted = noOfThreadsExecuted == responses.size();
-            if(!allThreadsExecuted)
-                logger.error("All threads could not execute.");
+            if (!allThreadsExecuted) {
+                LOG.error("All threads could not execute.");
+            }
         } catch (InterruptedException e1) {
-            logger.error("Interrupted while posting IR entries", e1);
-        }  catch (ExecutionException e2) {
-            logger.error("Execution exception while posting IR entries", e2);
+            LOG.error("Interrupted while posting IR entries", e1);
+        } catch (ExecutionException e2) {
+            LOG.error("Execution exception while posting IR entries", e2);
         }
     }
-
-
-
-
 }

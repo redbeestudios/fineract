@@ -1,1 +1,1 @@
-pipelinefineract(AppId: 'fineract-server', builderImage: 'registry.dev.redbee.io/waas-gradle-builder:1.4', baseImage: 'was-tomcat7.0.94:1.0', dockerfile: 'Dockerfile.fineract', namespace: 'development')
+pipelinefineract(AppId: 'fineract-server', builderImage: 'registry.dev.redbee.io/waas-gradle-6-6-builder:11', baseImage: '11.0.5-jdk-slim', dockerfile: 'Dockerfile.fineract', namespace: 'development')

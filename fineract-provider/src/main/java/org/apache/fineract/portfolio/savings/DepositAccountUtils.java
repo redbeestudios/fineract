@@ -22,8 +22,16 @@ import org.apache.fineract.portfolio.calendar.domain.CalendarFrequencyType;
 import org.apache.fineract.portfolio.calendar.service.CalendarUtils;
 import org.apache.fineract.portfolio.common.domain.PeriodFrequencyType;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class DepositAccountUtils {
+public final class DepositAccountUtils {
+
+    private DepositAccountUtils() {
+
+    }
+
+    private static final Logger LOG = LoggerFactory.getLogger(DepositAccountUtils.class);
 
     public static final int GENERATE_MINIMUM_NUMBER_OF_FUTURE_INSTALMENTS = 5;
 
@@ -45,6 +53,9 @@ public class DepositAccountUtils {
                 nextDepositDate = lastDepositDate.plusYears(recurringEvery);
             break;
             case INVALID:
+            break;
+            case WHOLE_TERM:
+                LOG.error("TODO Implement calculateNextDepositDate for WHOLE_TERM");
             break;
         }
         return nextDepositDate;

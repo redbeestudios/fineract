@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.persistence.PersistenceException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.fineract.infrastructure.campaigns.sms.data.SmsProviderData;
 import org.apache.fineract.infrastructure.campaigns.sms.domain.SmsCampaign;
 import org.apache.fineract.infrastructure.campaigns.sms.service.SmsCampaignDropdownReadPlatformService;
@@ -65,6 +65,7 @@ import org.apache.fineract.useradministration.exception.RoleNotFoundException;
 import org.apache.fineract.useradministration.service.AppUserReadPlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -94,7 +95,7 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
             final UserDomainService userDomainService, final GmailBackedPlatformEmailService gmailBackedPlatformEmailService,
             final SmsMessageRepository smsMessageRepository, SmsMessageScheduledJobService smsMessageScheduledJobService,
             final SmsCampaignDropdownReadPlatformService smsCampaignDropdownReadPlatformService,
-            final AppUserReadPlatformService appUserReadPlatformService,final RoleRepository roleRepository) {
+            final AppUserReadPlatformService appUserReadPlatformService, final RoleRepository roleRepository) {
         this.selfServiceRegistrationRepository = selfServiceRegistrationRepository;
         this.fromApiJsonHelper = fromApiJsonHelper;
         this.selfServiceRegistrationReadPlatformService = selfServiceRegistrationReadPlatformService;
@@ -190,9 +191,11 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
 
     private void sendAuthorizationMessage(SelfServiceRegistration selfServiceRegistration) {
         Collection<SmsProviderData> smsProviders = this.smsCampaignDropdownReadPlatformService.retrieveSmsProviders();
-        if (smsProviders.isEmpty()) { throw new PlatformDataIntegrityException("error.msg.mobile.service.provider.not.available",
-                "Mobile service provider not available."); }
-        Long providerId = (new ArrayList<>(smsProviders)).get(0).getId();
+        if (smsProviders.isEmpty()) {
+            throw new PlatformDataIntegrityException("error.msg.mobile.service.provider.not.available",
+                    "Mobile service provider not available.");
+        }
+        Long providerId = new ArrayList<>(smsProviders).get(0).getId();
         final String message = "Hi  " + selfServiceRegistration.getFirstName() + "," + "\n"
                 + "To create user, please use following details \n" + "Request Id : " + selfServiceRegistration.getId()
                 + "\n Authentication Token : " + selfServiceRegistration.getAuthenticationToken();
@@ -218,12 +221,16 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
         this.gmailBackedPlatformEmailService.sendDefinedEmail(emailDetail);
     }
 
-    private void throwExceptionIfValidationError(final List<ApiParameterError> dataValidationErrors, String accountNumber,
-            String firstName, String lastName, String mobileNumber, boolean isEmailAuthenticationMode) {
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+    private void throwExceptionIfValidationError(final List<ApiParameterError> dataValidationErrors, String accountNumber, String firstName,
+            String lastName, String mobileNumber, boolean isEmailAuthenticationMode) {
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
         boolean isClientExist = this.selfServiceRegistrationReadPlatformService.isClientExist(accountNumber, firstName, lastName,
                 mobileNumber, isEmailAuthenticationMode);
-        if (!isClientExist) { throw new ClientNotFoundException(); }
+        if (!isClientExist) {
+            throw new ClientNotFoundException();
+        }
     }
 
     public static String randomAuthorizationTokenGeneration() {
@@ -252,11 +259,15 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
             baseDataValidator.reset().parameter(SelfServiceApiConstants.authenticationTokenParamName).value(authenticationToken).notBlank()
                     .notNull().notExceedingLengthOf(100);
 
-            if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+            if (!dataValidationErrors.isEmpty()) {
+                throw new PlatformApiDataValidationException(dataValidationErrors);
+            }
 
-            SelfServiceRegistration selfServiceRegistration = this.selfServiceRegistrationRepository.getRequestByIdAndAuthenticationToken(
-                    id, authenticationToken);
-            if (selfServiceRegistration == null) { throw new SelfServiceRegistrationNotFoundException(id, authenticationToken); }
+            SelfServiceRegistration selfServiceRegistration = this.selfServiceRegistrationRepository
+                    .getRequestByIdAndAuthenticationToken(id, authenticationToken);
+            if (selfServiceRegistration == null) {
+                throw new SelfServiceRegistrationNotFoundException(id, authenticationToken);
+            }
             username = selfServiceRegistration.getUsername();
             Client client = selfServiceRegistration.getClient();
             final boolean passwordNeverExpire = true;
@@ -265,9 +276,9 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
             authorities.add(new SimpleGrantedAuthority("DUMMY_ROLE_NOT_USED_OR_PERSISTED_TO_AVOID_EXCEPTION"));
             final Set<Role> allRoles = new HashSet<>();
             Role role = this.roleRepository.getRoleByName(SelfServiceApiConstants.SELF_SERVICE_USER_ROLE);
-            if(role != null){
+            if (role != null) {
                 allRoles.add(role);
-            }else{
+            } else {
                 throw new RoleNotFoundException(SelfServiceApiConstants.SELF_SERVICE_USER_ROLE);
             }
             List<Client> clients = new ArrayList<>(Arrays.asList(client));
@@ -277,7 +288,7 @@ public class SelfServiceRegistrationWritePlatformServiceImpl implements SelfServ
             this.userDomainService.create(appUser, true);
             return appUser;
 
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleDataIntegrityIssues(command, dve.getMostSpecificCause(), dve, username);
             return null;
         } catch (final PersistenceException | AuthenticationServiceException dve) {

@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.organisation.office.api;
 
-import io.swagger.annotations.Api;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,12 +49,12 @@ import org.springframework.stereotype.Component;
 @Path("/officetransactions")
 @Component
 @Scope("singleton")
-@Api(value = "officetransactions", description = "")
+
 public class OfficeTransactionsApiResource {
 
-    private static final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(Arrays.asList("id", "transactionDate", "fromOfficeId",
-            "fromOfficeName", "toOfficeId", "toOfficeIdName", "currencyCode", "digitsAfterDecimal", "inMultiplesOf", "transactionAmount",
-            "description", "allowedOffices", "currencyOptions"));
+    private static final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(
+            Arrays.asList("id", "transactionDate", "fromOfficeId", "fromOfficeName", "toOfficeId", "toOfficeIdName", "currencyCode",
+                    "digitsAfterDecimal", "inMultiplesOf", "transactionAmount", "description", "allowedOffices", "currencyOptions"));
 
     private final String resourceNameForReadPermissions = "OFFICE";
 

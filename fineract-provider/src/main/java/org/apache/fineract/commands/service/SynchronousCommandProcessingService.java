@@ -18,6 +18,7 @@
  */
 package org.apache.fineract.commands.service;
 
+import java.util.Map;
 import org.apache.fineract.commands.data.FineractEventData;
 import org.apache.fineract.commands.domain.CommandSource;
 import org.apache.fineract.commands.domain.CommandSourceRepository;
@@ -46,9 +47,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Optional;
-
 @Service
 public class SynchronousCommandProcessingService implements CommandProcessingService {
 
@@ -64,11 +62,10 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
 
     @Autowired
     public SynchronousCommandProcessingService(final PlatformSecurityContext context, final ApplicationContext applicationContext,
-                                               final ToApiJsonSerializer<Map<String, Object>> toApiJsonSerializer,
-                                               final ToApiJsonSerializer<CommandProcessingResult> toApiResultJsonSerializer,
-                                               final CommandSourceRepository commandSourceRepository, final ConfigurationDomainService configurationDomainService,
-                                               final CommandHandlerProvider commandHandlerProvider,
-                                               @Qualifier("custom-kafka-producer") final KafkaProducer kafkaProducer) {
+            final ToApiJsonSerializer<Map<String, Object>> toApiJsonSerializer,
+            final ToApiJsonSerializer<CommandProcessingResult> toApiResultJsonSerializer,
+            final CommandSourceRepository commandSourceRepository, final ConfigurationDomainService configurationDomainService,
+            final CommandHandlerProvider commandHandlerProvider, @Qualifier("custom-kafka-producer") final KafkaProducer kafkaProducer) {
         this.context = context;
         this.context = context;
         this.applicationContext = applicationContext;
@@ -84,7 +81,7 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
     @Transactional
     @Override
     public CommandProcessingResult processAndLogCommand(final CommandWrapper wrapper, final JsonCommand command,
-                                                        final boolean isApprovedByChecker) {
+            final boolean isApprovedByChecker) {
 
         final boolean rollbackTransaction = this.configurationDomainService.isMakerCheckerEnabledForTask(wrapper.taskPermissionName());
 
@@ -122,23 +119,21 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
 
         if ((rollbackTransaction || result.isRollbackTransaction()) && !isApprovedByChecker) {
             /*
-             * JournalEntry will generate a new transactionId every time.
-             * Updating the transactionId with old transactionId, because as
-             * there are no entries are created with new transactionId, will
-             * throw an error when checker approves the transaction
+             * JournalEntry will generate a new transactionId every time. Updating the transactionId with old
+             * transactionId, because as there are no entries are created with new transactionId, will throw an error
+             * when checker approves the transaction
              */
             commandSourceResult.updateTransaction(command.getTransactionId());
             /*
-             * Update CommandSource json data with JsonCommand json data, line
-             * 77 and 81 may update the json data
+             * Update CommandSource json data with JsonCommand json data, line 77 and 81 may update the json data
              */
             commandSourceResult.updateJsonTo(command.json());
             throw new RollbackTransactionAsCommandIsNotApprovedByCheckerException(commandSourceResult);
         }
         result.setRollbackTransaction(null);
 
-        logger.debug("source:" + wrapper.getSource());
-        logger.debug("topicName:" + wrapper.getTopicName());
+        logger.debug("source: {}", wrapper.getSource());
+        logger.debug("topicName: {}", wrapper.getTopicName());
         if (shouldSendMessageToKafka(wrapper)) {
             publishKafkaEvent(wrapper, result);
         }
@@ -149,7 +144,8 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
     }
 
     private boolean shouldSendMessageToKafka(CommandWrapper wrapper) {
-        return wrapper.getSource() == null && wrapper.getTopicName() != null && !wrapper.getTopicName().equalsIgnoreCase(CommandWrapper.EMPTY_TOPIC);
+        return wrapper.getSource() == null && wrapper.getTopicName() != null
+                && !wrapper.getTopicName().equalsIgnoreCase(CommandWrapper.EMPTY_TOPIC);
     }
 
     @Transactional
@@ -232,8 +228,7 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
 
         final String authToken = ThreadLocalContextUtil.getAuthToken();
         final String tenantIdentifier = ThreadLocalContextUtil.getTenant().getTenantIdentifier();
-        final AppUser appUser = this.context.authenticatedUser(CommandWrapper.wrap(actionName,
-                entityName, null, null));
+        final AppUser appUser = this.context.authenticatedUser(CommandWrapper.wrap(actionName, entityName, null, null));
 
         final HookEventSource hookEventSource = new HookEventSource(entityName, actionName);
 
@@ -246,8 +241,9 @@ public class SynchronousCommandProcessingService implements CommandProcessingSer
 
     private void publishKafkaEvent(CommandWrapper request, CommandProcessingResult response) {
         final String tenantIdentifier = ThreadLocalContextUtil.getTenant().getTenantIdentifier();
-        logger.info("Sending message to " + request.getTopicName() + " .TenantId is " + tenantIdentifier);
-        kafkaProducer.sendMessage(request.getTopicName(), response.resourceId().toString(), new FineractEventData(request, response, tenantIdentifier));
+        logger.info("Sending message to {}. TenantId is {}", request.getTopicName(), tenantIdentifier);
+        kafkaProducer.sendMessage(request.getTopicName(), response.resourceId().toString(),
+                new FineractEventData(request, response, tenantIdentifier));
         logger.info("Finished sending message to kafka");
     }
 }

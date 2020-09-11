@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 public class FundsHelper {
 
-    public static class Builder {
+    public static final class Builder {
 
         private String name;
         private String externalId;
@@ -47,12 +47,11 @@ public class FundsHelper {
     private Long resourceId;
 
     FundsHelper() {
-        super();
+
     }
 
-    private FundsHelper(final String name,
-                        final String externalId) {
-        super();
+    private FundsHelper(final String name, final String externalId) {
+
         this.name = name;
         this.externalId = externalId;
     }
@@ -99,7 +98,7 @@ public class FundsHelper {
             return false;
         }
 
-        FundsHelper fh = (FundsHelper)o;
+        FundsHelper fh = (FundsHelper) o;
 
         if (this.name.equals(fh.name)) {
             return true;

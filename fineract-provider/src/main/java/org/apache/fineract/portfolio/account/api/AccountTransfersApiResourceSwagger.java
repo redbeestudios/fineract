@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.portfolio.account.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,109 +26,109 @@ import java.util.Set;
  * Created by Chirag Gupta on 12/16/17.
  */
 final class AccountTransfersApiResourceSwagger {
-    private AccountTransfersApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetAccountTransfersTemplateResponse")
-    public final static class GetAccountTransfersTemplateResponse {
-        private GetAccountTransfersTemplateResponse() {
-        }
+    private AccountTransfersApiResourceSwagger() {}
 
-        final class GetAccountTransfersFromOffice {
-            private GetAccountTransfersFromOffice() {
-            }
+    @Schema(description = "GetAccountTransfersTemplateResponse")
+    public static final class GetAccountTransfersTemplateResponse {
 
-            @ApiModelProperty(example = "1")
+        private GetAccountTransfersTemplateResponse() {}
+
+        static final class GetAccountTransfersFromOffice {
+
+            private GetAccountTransfersFromOffice() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String name;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String nameDecorated;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer externalId;
-            @ApiModelProperty(example = "[2009, 1, 1]")
+            @Schema(example = "[2009, 1, 1]")
             public LocalDate openingDate;
-            @ApiModelProperty(example = ".")
+            @Schema(example = ".")
             public String hierarchy;
         }
 
-        final class GetAccountTransfersFromAccountType {
-            private GetAccountTransfersFromAccountType() {
-            }
+        static final class GetAccountTransfersFromAccountType {
 
-            @ApiModelProperty(example = "2")
+            private GetAccountTransfersFromAccountType() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "accountType.savings")
+            @Schema(example = "accountType.savings")
             public String code;
-            @ApiModelProperty(example = "Savings Account")
-            public String value;
+            @Schema(example = "Savings Account")
+            public String description;
         }
 
-        final class GetAccountTransfersFromOfficeOptions {
-            private GetAccountTransfersFromOfficeOptions() {
-            }
+        static final class GetAccountTransfersFromOfficeOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersFromOfficeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String name;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String nameDecorated;
         }
 
-        final class GetAccountTransfersFromClientOptions {
-            private GetAccountTransfersFromClientOptions() {
-            }
+        static final class GetAccountTransfersFromClientOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersFromClientOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Small shop")
+            @Schema(example = "Small shop")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String officeName;
         }
 
-        final class GetAccountTransfersFromAccountTypeOptions {
-            private GetAccountTransfersFromAccountTypeOptions() {
-            }
+        static final class GetAccountTransfersFromAccountTypeOptions {
 
-            @ApiModelProperty(example = "2")
+            private GetAccountTransfersFromAccountTypeOptions() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "accountType.savings")
+            @Schema(example = "accountType.savings")
             public String code;
-            @ApiModelProperty(example = "Savings Account")
-            public String value;
+            @Schema(example = "Savings Account")
+            public String description;
         }
 
-        final class GetAccountTransfersToOfficeOptions {
-            private GetAccountTransfersToOfficeOptions() {
-            }
+        static final class GetAccountTransfersToOfficeOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersToOfficeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String name;
-            @ApiModelProperty(example = "HO")
+            @Schema(example = "HO")
             public String nameDecorated;
         }
 
-        final class GetAccountTransfersToAccountTypeOptions {
-            private GetAccountTransfersToAccountTypeOptions() {
-            }
+        static final class GetAccountTransfersToAccountTypeOptions {
 
-            @ApiModelProperty(example = "2")
+            private GetAccountTransfersToAccountTypeOptions() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "accountType.savings")
+            @Schema(example = "accountType.savings")
             public String code;
-            @ApiModelProperty(example = "Savings Account")
-            public String value;
+            @Schema(example = "Savings Account")
+            public String description;
         }
 
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Long transferAmount;
-        @ApiModelProperty(example = "[2013, 8, 15]")
+        @Schema(example = "[2013, 8, 15]")
         public LocalDate transferDate;
         public GetAccountTransfersFromOffice fromOffice;
         public GetAccountTransfersFromAccountType fromAccountType;
@@ -140,120 +139,119 @@ final class AccountTransfersApiResourceSwagger {
         public Set<GetAccountTransfersToAccountTypeOptions> toAccountTypeOptions;
     }
 
-    @ApiModel(value = "PostAccountTransfersRequest")
-    public final static class PostAccountTransfersRequest {
-        private PostAccountTransfersRequest() {
-        }
+    @Schema(description = "PostAccountTransfersRequest")
+    public static final class PostAccountTransfersRequest {
 
-        @ApiModelProperty(example = "1")
+        private PostAccountTransfersRequest() {}
+
+        @Schema(example = "1")
         public Integer fromOfficeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromClientId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer fromAccountType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromAccountId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer toOfficeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer toClientId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer toAccountType;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer toAccountId;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "01 August 2011")
+        @Schema(example = "01 August 2011")
         public String transferDate;
-        @ApiModelProperty(example = "112.45")
+        @Schema(example = "112.45")
         public Float transferAmount;
-        @ApiModelProperty(example = "A description of the transfer")
+        @Schema(example = "A description of the transfer")
         public String transferDescription;
     }
 
-    @ApiModel(value = "PostAccountTransfersResponse")
-    public final static class PostAccountTransfersResponse {
-        private PostAccountTransfersResponse() {
-        }
+    @Schema(description = "PostAccountTransfersResponse")
+    public static final class PostAccountTransfersResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostAccountTransfersResponse() {}
+
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "GetAccountTransfersResponse")
-    public final static class GetAccountTransfersResponse {
-        private GetAccountTransfersResponse() {
-        }
+    @Schema(description = "GetAccountTransfersResponse")
+    public static final class GetAccountTransfersResponse {
 
-        final class GetAccountTransfersPageItems {
-            private GetAccountTransfersPageItems() {
-            }
+        private GetAccountTransfersResponse() {}
 
-            final class GetAccountTransfersPageItemsCurrency {
-                private GetAccountTransfersPageItemsCurrency() {
-                }
+        static final class GetAccountTransfersPageItems {
 
-                @ApiModelProperty(example = "USD")
+            private GetAccountTransfersPageItems() {}
+
+            static final class GetAccountTransfersPageItemsCurrency {
+
+                private GetAccountTransfersPageItemsCurrency() {}
+
+                @Schema(example = "USD")
                 public String code;
-                @ApiModelProperty(example = "US Dollar")
+                @Schema(example = "US Dollar")
                 public String name;
-                @ApiModelProperty(example = "2")
+                @Schema(example = "2")
                 public Integer decimalPlaces;
-                @ApiModelProperty(example = "$")
+                @Schema(example = "$")
                 public String displaySymbol;
-                @ApiModelProperty(example = "currency.USD")
+                @Schema(example = "currency.USD")
                 public String nameCode;
-                @ApiModelProperty(example = "US Dollar ($)")
+                @Schema(example = "US Dollar ($)")
                 public String displayLabel;
             }
 
-            final class GetAccountTransfersPageItemsFromOffice {
-                private GetAccountTransfersPageItemsFromOffice() {
-                }
+            static final class GetAccountTransfersPageItemsFromOffice {
 
-                @ApiModelProperty(example = "1")
+                private GetAccountTransfersPageItemsFromOffice() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "HO")
+                @Schema(example = "HO")
                 public String name;
             }
 
-            final class GetAccountTransfersPageItemsFromAccount {
-                private GetAccountTransfersPageItemsFromAccount() {
-                }
+            static final class GetAccountTransfersPageItemsFromAccount {
 
-                @ApiModelProperty(example = "1")
+                private GetAccountTransfersPageItemsFromAccount() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "000000001")
+                @Schema(example = "000000001")
                 public Long accountNo;
             }
 
-            final class GetAccountTransfersPageItemsToAccountType {
-                private GetAccountTransfersPageItemsToAccountType() {
-                }
+            static final class GetAccountTransfersPageItemsToAccountType {
 
-                @ApiModelProperty(example = "1")
+                private GetAccountTransfersPageItemsToAccountType() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "accountType.loan")
+                @Schema(example = "accountType.loan")
                 public String code;
-                @ApiModelProperty(example = "Loan Account")
-                public String value;
+                @Schema(example = "Loan Account")
+                public String description;
             }
 
-
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean reversed;
             public GetAccountTransfersPageItemsCurrency currency;
-            @ApiModelProperty(example = "200")
+            @Schema(example = "200")
             public Float transferAmount;
-            @ApiModelProperty(example = "[2013, 4, 1]")
+            @Schema(example = "[2013, 4, 1]")
             public LocalDate transferDate;
-            @ApiModelProperty(example = "pay off loan from savings.")
+            @Schema(example = "pay off loan from savings.")
             public String transferDescription;
             public GetAccountTransfersPageItemsFromOffice fromOffice;
             public GetAccountTransfersTemplateResponse.GetAccountTransfersFromClientOptions fromClient;
@@ -265,247 +263,247 @@ final class AccountTransfersApiResourceSwagger {
             public GetAccountTransfersPageItemsFromAccount toAccount;
         }
 
-        @ApiModelProperty(example = "4")
+        @Schema(example = "4")
         public Integer totalFilteredRecords;
         public Set<GetAccountTransfersPageItems> pageItems;
     }
 
-    @ApiModel(value = "GetAccountTransfersTemplateRefundByTransferResponse")
+    @Schema(description = "GetAccountTransfersTemplateRefundByTransferResponse")
     public static final class GetAccountTransfersTemplateRefundByTransferResponse {
-        private GetAccountTransfersTemplateRefundByTransferResponse() {
-        }
 
-        final class GetAccountTransfersTemplateRefundByTransferCurrency {
-            private GetAccountTransfersTemplateRefundByTransferCurrency() {
-            }
+        private GetAccountTransfersTemplateRefundByTransferResponse() {}
 
-            @ApiModelProperty(example = "USD")
+        static final class GetAccountTransfersTemplateRefundByTransferCurrency {
+
+            private GetAccountTransfersTemplateRefundByTransferCurrency() {}
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Integer inMultiplesOf;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromOffice {
-            private GetAccountTransfersTemplateRefundByTransferFromOffice() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromOffice {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersTemplateRefundByTransferFromOffice() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String name;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String nameDecorated;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer externalId;
-            @ApiModelProperty(example = "[2009, 1, 1]")
+            @Schema(example = "[2009, 1, 1]")
             public LocalDate openingDate;
-            @ApiModelProperty(example = ".")
+            @Schema(example = ".")
             public String hierarchy;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromClient {
-            private GetAccountTransfersTemplateRefundByTransferFromClient() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromClient {
 
-            final class GetAccountTransfersStatus {
-                private GetAccountTransfersStatus() {
-                }
+            private GetAccountTransfersTemplateRefundByTransferFromClient() {}
 
-                @ApiModelProperty(example = "300")
+            static final class GetAccountTransfersStatus {
+
+                private GetAccountTransfersStatus() {}
+
+                @Schema(example = "300")
                 public Integer id;
-                @ApiModelProperty(example = "clientStatusType.active")
+                @Schema(example = "clientStatusType.active")
                 public String code;
-                @ApiModelProperty(example = "Active")
-                public String value;
+                @Schema(example = "Active")
+                public String description;
             }
 
-            final class GetAccountTransfersGender {
-                private GetAccountTransfersGender() {
-                }
+            static final class GetAccountTransfersGender {
+
+                private GetAccountTransfersGender() {}
             }
 
-            final class GetAccountTransfersClientType {
-                private GetAccountTransfersClientType() {
-                }
+            static final class GetAccountTransfersClientType {
+
+                private GetAccountTransfersClientType() {}
             }
 
-            final class GetAccountTransfersClientClassification {
-                private GetAccountTransfersClientClassification() {
-                }
+            static final class GetAccountTransfersClientClassification {
+
+                private GetAccountTransfersClientClassification() {}
             }
 
-            final class GetAccountTransfersTimeline {
-                private GetAccountTransfersTimeline() {
-                }
+            static final class GetAccountTransfersTimeline {
 
-                @ApiModelProperty(example = "[2012, 2, 1]")
+                private GetAccountTransfersTimeline() {}
+
+                @Schema(example = "[2012, 2, 1]")
                 public LocalDate submittedOnDate;
-                @ApiModelProperty(example = "mifos")
+                @Schema(example = "mifos")
                 public String submittedByUsername;
-                @ApiModelProperty(example = "App")
+                @Schema(example = "App")
                 public String submittedByFirstname;
-                @ApiModelProperty(example = "Administrator")
+                @Schema(example = "Administrator")
                 public String submittedByLastname;
-                @ApiModelProperty(example = "[2012, 2, 1]")
+                @Schema(example = "[2012, 2, 1]")
                 public LocalDate activatedOnDate;
-                @ApiModelProperty(example = "mifos")
+                @Schema(example = "mifos")
                 public String activatedByUsername;
-                @ApiModelProperty(example = "App")
+                @Schema(example = "App")
                 public String activatedByFirstname;
-                @ApiModelProperty(example = "Administrator")
+                @Schema(example = "Administrator")
                 public String activatedByLastname;
             }
 
-            final class GetAccountTransfersGroups {
-                private GetAccountTransfersGroups() {
-                }
+            static final class GetAccountTransfersGroups {
+
+                private GetAccountTransfersGroups() {}
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "000000001")
+            @Schema(example = "000000001")
             public Long accountNo;
             public GetAccountTransfersStatus status;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean active;
-            @ApiModelProperty(example = "[2012, 2, 1]")
+            @Schema(example = "[2012, 2, 1]")
             public LocalDate activationDate;
-            @ApiModelProperty(example = "Daniel")
+            @Schema(example = "Daniel")
             public String firstname;
-            @ApiModelProperty(example = "Owusu")
+            @Schema(example = "Owusu")
             public String lastname;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String displayName;
             public GetAccountTransfersGender gender;
             public GetAccountTransfersClientType clientType;
             public GetAccountTransfersClientClassification clientClassification;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
             public GetAccountTransfersTimeline timeline;
             public GetAccountTransfersGroups groups;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromAccount {
-            private GetAccountTransfersTemplateRefundByTransferFromAccount() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromAccount {
 
-            @ApiModelProperty(example = "2")
+            private GetAccountTransfersTemplateRefundByTransferFromAccount() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "000000002")
+            @Schema(example = "000000002")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer clientId;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String clientName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "CTRL")
+            @Schema(example = "CTRL")
             public String productName;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Integer fieldOfficerId;
             public GetAccountTransfersTemplateRefundByTransferCurrency currency;
-            @ApiModelProperty(example = "130")
+            @Schema(example = "130")
             public Float amtForTransfer;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferToClient {
-            private GetAccountTransfersTemplateRefundByTransferToClient() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferToClient {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersTemplateRefundByTransferToClient() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferToAccount {
-            private GetAccountTransfersTemplateRefundByTransferToAccount() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferToAccount {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersTemplateRefundByTransferToAccount() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "000000001")
+            @Schema(example = "000000001")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer clientId;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String clientName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "TEST")
+            @Schema(example = "TEST")
             public String productName;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Integer fieldOfficerId;
             public GetAccountTransfersTemplateRefundByTransferCurrency currency;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromOfficeOptions {
-            private GetAccountTransfersTemplateRefundByTransferFromOfficeOptions() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromOfficeOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersTemplateRefundByTransferFromOfficeOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String name;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String nameDecorated;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromClientOptions {
-            private GetAccountTransfersTemplateRefundByTransferFromClientOptions() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromClientOptions {
 
-            @ApiModelProperty(example = "1")
+            private GetAccountTransfersTemplateRefundByTransferFromClientOptions() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String displayName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer officeId;
-            @ApiModelProperty(example = "Head Office")
+            @Schema(example = "Head Office")
             public String officeName;
         }
 
-        final class GetAccountTransfersTemplateRefundByTransferFromAccountOptions {
-            private GetAccountTransfersTemplateRefundByTransferFromAccountOptions() {
-            }
+        static final class GetAccountTransfersTemplateRefundByTransferFromAccountOptions {
 
-            @ApiModelProperty(example = "2")
+            private GetAccountTransfersTemplateRefundByTransferFromAccountOptions() {}
+
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "000000002")
+            @Schema(example = "000000002")
             public Long accountNo;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer clientId;
-            @ApiModelProperty(example = "Daniel Owusu")
+            @Schema(example = "Daniel Owusu")
             public String clientName;
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Integer productId;
-            @ApiModelProperty(example = "CTRL")
+            @Schema(example = "CTRL")
             public String productName;
-            @ApiModelProperty(example = "0")
+            @Schema(example = "0")
             public Integer fieldOfficerId;
             public GetAccountTransfersTemplateRefundByTransferCurrency currency;
         }
 
         public GetAccountTransfersTemplateRefundByTransferCurrency currency;
-        @ApiModelProperty(example = "130")
+        @Schema(example = "130")
         public Float transferAmount;
-        @ApiModelProperty(example = "[2014, 11, 1]")
+        @Schema(example = "[2014, 11, 1]")
         public LocalDate transferDate;
         public GetAccountTransfersTemplateRefundByTransferFromOffice fromOffice;
         public GetAccountTransfersTemplateRefundByTransferFromClient fromClient;
@@ -525,47 +523,47 @@ final class AccountTransfersApiResourceSwagger {
         public Set<GetAccountTransfersTemplateRefundByTransferToAccount> toAccountOptions;
     }
 
-    @ApiModel(value = "PostAccountTransfersRefundByTransferRequest")
+    @Schema(description = "PostAccountTransfersRefundByTransferRequest")
     public static final class PostAccountTransfersRefundByTransferRequest {
-        private PostAccountTransfersRefundByTransferRequest() {
-        }
 
-        @ApiModelProperty(example = "2")
+        private PostAccountTransfersRefundByTransferRequest() {}
+
+        @Schema(example = "2")
         public Integer fromAccountId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromAccountType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer toOfficeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer toClientId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer toAccountType;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer toAccountId;
-        @ApiModelProperty(example = "130")
+        @Schema(example = "130")
         public Float transferAmount;
-        @ApiModelProperty(example = "31 October 2014")
+        @Schema(example = "31 October 2014")
         public String transferDate;
-        @ApiModelProperty(example = "Transfer refund to my savings account")
+        @Schema(example = "Transfer refund to my savings account")
         public String transferDescription;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromClientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer fromOfficeId;
     }
 
-    @ApiModel(value = "PostAccountTransfersRefundByTransferResponse")
-    public final static class PostAccountTransfersRefundByTransferResponse {
-        private PostAccountTransfersRefundByTransferResponse() {
-        }
+    @Schema(description = "PostAccountTransfersRefundByTransferResponse")
+    public static final class PostAccountTransfersRefundByTransferResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostAccountTransfersRefundByTransferResponse() {}
+
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer resourceId;
     }
 }

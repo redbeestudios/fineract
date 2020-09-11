@@ -18,7 +18,7 @@
  */
 package org.apache.fineract.infrastructure.dataqueries.api;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.fineract.infrastructure.dataqueries.data.ResultsetColumnHeaderData;
 import org.apache.fineract.infrastructure.dataqueries.data.ResultsetRowData;
 
@@ -26,14 +26,18 @@ import org.apache.fineract.infrastructure.dataqueries.data.ResultsetRowData;
  * Created by sanyam on 5/8/17.
  */
 final class RunreportsApiResourceSwagger {
+
     private RunreportsApiResourceSwagger() {
 
     }
-    @ApiModel(value = "GetReportNameResponse")
+
+    @Schema(description = "GetReportNameResponse")
     public static final class GetReportNameResponse {
+
         private GetReportNameResponse() {
 
         }
+
         public ResultsetColumnHeaderData columnHeaders;
         public ResultsetRowData row;
     }

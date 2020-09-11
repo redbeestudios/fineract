@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.accounting.provisioning.constant.ProvisioningEntriesApiConstants;
 import org.apache.fineract.infrastructure.core.data.ApiParameterError;
 import org.apache.fineract.infrastructure.core.data.DataValidatorBuilder;
@@ -47,16 +47,15 @@ public class ProvisioningEntriesDefinitionJsonDeserializer implements Provisioni
     private static final Set<String> supportedParameters = new HashSet<>(
             Arrays.asList(JSON_DATE_PARAM, JSON_DATEFORMAT_PARAM, JSON_LOCALE_PARAM, JSON_CREATEJOURNALENTRIES_PARAM));
 
-
     @Autowired
     public ProvisioningEntriesDefinitionJsonDeserializer(final FromJsonHelper fromApiJsonHelper) {
         this.fromApiJsonHelper = fromApiJsonHelper;
     }
 
     public void validateForCreate(final String json) {
-        if (StringUtils.isBlank(json)) { throw new ProvisioningCriteriaCannotBeCreatedException(
-                "error.msg.provisioningentry.cannot.be.created",
-                "locale, dateformat, date, createjournalentries params are missing in the request");
+        if (StringUtils.isBlank(json)) {
+            throw new ProvisioningCriteriaCannotBeCreatedException("error.msg.provisioningentry.cannot.be.created",
+                    "locale, dateformat, date, createjournalentries params are missing in the request");
 
         }
         final Type typeOfMap = new TypeToken<Map<String, Object>>() {}.getType();
@@ -68,13 +67,15 @@ public class ProvisioningEntriesDefinitionJsonDeserializer implements Provisioni
         baseDataValidator.reset().parameter(JSON_DATEFORMAT_PARAM).value(locale).notNull();
         final String dateformat = this.fromApiJsonHelper.extractDateFormatParameter(element.getAsJsonObject());
         baseDataValidator.reset().parameter(JSON_DATEFORMAT_PARAM).value(dateformat).notBlank();
-        LocalDate localDate = this.fromApiJsonHelper.extractLocalDateNamed(JSON_DATE_PARAM, element) ;
+        LocalDate localDate = this.fromApiJsonHelper.extractLocalDateNamed(JSON_DATE_PARAM, element);
         baseDataValidator.reset().parameter(JSON_DATE_PARAM).value(localDate).notBlank();
-        baseDataValidator.reset().parameter(JSON_DATE_PARAM).value(localDate).validateDateBeforeOrEqual(DateUtils.getLocalDateOfTenant()) ;
-        if(this.fromApiJsonHelper.parameterExists(JSON_CREATEJOURNALENTRIES_PARAM, element)) {
-            Boolean bool = this.fromApiJsonHelper.extractBooleanNamed(JSON_CREATEJOURNALENTRIES_PARAM, element) ;
-            baseDataValidator.reset().parameter(JSON_CREATEJOURNALENTRIES_PARAM).value(bool).validateForBooleanValue() ;
+        baseDataValidator.reset().parameter(JSON_DATE_PARAM).value(localDate).validateDateBeforeOrEqual(DateUtils.getLocalDateOfTenant());
+        if (this.fromApiJsonHelper.parameterExists(JSON_CREATEJOURNALENTRIES_PARAM, element)) {
+            Boolean bool = this.fromApiJsonHelper.extractBooleanNamed(JSON_CREATEJOURNALENTRIES_PARAM, element);
+            baseDataValidator.reset().parameter(JSON_CREATEJOURNALENTRIES_PARAM).value(bool).validateForBooleanValue();
         }
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
     }
 }

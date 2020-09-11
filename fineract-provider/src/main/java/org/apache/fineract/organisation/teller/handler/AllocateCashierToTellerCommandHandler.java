@@ -35,18 +35,18 @@ public class AllocateCashierToTellerCommandHandler implements NewCommandSourceHa
     /**
      * Creates a new instance.
      *
-     * @param writePlatformService the {@code CashierWritePlatformService} used to access the backend
+     * @param writePlatformService
+     *            the {@code CashierWritePlatformService} used to access the backend
      */
     @Autowired
     public AllocateCashierToTellerCommandHandler(final TellerWritePlatformService writePlatformService) {
-        super();
+
         this.writePlatformService = writePlatformService;
     }
 
     @Override
     public CommandProcessingResult processCommand(final JsonCommand command) {
 
-        return this.writePlatformService.allocateCashierToTeller(
-                        command.entityId(), command);
+        return this.writePlatformService.allocateCashierToTeller(command.entityId(), command);
     }
 }

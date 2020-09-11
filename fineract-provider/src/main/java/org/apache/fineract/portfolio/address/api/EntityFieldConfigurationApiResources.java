@@ -18,13 +18,14 @@
  */
 package org.apache.fineract.portfolio.address.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -52,15 +53,14 @@ import org.springframework.stereotype.Component;
 @Path("/fieldconfiguration/{entity}")
 @Component
 @Scope("singleton")
-@Api(tags = {"Entity Field Configuration"})
-@SwaggerDefinition(tags = {
-  @Tag(name = "Entity Field Configuration", description = "Entity Field configuration API is a generic and extensible \n" + "wherein various entities and subentities can be related.\n" + "Also it gives the user an ability to enable/disable fields,\n" + "add regular expression for validation")
-})
+@Tag(name = "Entity Field Configuration", description = "Entity Field configuration API is a generic and extensible \n"
+        + "wherein various entities and subentities can be related.\n" + "Also it gives the user an ability to enable/disable fields,\n"
+        + "add regular expression for validation")
 public class EntityFieldConfigurationApiResources {
 
-    private final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(Arrays.asList("clientAddressId", "client_id",
-            "address_id", "address_type_id", "isActive", "fieldConfigurationId", "entity", "table", "field",
-            "is_enabled", "is_mandatory", "validation_regex"));
+    private final Set<String> responseDataParameters = new HashSet<>(
+            Arrays.asList("clientAddressId", "client_id", "address_id", "address_type_id", "isActive", "fieldConfigurationId", "entity",
+                    "table", "field", "is_enabled", "is_mandatory", "validation_regex"));
     private final String resourceNameForPermissions = "Address";
     private final PlatformSecurityContext context;
     private final DefaultToApiJsonSerializer<AddressData> toApiJsonSerializer;
@@ -87,19 +87,18 @@ public class EntityFieldConfigurationApiResources {
     @GET
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-       @ApiOperation(httpMethod = "GET", value = "Retrieves the Entity Field Configuration", notes = "It retrieves all the Entity Field Configuration")
-       @ApiResponses({@ApiResponse(code = 200, message = "OK", response = EntityFieldConfigurationApiResourcesSwagger.GetFieldConfigurationEntityResponse.class, responseContainer = "List")})
-    public String getAddresses(@PathParam("entity") @ApiParam(value = "entity") final String entityname, @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieves the Entity Field Configuration", description = "It retrieves all the Entity Field Configuration")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EntityFieldConfigurationApiResourcesSwagger.GetFieldConfigurationEntityResponse.class)))) })
+    public String getAddresses(@PathParam("entity") @Parameter(description = "entity") final String entityname,
+            @Context final UriInfo uriInfo) {
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
 
-        final Collection<FieldConfigurationData> fldconfig = this.readPlatformServicefld
-                .retrieveFieldConfiguration(entityname);
+        final Collection<FieldConfigurationData> fldconfig = this.readPlatformServicefld.retrieveFieldConfiguration(entityname);
 
-        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper
-                .process(uriInfo.getQueryParameters());
-        return this.toApiJsonSerializerfld.serialize(settings, fldconfig, this.RESPONSE_DATA_PARAMETERS);
+        final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
+        return this.toApiJsonSerializerfld.serialize(settings, fldconfig, this.responseDataParameters);
 
     }
-
 
 }

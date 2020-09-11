@@ -26,7 +26,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "topic")
-public class Topic extends AbstractPersistableCustom<Long> {
+public class Topic extends AbstractPersistableCustom {
 
     @Column(name = "title", unique = true, nullable = false, length = 100)
     private String title;
@@ -43,8 +43,7 @@ public class Topic extends AbstractPersistableCustom<Long> {
     @Column(name = "member_type")
     private String memberType;
 
-    public Topic() {
-    }
+    public Topic() {}
 
     public Topic(String title, Boolean enabled, Long entityId, String entityType, String memberType) {
         this.title = title.trim();

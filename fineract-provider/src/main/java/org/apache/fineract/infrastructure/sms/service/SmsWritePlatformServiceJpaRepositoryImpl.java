@@ -31,13 +31,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SmsWritePlatformServiceJpaRepositoryImpl implements SmsWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(SmsWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SmsWritePlatformServiceJpaRepositoryImpl.class);
 
     private final SmsMessageAssembler assembler;
     private final SmsMessageRepository repository;
@@ -71,8 +73,9 @@ public class SmsWritePlatformServiceJpaRepositoryImpl implements SmsWritePlatfor
                     .withCommandId(command.commandId()) //
                     .withEntityId(message.getId()) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
     }
@@ -95,8 +98,9 @@ public class SmsWritePlatformServiceJpaRepositoryImpl implements SmsWritePlatfor
                     .withEntityId(resourceId) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
-            handleDataIntegrityIssues(command, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleDataIntegrityIssues(command, throwable, dve);
             return CommandProcessingResult.empty();
         }
     }
@@ -109,24 +113,26 @@ public class SmsWritePlatformServiceJpaRepositoryImpl implements SmsWritePlatfor
             final SmsMessage message = this.assembler.assembleFromResourceId(resourceId);
             this.repository.delete(message);
             this.repository.flush();
-        } catch (final DataIntegrityViolationException dve) {
-            handleDataIntegrityIssues(null, dve);
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
+            final Throwable throwable = dve.getMostSpecificCause();
+            handleDataIntegrityIssues(null, throwable, dve);
             return CommandProcessingResult.empty();
         }
         return new CommandProcessingResultBuilder().withEntityId(resourceId).build();
     }
 
     /*
-     * Guaranteed to throw an exception no matter what the data integrity issue
-     * is.
+     * Guaranteed to throw an exception no matter what the data integrity issue is.
      */
-    private void handleDataIntegrityIssues(@SuppressWarnings("unused") final JsonCommand command, final DataIntegrityViolationException dve) {
-        final Throwable realCause = dve.getMostSpecificCause();
+    private void handleDataIntegrityIssues(@SuppressWarnings("unused") final JsonCommand command, final Throwable realCause,
+            final NonTransientDataAccessException dve) {
 
-        if (realCause.getMessage().contains("mobile_no")) { throw new PlatformDataIntegrityException("error.msg.sms.no.mobile.no.exists",
-                "The group, client or staff provided has no mobile no.", "id"); }
+        if (realCause.getMessage().contains("mobile_no")) {
+            throw new PlatformDataIntegrityException("error.msg.sms.no.mobile.no.exists",
+                    "The group, client or staff provided has no mobile no.", "id");
+        }
 
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
         throw new PlatformDataIntegrityException("error.msg.sms.unknown.data.integrity.issue",
                 "Unknown data integrity issue with resource: " + realCause.getMessage());
     }

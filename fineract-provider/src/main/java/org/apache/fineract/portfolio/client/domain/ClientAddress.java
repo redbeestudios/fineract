@@ -29,7 +29,7 @@ import org.apache.fineract.portfolio.address.domain.Address;
 
 @Entity
 @Table(name = "m_client_address")
-public class ClientAddress extends AbstractPersistableCustom<Long> {
+public class ClientAddress extends AbstractPersistableCustom {
 
     @ManyToOne
     private Client client;
@@ -44,8 +44,7 @@ public class ClientAddress extends AbstractPersistableCustom<Long> {
     @Column(name = "is_active")
     private boolean isActive;
 
-    private ClientAddress(final Client client, final Address address, final CodeValue addressType,
-            final boolean isActive) {
+    private ClientAddress(final Client client, final Address address, final CodeValue addressType, final boolean isActive) {
         this.client = client;
         this.address = address;
         this.addressType = addressType;
@@ -57,8 +56,7 @@ public class ClientAddress extends AbstractPersistableCustom<Long> {
 
     }
 
-    public static ClientAddress fromJson(final boolean isActive, final Client client, final Address address,
-            final CodeValue address_type) {
+    public static ClientAddress fromJson(final boolean isActive, final Client client, final Address address, final CodeValue address_type) {
 
         return new ClientAddress(client, address, address_type, isActive);
     }

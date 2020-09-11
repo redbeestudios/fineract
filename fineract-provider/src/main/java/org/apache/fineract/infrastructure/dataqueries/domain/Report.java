@@ -33,7 +33,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.data.ApiParameterError;
 import org.apache.fineract.infrastructure.core.data.DataValidatorBuilder;
@@ -43,7 +43,7 @@ import org.apache.fineract.infrastructure.core.exception.PlatformDataIntegrityEx
 
 @Entity
 @Table(name = "stretchy_report", uniqueConstraints = { @UniqueConstraint(columnNames = { "report_name" }, name = "unq_report_name") })
-public final class Report extends AbstractPersistableCustom<Long> {
+public final class Report extends AbstractPersistableCustom {
 
     @Column(name = "report_name", nullable = false, unique = true)
     private String reportName;
@@ -70,7 +70,7 @@ public final class Report extends AbstractPersistableCustom<Long> {
     @Column(name = "report_sql")
     private String reportSql;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "report", orphanRemoval = true, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "report", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ReportParameterUsage> reportParameterUsages = new HashSet<>();
 
     @Column(name = "self_service_user_report")
@@ -111,7 +111,7 @@ public final class Report extends AbstractPersistableCustom<Long> {
         return new Report(reportName, reportType, reportSubType, reportCategory, description, useReport, reportSql, reportTypes);
     }
 
-    protected Report() {
+    Report() {
         //
     }
 
@@ -188,9 +188,10 @@ public final class Report extends AbstractPersistableCustom<Long> {
         if (!actualChanges.isEmpty()) {
             if (isCoreReport()) {
                 for (final String key : actualChanges.keySet()) {
-                    if (!(key.equals("useReport"))) { throw new PlatformDataIntegrityException(
-                            "error.msg.only.use.report.can.be.updated.for.core.report",
-                            "Only the Use Report field can be updated for Core Reports", key); }
+                    if (!key.equals("useReport")) {
+                        throw new PlatformDataIntegrityException("error.msg.only.use.report.can.be.updated.for.core.report",
+                                "Only the Use Report field can be updated for Core Reports", key);
+                    }
                 }
             }
         }
@@ -238,19 +239,21 @@ public final class Report extends AbstractPersistableCustom<Long> {
         baseDataValidator.reset().parameter("reportCategory").value(this.reportCategory).notExceedingLengthOf(45);
 
         if (StringUtils.isNotBlank(this.reportType)) {
-            if ((this.reportType.equals("Table")) || (this.reportType.equals("Chart"))) {
-                baseDataValidator.reset().parameter("reportSql").value(this.reportSql)
-                        .cantBeBlankWhenParameterProvidedIs("reportType", this.reportType);
+            if (this.reportType.equals("Table") || this.reportType.equals("Chart")) {
+                baseDataValidator.reset().parameter("reportSql").value(this.reportSql).cantBeBlankWhenParameterProvidedIs("reportType",
+                        this.reportType);
             } else {
-                baseDataValidator.reset().parameter("reportSql").value(this.reportSql)
-                        .mustBeBlankWhenParameterProvidedIs("reportType", this.reportType);
+                baseDataValidator.reset().parameter("reportSql").value(this.reportSql).mustBeBlankWhenParameterProvidedIs("reportType",
+                        this.reportType);
             }
         }
         throwExceptionIfValidationWarningsExist(dataValidationErrors);
     }
 
     private void throwExceptionIfValidationWarningsExist(final List<ApiParameterError> dataValidationErrors) {
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
     }
 
     public String getReportName() {
@@ -258,7 +261,9 @@ public final class Report extends AbstractPersistableCustom<Long> {
     }
 
     public boolean update(final Set<ReportParameterUsage> newReportParameterUsages) {
-        if (newReportParameterUsages == null) { return false; }
+        if (newReportParameterUsages == null) {
+            return false;
+        }
 
         boolean updated = false;
 
@@ -272,7 +277,9 @@ public final class Report extends AbstractPersistableCustom<Long> {
 
     private boolean changeInReportParameters(final Set<ReportParameterUsage> newReportParameterUsages) {
 
-        if (!(this.reportParameterUsages.equals(newReportParameterUsages))) { return true; }
+        if (!this.reportParameterUsages.equals(newReportParameterUsages)) {
+            return true;
+        }
 
         return false;
     }

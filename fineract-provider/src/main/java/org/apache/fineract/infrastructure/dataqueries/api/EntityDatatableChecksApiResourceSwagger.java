@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.infrastructure.dataqueries.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Collection;
 import java.util.List;
 import org.apache.fineract.infrastructure.core.data.EnumOptionData;
@@ -32,13 +31,15 @@ import org.apache.fineract.portfolio.savings.data.SavingsProductData;
  * Created by sanyam on 31/7/17.
  */
 final class EntityDatatableChecksApiResourceSwagger {
+
     private EntityDatatableChecksApiResourceSwagger() {
 
     }
 
-    @ApiModel(value = "GetEntityDatatableChecksResponse")
+    @Schema(description = "GetEntityDatatableChecksResponse")
     public static final class GetEntityDatatableChecksResponse {
-        private GetEntityDatatableChecksResponse(){}
+
+        private GetEntityDatatableChecksResponse() {}
 
         public long id;
         public String entity;
@@ -50,9 +51,10 @@ final class EntityDatatableChecksApiResourceSwagger {
         public String productName;
     }
 
-    @ApiModel(value = "GetEntityDatatableChecksTemplateResponse")
+    @Schema(description = "GetEntityDatatableChecksTemplateResponse")
     public static final class GetEntityDatatableChecksTemplateResponse {
-        private GetEntityDatatableChecksTemplateResponse(){}
+
+        private GetEntityDatatableChecksTemplateResponse() {}
 
         public List<String> entities;
         public List<DatatableCheckStatusData> statusClient;
@@ -64,37 +66,42 @@ final class EntityDatatableChecksApiResourceSwagger {
         public Collection<SavingsProductData> savingsProductDatas;
     }
 
-    @ApiModel(value = "PostEntityDatatableChecksTemplateRequest")
-    public static final class PostEntityDatatableChecksTemplateRequest{
+    @Schema(description = "PostEntityDatatableChecksTemplateRequest")
+    public static final class PostEntityDatatableChecksTemplateRequest {
+
         private PostEntityDatatableChecksTemplateRequest() {
 
         }
-        @ApiModelProperty(example = "m_loan")
+
+        @Schema(example = "m_loan")
         public String entity;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Long status;
-        @ApiModelProperty(example = "Additional Details")
+        @Schema(example = "Additional Details")
         public String datatableName;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Long productId;
     }
 
-    @ApiModel(value = "PostEntityDatatableChecksTemplateResponse")
-    public static final class PostEntityDatatableChecksTemplateResponse{
+    @Schema(description = "PostEntityDatatableChecksTemplateResponse")
+    public static final class PostEntityDatatableChecksTemplateResponse {
+
         private PostEntityDatatableChecksTemplateResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long resourceId;
     }
 
-    @ApiModel(value = "DeleteEntityDatatableChecksTemplateResponse")
-    public static final class DeleteEntityDatatableChecksTemplateResponse{
+    @Schema(description = "DeleteEntityDatatableChecksTemplateResponse")
+    public static final class DeleteEntityDatatableChecksTemplateResponse {
+
         private DeleteEntityDatatableChecksTemplateResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long resourceId;
     }
 }
-

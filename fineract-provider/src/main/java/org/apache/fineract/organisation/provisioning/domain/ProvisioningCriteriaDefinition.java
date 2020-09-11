@@ -29,7 +29,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_provisioning_criteria_definition")
-public class ProvisioningCriteriaDefinition extends AbstractPersistableCustom<Long> {
+public class ProvisioningCriteriaDefinition extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "criteria_id", referencedColumnName = "id", nullable = false)
@@ -80,13 +80,12 @@ public class ProvisioningCriteriaDefinition extends AbstractPersistableCustom<Lo
     }
 
     public void update(Long minAge, Long maxAge, BigDecimal percentage, GLAccount lia, GLAccount exp) {
-        this.minimumAge = minAge ;
-        this.maximumAge = maxAge ;
-        this.provisioningPercentage = percentage ;
-        this.liabilityAccount = lia ;
-        this.expenseAccount = exp ;
+        this.minimumAge = minAge;
+        this.maximumAge = maxAge;
+        this.provisioningPercentage = percentage;
+        this.liabilityAccount = lia;
+        this.expenseAccount = exp;
     }
-
 
     public boolean isOverlapping(ProvisioningCriteriaDefinition def) {
         return this.minimumAge <= def.maximumAge && def.minimumAge <= this.maximumAge;

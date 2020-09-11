@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.infrastructure.dataqueries.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Collection;
 import java.util.List;
 import org.apache.fineract.infrastructure.dataqueries.data.ReportParameterData;
@@ -28,39 +27,43 @@ import org.apache.fineract.infrastructure.dataqueries.data.ReportParameterData;
  * Created by sanyam on 4/8/17.
  */
 final class ReportsApiResourceSwagger {
+
     private ReportsApiResourceSwagger() {
 
     }
 
-    @ApiModel(value = "GetReportsResponse")
+    @Schema(description = "GetReportsResponse")
     public static final class GetReportsResponse {
+
         private GetReportsResponse() {
 
         }
-        @ApiModelProperty(example = "1")
+
+        @Schema(example = "1")
         public Long id;
-        @ApiModelProperty(example = "Client Listing")
+        @Schema(example = "Client Listing")
         public String reportName;
-        @ApiModelProperty(example = "Table")
+        @Schema(example = "Table")
         public String reportType;
         public String reportSubType;
-        @ApiModelProperty(example = "Client")
+        @Schema(example = "Client")
         public String reportCategory;
-        @ApiModelProperty(example = "Individual Client Report Lists the small number of defined fields on the client table.  Would expect to copy this report and add any one to one additional data for specific tenant needs. Can be run for any size MFI but you expect it only to be run within a branch for larger ones.  Depending on how many columns are displayed, there is probably is a limit of about 20/50k clients returned for html display (export to excel doesnt have that client browser/memory impact).")
+        @Schema(example = "Individual Client Report Lists the small number of defined fields on the client table.  Would expect to copy this report and add any one to one additional data for specific tenant needs. Can be run for any size MFI but you expect it only to be run within a branch for larger ones.  Depending on how many columns are displayed, there is probably is a limit of about 20/50k clients returned for html display (export to excel doesnt have that client browser/memory impact).")
         public String description;
-        @ApiModelProperty(example = "")
+        @Schema(example = "")
         public String reportSql;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean coreReport;
-        @ApiModelProperty(example = "true")
+        @Schema(example = "true")
         public Boolean useReport;
         public Collection<ReportParameterData> reportParameters;
 
     }
 
-    @ApiModel(value = "GetReportsTemplateResponse")
+    @Schema(description = "GetReportsTemplateResponse")
     public static final class GetReportsTemplateResponse {
-        private GetReportsTemplateResponse(){
+
+        private GetReportsTemplateResponse() {
 
         }
 
@@ -69,70 +72,83 @@ final class ReportsApiResourceSwagger {
         public Collection<ReportParameterData> allowedParameters;
     }
 
-    @ApiModel(value = "PostRepostRequest")
+    @Schema(description = "PostRepostRequest")
     public static final class PostRepostRequest {
+
         private PostRepostRequest() {
 
         }
-        @ApiModelProperty(example = "Completely New Report")
+
+        @Schema(example = "Completely New Report")
         public String reportName;
-        @ApiModelProperty(example = "Table")
+        @Schema(example = "Table")
         public String reportType;
-        @ApiModelProperty(example = "")
+        @Schema(example = "")
         public String reportSubType;
-        @ApiModelProperty(example = "Loan")
+        @Schema(example = "Loan")
         public String reportCategory;
-        @ApiModelProperty(example = "Just An Example")
+        @Schema(example = "Just An Example")
         public String description;
-        @ApiModelProperty(example = "select 'very good sql' as AComment")
+        @Schema(example = "select 'very good sql' as AComment")
         public String reportSql;
         public Collection<ReportParameterData> reportParameters;
     }
 
-    @ApiModel(value = "PostReportsResponse")
+    @Schema(description = "PostReportsResponse")
     public static final class PostReportsResponse {
-        private PostReportsResponse(){
+
+        private PostReportsResponse() {
 
         }
-        @ApiModelProperty(example = "132")
+
+        @Schema(example = "132")
         public long resourceId;
     }
 
-    @ApiModel(value = "PutReportRequest")
+    @Schema(description = "PutReportRequest")
     public static final class PutReportRequest {
+
         private PutReportRequest() {
 
         }
-        @ApiModelProperty(example = "Completely New Report")
+
+        @Schema(example = "Completely New Report")
         public String reportName;
         public Collection<ReportParameterData> reportParameters;
 
     }
 
-    @ApiModel(value = "PutReportResponse")
+    @Schema(description = "PutReportResponse")
     public static final class PutReportResponse {
+
         private PutReportResponse() {
 
         }
-        final class PutReportResponseChanges{
+
+        static final class PutReportResponseChanges {
+
             private PutReportResponseChanges() {
 
             }
-            @ApiModelProperty(example = "Changed New Report")
+
+            @Schema(example = "Changed New Report")
             public String reportName;
             public Collection<ReportParameterData> reportParameters;
         }
-        @ApiModelProperty(example = "132")
+
+        @Schema(example = "132")
         public long resourceId;
         public PutReportResponseChanges changes;
     }
 
-    @ApiModel(value = "DeleteReportsResponse")
+    @Schema(description = "DeleteReportsResponse")
     public static final class DeleteReportsResponse {
-        private DeleteReportsResponse(){
+
+        private DeleteReportsResponse() {
 
         }
-        @ApiModelProperty(example = "132")
+
+        @Schema(example = "132")
         public long resourceId;
     }
 }

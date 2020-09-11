@@ -24,13 +24,19 @@ import org.apache.fineract.organisation.workingdays.domain.WorkingDays;
 import org.apache.fineract.portfolio.calendar.service.CalendarUtils;
 import org.joda.time.LocalDate;
 
-public class WorkingDaysUtil {
+public final class WorkingDaysUtil {
+
+    private WorkingDaysUtil() {
+
+    }
 
     public static LocalDate getOffSetDateIfNonWorkingDay(final LocalDate date, final LocalDate nextMeetingDate,
             final WorkingDays workingDays) {
 
         // If date is not a non working day then return date.
-        if (isWorkingDay(workingDays, date)) { return date; }
+        if (isWorkingDay(workingDays, date)) {
+            return date;
+        }
 
         final RepaymentRescheduleType rescheduleType = RepaymentRescheduleType.fromInt(workingDays.getRepaymentReschedulingType());
 
@@ -58,7 +64,8 @@ public class WorkingDaysUtil {
         return !isWorkingDay(workingDays, date);
     }
 
-    public static void updateWorkingDayIfRepaymentDateIsNonWorkingDay(final AdjustedDateDetailsDTO adjustedDateDetailsDTO, final WorkingDays workingDays) {
+    public static void updateWorkingDayIfRepaymentDateIsNonWorkingDay(final AdjustedDateDetailsDTO adjustedDateDetailsDTO,
+            final WorkingDays workingDays) {
         final LocalDate changedScheduleDate = getOffSetDateIfNonWorkingDay(adjustedDateDetailsDTO.getChangedScheduleDate(),
                 adjustedDateDetailsDTO.getNextRepaymentPeriodDueDate(), workingDays);
         adjustedDateDetailsDTO.setChangedScheduleDate(changedScheduleDate);

@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.apache.fineract.infrastructure.reportmailingjob.data.ReportMailingJobConfigurationData;
 
 public interface ReportMailingJobConfigurationReadPlatformService {
+
     /**
      * Retrieve all report mailing job configurations
      *
@@ -34,5 +35,5 @@ public interface ReportMailingJobConfigurationReadPlatformService {
      *
      * @return ReportMailingJobConfigurationData object
      **/
-    ReportMailingJobConfigurationData retrieveReportMailingJobConfiguration(final String name);
+    ReportMailingJobConfigurationData retrieveReportMailingJobConfiguration(String name);
 }

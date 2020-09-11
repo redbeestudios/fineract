@@ -18,46 +18,49 @@
  */
 package org.apache.fineract.portfolio.self.runreport;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
-
 
 /**
  * Created by Kang Breder on 07/08/19.
  */
 
 final class SelfRunReportApiResourceSwagger {
-    private SelfRunReportApiResourceSwagger() {
-    }
-    @ApiModel(value = "GetRunReportResponse")
-    public final static class GetRunReportResponse {
-        private GetRunReportResponse() {
-    }
-        final class GetRunReportColumnHeaders {
-            private GetRunReportColumnHeaders() {
-            }
-            @ApiModelProperty(example = "Office/Branch")
+
+    private SelfRunReportApiResourceSwagger() {}
+
+    @Schema(description = "GetRunReportResponse")
+    public static final class GetRunReportResponse {
+
+        private GetRunReportResponse() {}
+
+        static final class GetRunReportColumnHeaders {
+
+            private GetRunReportColumnHeaders() {}
+
+            @Schema(example = "Office/Branch")
             public String columnName;
-            @ApiModelProperty(example = "VARCHAR")
+            @Schema(example = "VARCHAR")
             public String columnType;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean isColumnNullable;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean isColumnPrimaryKey;
-            @ApiModelProperty(example = "[]")
+            @Schema(example = "[]")
             public String columnValues;
 
         }
-        final class GetPocketData {
-            private GetPocketData() {
-            }
 
-                @ApiModelProperty(example = "[\"Head Office\", \"000000001\", \"John Doe\"  \"2017-03-04\", \"786YYH7\"")
-                public String row;
-            }
+        static final class GetPocketData {
+
+            private GetPocketData() {}
+
+            @Schema(example = "[\"Head Office\", \"000000001\", \"John Doe\"  \"2017-03-04\", \"786YYH7\"")
+            public String row;
+        }
+
         public Set<GetRunReportColumnHeaders> columnHeaders;
         public Set<GetPocketData> data;
 
-        }
     }
+}

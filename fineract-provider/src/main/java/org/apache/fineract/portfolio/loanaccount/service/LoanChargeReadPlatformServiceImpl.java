@@ -156,8 +156,8 @@ public class LoanChargeReadPlatformServiceImpl implements LoanChargeReadPlatform
         final List<EnumOptionData> feeFrequencyOptions = this.dropdownReadPlatformService.retrievePeriodFrequencyTypeOptions();
         // this field is applicable only for client charges
         final Map<String, List<GLAccountData>> incomeOrLiabilityAccountOptions = null;
-        final List<EnumOptionData> shareChargeCalculationTypeOptions = null ;
-        final List<EnumOptionData> shareChargeTimeTypeOptions = null ;
+        final List<EnumOptionData> shareChargeCalculationTypeOptions = null;
+        final List<EnumOptionData> shareChargeTimeTypeOptions = null;
         final Collection<TaxGroupData> taxGroupOptions = null;
         return ChargeData.template(null, allowedChargeCalculationTypeOptions, null, allowedChargeTimeOptions, null,
                 loansChargeCalculationTypeOptions, loansChargeTimeTypeOptions, savingsChargeCalculationTypeOptions,
@@ -300,7 +300,7 @@ public class LoanChargeReadPlatformServiceImpl implements LoanChargeReadPlatform
 
         private final String schemaSql;
 
-        public LoanChargeAccrualMapper() {
+        LoanChargeAccrualMapper() {
             StringBuilder sb = new StringBuilder(50);
             sb.append("lc.id as id, lc.charge_id as chargeId, ");
             sb.append("lc.amount as amountDue, ");
@@ -360,7 +360,7 @@ public class LoanChargeReadPlatformServiceImpl implements LoanChargeReadPlatform
         private final String schemaSql;
         private final Map<Long, LoanChargeData> chargeDataMap;
 
-        public LoanChargeUnRecognizedIncomeMapper(final Collection<LoanChargeData> datas) {
+        LoanChargeUnRecognizedIncomeMapper(final Collection<LoanChargeData> datas) {
             this.chargeDataMap = new HashMap<>();
             for (LoanChargeData chargeData : datas) {
                 this.chargeDataMap.put(chargeData.getId(), chargeData);
@@ -397,7 +397,8 @@ public class LoanChargeReadPlatformServiceImpl implements LoanChargeReadPlatform
 
     private Collection<LoanInstallmentChargeData> retrieveInstallmentLoanChargesForAccrual(Long loanChargeId) {
         final LoanInstallmentChargeAccrualMapper rm = new LoanInstallmentChargeAccrualMapper();
-        String sql = "select " + rm.schema() + " where lic.loan_charge_id= ?  group by lsi.installment, lsi.duedate, lic.amount_outstanding_derived, lic.amount, lic.is_paid_derived, lic.amount_waived_derived, lic.waived";
+        String sql = "select " + rm.schema()
+                + " where lic.loan_charge_id= ?  group by lsi.installment, lsi.duedate, lic.amount_outstanding_derived, lic.amount, lic.is_paid_derived, lic.amount_waived_derived, lic.waived";
         Collection<LoanInstallmentChargeData> chargeDatas = this.jdbcTemplate.query(sql, rm,
                 new Object[] { LoanTransactionType.ACCRUAL.getValue(), loanChargeId });
         final Map<Integer, LoanInstallmentChargeData> installmentChargeDatas = new HashMap<>();

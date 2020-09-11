@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ws.rs.core.UriInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.ApiParameterHelper;
 import org.apache.fineract.infrastructure.core.data.ApiParameterError;
 import org.apache.fineract.infrastructure.core.data.DataValidatorBuilder;
@@ -49,17 +49,14 @@ public class SelfSavingsDataValidator {
     }
 
     private static final Set<String> allowedAssociationParameters = new HashSet<>(
-            Arrays.asList(SavingsApiConstants.transactions,
-                    SavingsApiConstants.charges));
+            Arrays.asList(SavingsApiConstants.transactions, SavingsApiConstants.charges));
 
     public void validateRetrieveSavings(final UriInfo uriInfo) {
         List<String> unsupportedParams = new ArrayList<>();
 
         validateTemplate(uriInfo, unsupportedParams);
 
-        Set<String> associationParameters = ApiParameterHelper
-                .extractAssociationsForResponseIfProvided(uriInfo
-                        .getQueryParameters());
+        Set<String> associationParameters = ApiParameterHelper.extractAssociationsForResponseIfProvided(uriInfo.getQueryParameters());
         if (!associationParameters.isEmpty()) {
             associationParameters.removeAll(allowedAssociationParameters);
             if (!associationParameters.isEmpty()) {
@@ -88,10 +85,8 @@ public class SelfSavingsDataValidator {
         }
     }
 
-    private void validateTemplate(final UriInfo uriInfo,
-            List<String> unsupportedParams) {
-        final boolean templateRequest = ApiParameterHelper.template(uriInfo
-                .getQueryParameters());
+    private void validateTemplate(final UriInfo uriInfo, List<String> unsupportedParams) {
+        final boolean templateRequest = ApiParameterHelper.template(uriInfo.getQueryParameters());
         if (templateRequest) {
             unsupportedParams.add("template");
         }
@@ -108,8 +103,7 @@ public class SelfSavingsDataValidator {
 
         final JsonElement element = this.fromApiJsonHelper.parse(json);
 
-        final Long clientId = this.fromApiJsonHelper.extractLongNamed(SelfSavingsAccountConstants.clientIdParameterName,
-                element);
+        final Long clientId = this.fromApiJsonHelper.extractLongNamed(SelfSavingsAccountConstants.clientIdParameterName, element);
         baseDataValidator.reset().parameter(SelfSavingsAccountConstants.clientIdParameterName).value(clientId).notNull()
                 .longGreaterThanZero();
 
@@ -123,5 +117,4 @@ public class SelfSavingsDataValidator {
         return parameterMap;
 
     }
-
 }

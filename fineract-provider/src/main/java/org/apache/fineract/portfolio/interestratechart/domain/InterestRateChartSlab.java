@@ -56,7 +56,7 @@ import org.apache.fineract.portfolio.interestratechart.InterestRateChartSlabApiC
 
 @Entity
 @Table(name = "m_interest_rate_slab")
-public class InterestRateChartSlab extends AbstractPersistableCustom<Long> {
+public class InterestRateChartSlab extends AbstractPersistableCustom {
 
     @Embedded
     private InterestRateChartSlabFields slabFields;
@@ -105,7 +105,9 @@ public class InterestRateChartSlab extends AbstractPersistableCustom<Long> {
     }
 
     private void throwExceptionIfValidationWarningsExist(final List<ApiParameterError> dataValidationErrors) {
-        if (!dataValidationErrors.isEmpty()) { throw new PlatformApiDataValidationException(dataValidationErrors); }
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
     }
 
     public InterestRateChartSlabFields slabFields() {
@@ -128,7 +130,9 @@ public class InterestRateChartSlab extends AbstractPersistableCustom<Long> {
         final Set<InterestIncentives> interestIncentives = setOfInterestIncentives();
 
         for (InterestIncentives interestIncentive : interestIncentives) {
-            if (interestIncentive.getId().equals(interestIncentiveId)) { return interestIncentive; }
+            if (interestIncentive.getId().equals(interestIncentiveId)) {
+                return interestIncentive;
+            }
         }
         return null;
     }
@@ -138,8 +142,8 @@ public class InterestRateChartSlab extends AbstractPersistableCustom<Long> {
         return incentives.remove(incentive);
     }
 
-    public void updateIncentives(JsonCommand command, final Map<String, Object> actualChanges,
-            final DataValidatorBuilder baseDataValidator, final InterestRateChartSlab chartSlab, final Locale locale) {
+    public void updateIncentives(JsonCommand command, final Map<String, Object> actualChanges, final DataValidatorBuilder baseDataValidator,
+            final InterestRateChartSlab chartSlab, final Locale locale) {
         final Map<String, Object> deleteIncentives = new HashMap<>();
         final Map<String, Object> IncentiveChanges = new HashMap<>();
         if (command.hasParameter(InterestRateChartSlabApiConstants.incentivesParamName)) {

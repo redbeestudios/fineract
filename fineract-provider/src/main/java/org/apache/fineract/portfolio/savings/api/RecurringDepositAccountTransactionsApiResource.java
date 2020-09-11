@@ -18,15 +18,14 @@
  */
 package org.apache.fineract.portfolio.savings.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +40,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.commands.domain.CommandWrapper;
 import org.apache.fineract.commands.service.CommandWrapperBuilder;
 import org.apache.fineract.commands.service.PortfolioCommandSourceWritePlatformService;
@@ -65,10 +64,7 @@ import org.springframework.stereotype.Component;
 @Path("/recurringdepositaccounts/{recurringDepositAccountId}/transactions")
 @Component
 @Scope("singleton")
-@Api(tags = {"Recurring Deposit Account Transactions"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Recurring Deposit Account Transactions", description = "Transactions possible on a recurring deposit account.")
-})
+@Tag(name = "Recurring Deposit Account Transactions", description = "Transactions possible on a recurring deposit account.")
 public class RecurringDepositAccountTransactionsApiResource {
 
     private final PlatformSecurityContext context;
@@ -80,10 +76,9 @@ public class RecurringDepositAccountTransactionsApiResource {
     private final PaymentTypeReadPlatformService paymentTypeReadPlatformService;
     private static final Set<String> FIXED_DEPOSIT_TRANSACTION_RESPONSE_DATA_PARAMETERS = new HashSet<>(
             Arrays.asList(DepositsApiConstants.idParamName, DepositsApiConstants.accountIdParamName,
-                    DepositsApiConstants.accountNoParamName, DepositsApiConstants.currencyParamName,
-                    DepositsApiConstants.amountParamName, DepositsApiConstants.dateParamName,
-                    DepositsApiConstants.paymentDetailDataParamName, DepositsApiConstants.runningBalanceParamName,
-                    DepositsApiConstants.reversedParamName));
+                    DepositsApiConstants.accountNoParamName, DepositsApiConstants.currencyParamName, DepositsApiConstants.amountParamName,
+                    DepositsApiConstants.dateParamName, DepositsApiConstants.paymentDetailDataParamName,
+                    DepositsApiConstants.runningBalanceParamName, DepositsApiConstants.reversedParamName));
 
     @Autowired
     public RecurringDepositAccountTransactionsApiResource(final PlatformSecurityContext context,
@@ -110,29 +105,33 @@ public class RecurringDepositAccountTransactionsApiResource {
     @Path("template")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve Recurring Deposit Account Transaction Template", httpMethod = "GET", notes = "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n" + "\n" + "Field Defaults\n" + "Allowed Value Lists\n" + "Example Requests:\n" + "\n" + "recurringdepositaccounts/1/transactions/template?command=deposit\n" + "\n" + "recurringdepositaccounts/1/transactions/template?command=withdrawal")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = RecurringDepositAccountTransactionsApiResourceSwagger.GetRecurringDepositAccountsRecurringDepositAccountIdTransactionsTemplateResponse.class)})
-    public String retrieveTemplate(@PathParam("recurringDepositAccountId") @ApiParam(value = "recurringDepositAccountId") final Long recurringDepositAccountId,
-            @QueryParam("command") @ApiParam(value = "command") final String commandParam, @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve Recurring Deposit Account Transaction Template", description = "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n"
+            + "\n" + "Field Defaults\n" + "Allowed Value Lists\n" + "Example Requests:\n" + "\n"
+            + "recurringdepositaccounts/1/transactions/template?command=deposit\n" + "\n"
+            + "recurringdepositaccounts/1/transactions/template?command=withdrawal")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.GetRecurringDepositAccountsRecurringDepositAccountIdTransactionsTemplateResponse.class))) })
+    public String retrieveTemplate(
+            @PathParam("recurringDepositAccountId") @Parameter(description = "recurringDepositAccountId") final Long recurringDepositAccountId,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam, @Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(DepositsApiConstants.RECURRING_DEPOSIT_ACCOUNT_RESOURCE_NAME);
 
         /***
-         * Check @Param commandParam value for deposit or withdrawal
+         * Check @Param commandParam description for deposit or withdrawal
          */
-        if (!(is(commandParam, "deposit") || is(commandParam, "withdrawal"))) { throw new UnrecognizedQueryParamException("command",
-                commandParam, new Object[] { "deposit", "withdrawal" }); }
+        if (!(is(commandParam, "deposit") || is(commandParam, "withdrawal"))) {
+            throw new UnrecognizedQueryParamException("command", commandParam, new Object[] { "deposit", "withdrawal" });
+        }
 
         /***
-         * By default get the deposit template for deposits and withdrawal
-         * transactions
+         * By default get the deposit template for deposits and withdrawal transactions
          */
         SavingsAccountTransactionData savingsAccount = this.depositAccountReadPlatformService
                 .retrieveRecurringAccountDepositTransactionTemplate(recurringDepositAccountId);
 
         /***
-         * Update transaction date and transaction type if transaction type is
-         * withdrawal
+         * Update transaction date and transaction type if transaction type is withdrawal
          */
         if (is(commandParam, "withdrawal")) {
             savingsAccount = SavingsAccountTransactionData.withWithDrawalTransactionDetails(savingsAccount);
@@ -150,32 +149,40 @@ public class RecurringDepositAccountTransactionsApiResource {
     @Path("{transactionId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve Recurring Deposit Account Transaction", httpMethod = "GET", notes = "Retrieves Recurring Deposit Account Transaction\n\n" + "Example Requests:\n" + "\n" + "recurringdepositaccounts/1/transactions/1")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = RecurringDepositAccountTransactionsApiResourceSwagger.GetRecurringDepositAccountsRecurringDepositAccountIdTransactionsTransactionIdResponse.class)})
-    public String retrieveOne(@PathParam("recurringDepositAccountId") @ApiParam(value = "recurringDepositAccountId") final Long recurringDepositAccountId,
-            @PathParam("transactionId") @ApiParam(value = "transactionId") final Long transactionId, @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve Recurring Deposit Account Transaction", description = "Retrieves Recurring Deposit Account Transaction\n\n"
+            + "Example Requests:\n" + "\n" + "recurringdepositaccounts/1/transactions/1")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.GetRecurringDepositAccountsRecurringDepositAccountIdTransactionsTransactionIdResponse.class))) })
+    public String retrieveOne(
+            @PathParam("recurringDepositAccountId") @Parameter(description = "recurringDepositAccountId") final Long recurringDepositAccountId,
+            @PathParam("transactionId") @Parameter(description = "transactionId") final Long transactionId,
+            @Context final UriInfo uriInfo) {
 
         this.context.authenticatedUser().validateHasReadPermission(DepositsApiConstants.RECURRING_DEPOSIT_ACCOUNT_RESOURCE_NAME);
-        SavingsAccountTransactionData transactionData = this.savingsAccountReadPlatformService.retrieveSavingsTransaction(
-                recurringDepositAccountId, transactionId, DepositAccountType.RECURRING_DEPOSIT);
+        SavingsAccountTransactionData transactionData = this.savingsAccountReadPlatformService
+                .retrieveSavingsTransaction(recurringDepositAccountId, transactionId, DepositAccountType.RECURRING_DEPOSIT);
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
         if (settings.isTemplate()) {
             final Collection<PaymentTypeData> paymentTypeOptions = this.paymentTypeReadPlatformService.retrieveAllPaymentTypes();
             transactionData = SavingsAccountTransactionData.templateOnTop(transactionData, paymentTypeOptions);
         }
 
-        return this.toApiJsonSerializer.serialize(settings, transactionData,
-                FIXED_DEPOSIT_TRANSACTION_RESPONSE_DATA_PARAMETERS);
+        return this.toApiJsonSerializer.serialize(settings, transactionData, FIXED_DEPOSIT_TRANSACTION_RESPONSE_DATA_PARAMETERS);
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Deposit Transaction | Withdrawal Transaction", httpMethod = "POST", notes = "Deposit Transaction:\n\n" + "Used for a deposit transaction\n\n" + "Withdrawal Transaction:\n\n" + "Used for a Withdrawal Transaction\n\n" + "Showing request/response for Deposit Transaction")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsResponse.class)})
-    public String transaction(@PathParam("recurringDepositAccountId") @ApiParam(value = "recurringDepositAccountId") final Long recurringDepositAccountId,
-            @QueryParam("command") @ApiParam(value = "command") final String commandParam, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Deposit Transaction | Withdrawal Transaction", description = "Deposit Transaction:\n\n"
+            + "Used for a deposit transaction\n\n" + "Withdrawal Transaction:\n\n" + "Used for a Withdrawal Transaction\n\n"
+            + "Showing request/response for Deposit Transaction")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsResponse.class))) })
+    public String transaction(
+            @PathParam("recurringDepositAccountId") @Parameter(description = "recurringDepositAccountId") final Long recurringDepositAccountId,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         final CommandWrapperBuilder builder = new CommandWrapperBuilder().withJson(apiRequestBodyAsJson);
 
@@ -201,12 +208,17 @@ public class RecurringDepositAccountTransactionsApiResource {
     @Path("{transactionId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Adjust Transaction | Undo transaction", httpMethod = "POST", notes = "Adjust Transaction:\n\n" + "This command modifies the given transaction.\n\n" + "Undo transaction:\n\n" + "This command reverses the given transaction.\n\n" + "Showing request/response for 'Adjust Transaction'")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsTransactionIdResponse.class)})
-    public String handleTransactionCommands(@PathParam("recurringDepositAccountId") @ApiParam(value = "recurringDepositAccountId") final Long recurringDepositAccountId,
-            @PathParam("transactionId") @ApiParam(value = "transactionId") final Long transactionId, @QueryParam("command") @ApiParam(value = "command") final String commandParam,
-            @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Adjust Transaction | Undo transaction", description = "Adjust Transaction:\n\n"
+            + "This command modifies the given transaction.\n\n" + "Undo transaction:\n\n"
+            + "This command reverses the given transaction.\n\n" + "Showing request/response for 'Adjust Transaction'")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RecurringDepositAccountTransactionsApiResourceSwagger.PostRecurringDepositAccountsRecurringDepositAccountIdTransactionsTransactionIdResponse.class))) })
+    public String handleTransactionCommands(
+            @PathParam("recurringDepositAccountId") @Parameter(description = "recurringDepositAccountId") final Long recurringDepositAccountId,
+            @PathParam("transactionId") @Parameter(description = "transactionId") final Long transactionId,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         String jsonApiRequest = apiRequestBodyAsJson;
         if (StringUtils.isBlank(jsonApiRequest)) {

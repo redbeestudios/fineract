@@ -18,11 +18,11 @@
  */
 package org.apache.fineract.integrationtests;
 
-import com.jayway.restassured.builder.RequestSpecBuilder;
-import com.jayway.restassured.builder.ResponseSpecBuilder;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.fineract.batch.domain.BatchRequest;
@@ -33,31 +33,33 @@ import org.apache.fineract.integrationtests.common.GroupHelper;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.loans.LoanProductTestBuilder;
 import org.apache.fineract.integrationtests.common.loans.LoanTransactionHelper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Test class for testing the integration of Batch API with custom batch
- * requests and various user defined workflow. Like in the case of mifos
- * community-app
+ * Test class for testing the integration of Batch API with custom batch requests and various user defined workflow.
+ * Like in the case of mifos community-app
  *
  * @author Rishabh Shukla
  */
 public class BatchRequestsIntegrationTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BatchRequestsIntegrationTest.class);
     private ResponseSpecification responseSpec;
     private RequestSpecification requestSpec;
 
     public BatchRequestsIntegrationTest() {
-        super();
+
     }
 
     /**
-     * Sets up the essential settings for the TEST like contentType,
-     * expectedStatusCode. It uses the '@Before' annotation provided by jUnit.
+     * Sets up the essential settings for the TEST like contentType, expectedStatusCode. It uses the '@BeforeEach'
+     * annotation provided by jUnit.
      */
-    @Before
+    @BeforeEach
     public void setup() {
 
         Utils.initializeRESTAssured();
@@ -68,12 +70,10 @@ public class BatchRequestsIntegrationTest {
 
     @Test
     /**
-     * Tests that a loan is successfully applied to client members of a group.
-     * Firstly, it'll create a few new clients and then will add those clients
-     * to the group. Then a few loans will be created and one of those loans
-     * will be chosen at random and similarily a few of the created clients will
-     * be chosen on random. Now, the selected loan will be applied to these
-     * clients through Batch - API ApplyLoanCommandStrategy.
+     * Tests that a loan is successfully applied to client members of a group. Firstly, it'll create a few new clients
+     * and then will add those clients to the group. Then a few loans will be created and one of those loans will be
+     * chosen at random and similarily a few of the created clients will be chosen on random. Now, the selected loan
+     * will be applied to these clients through Batch - API ApplyLoanCommandStrategy.
      */
     public void shouldReturnOkStatusForLoansAppliedToSelectedClients() {
 
@@ -88,7 +88,7 @@ public class BatchRequestsIntegrationTest {
         for (Integer i = 0; i < clientsCount; i++) {
             clientIDs[i] = ClientHelper.createClient(this.requestSpec, this.responseSpec);
             groupID = GroupHelper.associateClient(this.requestSpec, this.responseSpec, groupID.toString(), clientIDs[i].toString());
-            System.out.println("client " + clientIDs[i] + " has been added to the group " + groupID);
+            LOG.info("client {} has been added to the group {}", clientIDs[i], groupID);
         }
 
         // Generate a random count of number of new loan products to be created
@@ -132,7 +132,7 @@ public class BatchRequestsIntegrationTest {
 
         // Verify that each loan has been applied successfully
         for (BatchResponse res : response) {
-            Assert.assertEquals("Verify Status Code 200", 200L, (long) res.getStatusCode());
+            Assertions.assertEquals(200L, (long) res.getStatusCode(), "Verify Status Code 200");
         }
     }
 }

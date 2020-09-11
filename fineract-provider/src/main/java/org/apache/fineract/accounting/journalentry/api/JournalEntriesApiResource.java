@@ -20,15 +20,15 @@ package org.apache.fineract.accounting.journalentry.api;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
@@ -45,7 +45,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.accounting.journalentry.command.JournalEntryCommand;
 import org.apache.fineract.accounting.journalentry.data.JournalEntryAssociationParametersData;
 import org.apache.fineract.accounting.journalentry.data.JournalEntryData;
@@ -73,16 +73,14 @@ import org.springframework.stereotype.Component;
 @Path("/journalentries")
 @Component
 @Scope("singleton")
-@Api(tags = {"Journal Entries"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Journal Entries", description = "A journal entry refers to the logging of transactions against general ledger accounts. A journal entry may consist of several line items, each of which is either a \"debit\" or a \"credit\". The total amount of the debits must equal the total amount of the credits or the journal entry is said to be \"unbalanced\" \n" + "\n" + "A journal entry directly changes the account balances on the general ledger")
-})
+@Tag(name = "Journal Entries", description = "A journal entry refers to the logging of transactions against general ledger accounts. A journal entry may consist of several line items, each of which is either a \"debit\" or a \"credit\". The total amount of the debits must equal the total amount of the credits or the journal entry is said to be \"unbalanced\" \n"
+        + "\n" + "A journal entry directly changes the account balances on the general ledger")
 public class JournalEntriesApiResource {
 
-    private static final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(Arrays.asList("id", "officeId", "officeName",
-            "glAccountName", "glAccountId", "glAccountCode", "glAccountType", "transactionDate", "entryType", "amount", "transactionId",
-            "manualEntry", "entityType", "entityId", "createdByUserId", "createdDate", "createdByUserName", "comments", "reversed",
-            "referenceNumber", "currency", "transactionDetails"));
+    private static final Set<String> RESPONSE_DATA_PARAMETERS = new HashSet<>(
+            Arrays.asList("id", "officeId", "officeName", "glAccountName", "glAccountId", "glAccountCode", "glAccountType",
+                    "transactionDate", "entryType", "amount", "transactionId", "manualEntry", "entityType", "entityId", "createdByUserId",
+                    "createdDate", "createdByUserName", "comments", "reversed", "referenceNumber", "currency", "transactionDetails"));
 
     private final String resourceNameForPermission = "JOURNALENTRY";
 
@@ -93,7 +91,6 @@ public class JournalEntriesApiResource {
     private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
     private final BulkImportWorkbookService bulkImportWorkbookService;
     private final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService;
-
 
     @Autowired
     public JournalEntriesApiResource(final PlatformSecurityContext context,
@@ -107,24 +104,39 @@ public class JournalEntriesApiResource {
         this.commandsSourceWritePlatformService = commandsSourceWritePlatformService;
         this.apiJsonSerializerService = toApiJsonSerializer;
         this.journalEntryReadPlatformService = journalEntryReadPlatformService;
-        this.bulkImportWorkbookService=bulkImportWorkbookService;
-        this.bulkImportWorkbookPopulatorService=bulkImportWorkbookPopulatorService;
+        this.bulkImportWorkbookService = bulkImportWorkbookService;
+        this.bulkImportWorkbookPopulatorService = bulkImportWorkbookPopulatorService;
     }
 
     @GET
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "List Journal Entries", notes = "The list capability of journal entries can support pagination and sorting.\n\n" + "Example Requests:\n" + "\n" + "journalentries\n" + "\n" + "journalentries?transactionId=PB37X8Y21EQUY4S\n" + "\n" + "journalentries?officeId=1&manualEntriesOnly=true&fromDate=1 July 2013&toDate=15 July 2013&dateFormat=dd MMMM yyyy&locale=en\n" + "\n" + "journalentries?fields=officeName,glAccountName,transactionDate\n" + "\n" + "journalentries?offset=10&limit=50\n" + "\n" + "journalentries?orderBy=transactionId&sortOrder=DESC\n" + "\n" + "journalentries?runningBalance=true\n" + "\n" + "journalentries?transactionDetails=true\n" + "\n" + "journalentries?loanId=12\n" + "\n" + "journalentries?savingsId=24")
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = JournalEntryData.class, responseContainer = "list")})
-    public String retrieveAll(@Context final UriInfo uriInfo, @QueryParam("officeId") @ApiParam(value = "officeId") final Long officeId,
-            @QueryParam("glAccountId") @ApiParam(value = "glAccountId") final Long glAccountId, @QueryParam("manualEntriesOnly") @ApiParam(value = "manualEntriesOnly") final Boolean onlyManualEntries,
-            @QueryParam("fromDate") @ApiParam(value = "fromDate") final DateParam fromDateParam, @QueryParam("toDate") @ApiParam(value = "toDate") final DateParam toDateParam,
-            @QueryParam("transactionId") @ApiParam(value = "transactionId") final String transactionId, @QueryParam("entityType") @ApiParam(value = "entityType") final Integer entityType,
-            @QueryParam("offset") @ApiParam(value = "offset") final Integer offset, @QueryParam("limit") @ApiParam(value = "limit") final Integer limit,
-            @QueryParam("orderBy") @ApiParam(value = "orderBy") final String orderBy, @QueryParam("sortOrder") @ApiParam(value = "sortOrder") final String sortOrder,
-            @QueryParam("locale") @ApiParam(value = "locale") final String locale, @QueryParam("dateFormat") @ApiParam(value = "dateFormat") final String dateFormat,
-            @QueryParam("loanId") @ApiParam(value = "loanId") final Long loanId, @QueryParam("savingsId") @ApiParam(value = "savingsId") final Long savingsId,
-            @QueryParam("runningBalance") @ApiParam(value = "runningBalance") final boolean runningBalance, @QueryParam("transactionDetails") @ApiParam(value = "transactionDetails") final boolean transactionDetails) {
+    @Operation(summary = "List Journal Entries", description = "The list capability of journal entries can support pagination and sorting.\n\n"
+            + "Example Requests:\n" + "\n" + "journalentries\n" + "\n" + "journalentries?transactionId=PB37X8Y21EQUY4S\n" + "\n"
+            + "journalentries?officeId=1&manualEntriesOnly=true&fromDate=1 July 2013&toDate=15 July 2013&dateFormat=dd MMMM yyyy&locale=en\n"
+            + "\n" + "journalentries?fields=officeName,glAccountName,transactionDate\n" + "\n" + "journalentries?offset=10&limit=50\n"
+            + "\n" + "journalentries?orderBy=transactionId&sortOrder=DESC\n" + "\n" + "journalentries?runningBalance=true\n" + "\n"
+            + "journalentries?transactionDetails=true\n" + "\n" + "journalentries?loanId=12\n" + "\n" + "journalentries?savingsId=24")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = JournalEntryData.class)))) })
+    public String retrieveAll(@Context final UriInfo uriInfo,
+            @QueryParam("officeId") @Parameter(description = "officeId") final Long officeId,
+            @QueryParam("glAccountId") @Parameter(description = "glAccountId") final Long glAccountId,
+            @QueryParam("manualEntriesOnly") @Parameter(description = "manualEntriesOnly") final Boolean onlyManualEntries,
+            @QueryParam("fromDate") @Parameter(description = "fromDate") final DateParam fromDateParam,
+            @QueryParam("toDate") @Parameter(description = "toDate") final DateParam toDateParam,
+            @QueryParam("transactionId") @Parameter(description = "transactionId") final String transactionId,
+            @QueryParam("entityType") @Parameter(description = "entityType") final Integer entityType,
+            @QueryParam("offset") @Parameter(description = "offset") final Integer offset,
+            @QueryParam("limit") @Parameter(description = "limit") final Integer limit,
+            @QueryParam("orderBy") @Parameter(description = "orderBy") final String orderBy,
+            @QueryParam("sortOrder") @Parameter(description = "sortOrder") final String sortOrder,
+            @QueryParam("locale") @Parameter(description = "locale") final String locale,
+            @QueryParam("dateFormat") @Parameter(description = "dateFormat") final String dateFormat,
+            @QueryParam("loanId") @Parameter(description = "loanId") final Long loanId,
+            @QueryParam("savingsId") @Parameter(description = "savingsId") final Long savingsId,
+            @QueryParam("runningBalance") @Parameter(description = "runningBalance") final boolean runningBalance,
+            @QueryParam("transactionDetails") @Parameter(description = "transactionDetails") final boolean transactionDetails) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermission);
 
@@ -152,10 +164,16 @@ public class JournalEntriesApiResource {
     @Path("{journalEntryId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a single Entry", notes = "Example Requests:\n" + "\n" + "journalentries/1\n" + "\n" + "\n" + "\n" + "journalentries/1?fields=officeName,glAccountId,entryType,amount\n" + "\n" + "journalentries/1?runningBalance=true\n" + "\n" + "journalentries/1?transactionDetails=true")
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = JournalEntryData.class)})
-    public String retreiveJournalEntryById(@PathParam("journalEntryId") @ApiParam(value = "journalEntryId") final Long journalEntryId, @Context final UriInfo uriInfo,
-            @QueryParam("runningBalance") @ApiParam(value = "runningBalance") final boolean runningBalance, @QueryParam("transactionDetails") @ApiParam(value = "transactionDetails") final boolean transactionDetails) {
+    @Operation(summary = "Retrieve a single Entry", description = "Example Requests:\n" + "\n" + "journalentries/1\n" + "\n" + "\n" + "\n"
+            + "journalentries/1?fields=officeName,glAccountId,entryType,amount\n" + "\n" + "journalentries/1?runningBalance=true\n" + "\n"
+            + "journalentries/1?transactionDetails=true")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = JournalEntryData.class))) })
+    public String retreiveJournalEntryById(
+            @PathParam("journalEntryId") @Parameter(description = "journalEntryId") final Long journalEntryId,
+            @Context final UriInfo uriInfo,
+            @QueryParam("runningBalance") @Parameter(description = "runningBalance") final boolean runningBalance,
+            @QueryParam("transactionDetails") @Parameter(description = "transactionDetails") final boolean transactionDetails) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermission);
         JournalEntryAssociationParametersData associationParametersData = new JournalEntryAssociationParametersData(transactionDetails,
@@ -170,10 +188,16 @@ public class JournalEntriesApiResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Create \"Balanced\" Journal Entries", notes = "Note: A Balanced (simple) Journal entry would have atleast one \"Debit\" and one \"Credit\" entry whose amounts are equal \n" + "Compound Journal entries may have \"n\" debits and \"m\" credits where both \"m\" and \"n\" are greater than 0 and the net sum or all debits and credits are equal \n\n" + "\n" + "Mandatory Fields\n" + "officeId, transactionDate\n\n" + "\ncredits- glAccountId, amount, comments\n\n " + "\ndebits-  glAccountId, amount, comments\n\n " + "\n" + "Optional Fields\n" + "paymentTypeId, accountNumber, checkNumber, routingCode, receiptNumber, bankNumber")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", value = "body", dataType = "body", dataTypeClass = JournalEntryCommand.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = JournalEntriesApiResourceSwagger.PostJournalEntriesResponse.class)})
-    public String createGLJournalEntry(@ApiParam(hidden = true) final String jsonRequestBody, @QueryParam("command") @ApiParam(value = "command") final String commandParam) {
+    @Operation(summary = "Create \"Balanced\" Journal Entries", description = "Note: A Balanced (simple) Journal entry would have atleast one \"Debit\" and one \"Credit\" entry whose amounts are equal \n"
+            + "Compound Journal entries may have \"n\" debits and \"m\" credits where both \"m\" and \"n\" are greater than 0 and the net sum or all debits and credits are equal \n\n"
+            + "\n" + "Mandatory Fields\n" + "officeId, transactionDate\n\n" + "\ncredits- glAccountId, amount, comments\n\n "
+            + "\ndebits-  glAccountId, amount, comments\n\n " + "\n" + "Optional Fields\n"
+            + "paymentTypeId, accountNumber, checkNumber, routingCode, receiptNumber, bankNumber")
+    @RequestBody(content = @Content(schema = @Schema(implementation = JournalEntryCommand.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = JournalEntriesApiResourceSwagger.PostJournalEntriesResponse.class))) })
+    public String createGLJournalEntry(@Parameter(hidden = true) final String jsonRequestBody,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam) {
 
         CommandProcessingResult result = null;
         if (is(commandParam, "updateRunningBalance")) {
@@ -195,11 +219,14 @@ public class JournalEntriesApiResource {
     @Path("{transactionId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Update Running balances for Journal Entries", notes = "This API calculates the running balances for office. If office ID not provided this API calculates running balances for all offices. \n" + "Mandatory Fields\n" + "officeId")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", value = "body", dataType = "body", dataTypeClass = JournalEntriesApiResourceSwagger.PostJournalEntriesTransactionIdRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "", response = JournalEntriesApiResourceSwagger.PostJournalEntriesTransactionIdResponse.class)})
-    public String createReversalJournalEntry(@ApiParam(hidden = true) final String jsonRequestBody, @PathParam("transactionId") @ApiParam(value = "transactionId") final String transactionId,
-            @QueryParam("command") @ApiParam(value = "command") final String commandParam) {
+    @Operation(summary = "Update Running balances for Journal Entries", description = "This API calculates the running balances for office. If office ID not provided this API calculates running balances for all offices. \n"
+            + "Mandatory Fields\n" + "officeId")
+    @RequestBody(content = @Content(schema = @Schema(implementation = JournalEntriesApiResourceSwagger.PostJournalEntriesTransactionIdRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = JournalEntriesApiResourceSwagger.PostJournalEntriesTransactionIdResponse.class))) })
+    public String createReversalJournalEntry(@Parameter(hidden = true) final String jsonRequestBody,
+            @PathParam("transactionId") @Parameter(description = "transactionId") final String transactionId,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam) {
         CommandProcessingResult result = null;
         if (is(commandParam, "reverse")) {
             final CommandWrapper commandRequest = new CommandWrapperBuilder().reverseJournalEntry(transactionId).withJson(jsonRequestBody)
@@ -219,13 +246,13 @@ public class JournalEntriesApiResource {
     public String retrieveJournalEntries(@QueryParam("offset") final Integer offset, @QueryParam("limit") final Integer limit,
             @QueryParam("entryId") final Long entryId, @Context final UriInfo uriInfo) {
         this.context.authenticatedUser();
-        String transactionId = "P"+entryId ;
-        SearchParameters params = SearchParameters.forPagination(offset, limit) ;
-                Page<JournalEntryData> entries = this.journalEntryReadPlatformService.retrieveAll(params, null, null, null, null, transactionId, PortfolioProductType.PROVISIONING.getValue(), null) ;
+        String transactionId = "P" + entryId;
+        SearchParameters params = SearchParameters.forPagination(offset, limit);
+        Page<JournalEntryData> entries = this.journalEntryReadPlatformService.retrieveAll(params, null, null, null, null, transactionId,
+                PortfolioProductType.PROVISIONING.getValue(), null);
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
         return this.apiJsonSerializerService.serialize(settings, entries, RESPONSE_DATA_PARAMETERS);
     }
-
 
     @GET
     @Path("openingbalance")
@@ -235,8 +262,8 @@ public class JournalEntriesApiResource {
             @QueryParam("currencyCode") final String currencyCode) {
 
         this.context.authenticatedUser().validateHasReadPermission(this.resourceNameForPermission);
-        final OfficeOpeningBalancesData officeOpeningBalancesData = this.journalEntryReadPlatformService.retrieveOfficeOpeningBalances(
-                officeId, currencyCode);
+        final OfficeOpeningBalancesData officeOpeningBalancesData = this.journalEntryReadPlatformService
+                .retrieveOfficeOpeningBalances(officeId, currencyCode);
         final ApiRequestJsonSerializationSettings settings = this.apiRequestParameterHelper.process(uriInfo.getQueryParameters());
         return this.apiJsonSerializerService.serialize(settings, officeOpeningBalancesData);
     }
@@ -250,19 +277,17 @@ public class JournalEntriesApiResource {
     @Produces("application/vnd.ms-excel")
     public Response getJournalEntriesTemplate(@QueryParam("officeId") final Long officeId,
             @QueryParam("dateFormat") final String dateFormat) {
-        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.GL_JOURNAL_ENTRIES.toString(),
-                officeId,null,dateFormat);
+        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.GL_JOURNAL_ENTRIES.toString(), officeId, null, dateFormat);
     }
 
     @POST
     @Path("uploadtemplate")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String postJournalEntriesTemplate(@FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail,
-            @FormDataParam("locale") final String locale,
-            @FormDataParam("dateFormat") final String dateFormat){
-        final Long importDocumentId =this.bulkImportWorkbookService.importWorkbook(GlobalEntityType.GL_JOURNAL_ENTRIES.toString(),
-                uploadedInputStream,fileDetail, locale,dateFormat);
+            @FormDataParam("file") FormDataContentDisposition fileDetail, @FormDataParam("locale") final String locale,
+            @FormDataParam("dateFormat") final String dateFormat) {
+        final Long importDocumentId = this.bulkImportWorkbookService.importWorkbook(GlobalEntityType.GL_JOURNAL_ENTRIES.toString(),
+                uploadedInputStream, fileDetail, locale, dateFormat);
         return this.apiJsonSerializerService.serialize(importDocumentId);
     }
 }

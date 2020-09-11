@@ -27,7 +27,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "stretchy_report_parameter")
-public final class ReportParameterUsage extends AbstractPersistableCustom<Long> {
+public final class ReportParameterUsage extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "report_id", nullable = false)
@@ -40,7 +40,7 @@ public final class ReportParameterUsage extends AbstractPersistableCustom<Long> 
     @Column(name = "report_parameter_name")
     private String reportParameterName;
 
-    protected ReportParameterUsage() {
+    ReportParameterUsage() {
         //
     }
 
@@ -50,29 +50,17 @@ public final class ReportParameterUsage extends AbstractPersistableCustom<Long> 
         this.reportParameterName = reportParameterName;
     }
 
-    /*@Override
-    public boolean equals(final Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
-        if (obj.getClass() != getClass()) { return false; }
-        final ReportParameterUsage rhs = (ReportParameterUsage) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)) //
-                .append(getId(), rhs.getId()) //
-                .append(this.report.getId(), rhs.report.getId()) //
-                .append(this.parameter.getId(), rhs.parameter.getId()) //
-                .append(this.reportParameterName, rhs.reportParameterName) //
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(3, 5) //
-                .append(getId()) //
-                .append(this.report.getId()) //
-                .append(this.parameter.getId()) //
-                .append(this.reportParameterName) //
-                .toHashCode();
-    }*/
+    /*
+     * @Override public boolean equals(final Object obj) { if (obj == null) { return false; } if (obj == this) { return
+     * true; } if (obj.getClass() != getClass()) { return false; } final ReportParameterUsage rhs =
+     * (ReportParameterUsage) obj; return new EqualsBuilder().appendSuper(super.equals(obj)) // .append(getId(),
+     * rhs.getId()) // .append(this.report.getId(), rhs.report.getId()) // .append(this.parameter.getId(),
+     * rhs.parameter.getId()) // .append(this.reportParameterName, rhs.reportParameterName) // .isEquals(); }
+     *
+     * @Override public int hashCode() { return new HashCodeBuilder(3, 5) // .append(getId()) //
+     * .append(this.report.getId()) // .append(this.parameter.getId()) // .append(this.reportParameterName) //
+     * .toHashCode(); }
+     */
 
     public boolean hasIdOf(final Long id) {
         return getId().equals(id);

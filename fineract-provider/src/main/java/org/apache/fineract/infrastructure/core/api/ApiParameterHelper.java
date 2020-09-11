@@ -26,11 +26,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.serialization.JsonParserHelper;
 import org.apache.fineract.infrastructure.security.utils.SQLInjectionValidator;
 
-public class ApiParameterHelper {
+public final class ApiParameterHelper {
+
+    private ApiParameterHelper() {
+
+    }
 
     public static Long commandId(final MultivaluedMap<String, String> queryParams) {
         Long id = null;
@@ -168,7 +172,6 @@ public class ApiParameterHelper {
         SQLInjectionValidator.validateSQLInput(str);
         return singleQuote + StringUtils.replace(str, singleQuote, twoSingleQuotes, -1) + singleQuote;
     }
-
 
     public static Map<String, String> asMap(final MultivaluedMap<String, String> queryParameters) {
 

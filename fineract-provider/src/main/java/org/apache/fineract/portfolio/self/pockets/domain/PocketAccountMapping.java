@@ -27,7 +27,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "m_pocket_accounts_mapping")
-public class PocketAccountMapping extends AbstractPersistableCustom<Long> {
+public class PocketAccountMapping extends AbstractPersistableCustom {
 
     @Column(name = "pocket_id", length = 20, nullable = false)
     private Long pocketId;
@@ -41,11 +41,9 @@ public class PocketAccountMapping extends AbstractPersistableCustom<Long> {
     @Column(name = "account_number", nullable = false)
     private String accountNumber;
 
-    protected PocketAccountMapping() {
-    }
+    protected PocketAccountMapping() {}
 
-    private PocketAccountMapping(final Long pocketId, final Long accountId, final Integer accountType,
-            final String accountNumber) {
+    private PocketAccountMapping(final Long pocketId, final Long accountId, final Integer accountType, final String accountNumber) {
         this.pocketId = pocketId;
         this.accountId = accountId;
         this.accountType = accountType;

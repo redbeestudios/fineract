@@ -26,9 +26,10 @@ import static org.apache.fineract.interoperation.util.InteropUtil.PARAM_SCENARIO
 import static org.apache.fineract.interoperation.util.InteropUtil.PARAM_SUB_SCENARIO;
 
 import com.google.gson.JsonObject;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 import org.apache.fineract.infrastructure.core.data.DataValidatorBuilder;
 import org.apache.fineract.infrastructure.core.serialization.FromJsonHelper;
 import org.apache.fineract.interoperation.domain.InteropInitiatorType;
@@ -37,7 +38,8 @@ import org.apache.fineract.interoperation.domain.InteropTransactionScenario;
 
 public class InteropTransactionTypeData {
 
-    public static final String[] PARAMS = {PARAM_SCENARIO, PARAM_SUB_SCENARIO, PARAM_INITIATOR, PARAM_INITIATOR_TYPE, PARAM_REFUND_INFO, PARAM_BALANCE_OF_PAYMENTS};
+    public static final List<String> PARAMS = List.copyOf(Arrays.asList(PARAM_SCENARIO, PARAM_SUB_SCENARIO, PARAM_INITIATOR,
+            PARAM_INITIATOR_TYPE, PARAM_REFUND_INFO, PARAM_BALANCE_OF_PAYMENTS));
 
     @NotNull
     private final InteropTransactionScenario scenario;
@@ -47,14 +49,15 @@ public class InteropTransactionTypeData {
     private final InteropTransactionRole initiator;
     @NotNull
     private final InteropInitiatorType initiatorType;
-    //TODO: SKIP FOR NOW
+    // TODO: SKIP FOR NOW
     @Valid
     private InteropRefundData refundInfo;
 
-    private String balanceOfPayments; // 3 digits number, see https://www.imf.org/external/np/sta/bopcode/
+    private String balanceOfPayments; // 3 digits number, see
+                                      // https://www.imf.org/external/np/sta/bopcode/
 
-    InteropTransactionTypeData(InteropTransactionScenario scenario, String subScenario, InteropTransactionRole initiator, InteropInitiatorType initiatorType,
-                                      InteropRefundData refundInfo, String balanceOfPayments) {
+    InteropTransactionTypeData(InteropTransactionScenario scenario, String subScenario, InteropTransactionRole initiator,
+            InteropInitiatorType initiatorType, InteropRefundData refundInfo, String balanceOfPayments) {
         this.scenario = scenario;
         this.subScenario = subScenario;
         this.initiator = initiator;
@@ -63,7 +66,8 @@ public class InteropTransactionTypeData {
         this.balanceOfPayments = balanceOfPayments;
     }
 
-    private InteropTransactionTypeData(InteropTransactionScenario scenario, String subScenario, InteropTransactionRole initiator, InteropInitiatorType initiatorType) {
+    private InteropTransactionTypeData(InteropTransactionScenario scenario, String subScenario, InteropTransactionRole initiator,
+            InteropInitiatorType initiatorType) {
         this(scenario, subScenario, initiator, initiatorType, null, null);
     }
 
@@ -83,12 +87,13 @@ public class InteropTransactionTypeData {
         return initiatorType;
     }
 
-
-    public static InteropTransactionTypeData validateAndParse(DataValidatorBuilder dataValidator, JsonObject element, FromJsonHelper jsonHelper) {
-        if (element == null)
+    public static InteropTransactionTypeData validateAndParse(DataValidatorBuilder dataValidator, JsonObject element,
+            FromJsonHelper jsonHelper) {
+        if (element == null) {
             return null;
+        }
 
-        jsonHelper.checkForUnsupportedParameters(element, Arrays.asList(PARAMS));
+        jsonHelper.checkForUnsupportedParameters(element, PARAMS);
 
         String scenarioString = jsonHelper.extractStringNamed(PARAM_SCENARIO, element);
         DataValidatorBuilder dataValidatorCopy = dataValidator.reset().parameter(PARAM_SCENARIO).value(scenarioString).notBlank();

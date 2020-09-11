@@ -20,8 +20,6 @@ package org.apache.fineract.commands.domain;
 
 import org.apache.fineract.useradministration.api.PasswordPreferencesApiConstants;
 
-import java.util.Optional;
-
 public class CommandWrapper {
 
     private final Long commandId;
@@ -63,9 +61,9 @@ public class CommandWrapper {
     public static CommandWrapper fromExistingCommand(final Long commandId, final String actionName, final String entityName,
             final Long resourceId, final Long subresourceId, final String resourceGetUrl, final Long productId, final Long officeId,
             final Long groupId, final Long clientId, final Long loanId, final Long savingsId, final String transactionId,
-            final Long creditBureauId,final Long organisationCreditBureauId) {
+            final Long creditBureauId, final Long organisationCreditBureauId) {
         return new CommandWrapper(commandId, actionName, entityName, resourceId, subresourceId, resourceGetUrl, productId, officeId,
-                groupId, clientId, loanId, savingsId, transactionId,creditBureauId,organisationCreditBureauId);
+                groupId, clientId, loanId, savingsId, transactionId, creditBureauId, organisationCreditBureauId);
     }
 
     private CommandWrapper(final Long commandId, final String actionName, final String entityName, final Long resourceId,
@@ -85,14 +83,14 @@ public class CommandWrapper {
         this.json = null;
         this.transactionId = null;
         this.productId = productId;
-        this.creditBureauId=null;
-        this.organisationCreditBureauId=null;
+        this.creditBureauId = null;
+        this.organisationCreditBureauId = null;
     }
 
     public CommandWrapper(final Long officeId, final Long groupId, final Long clientId, final Long loanId, final Long savingsId,
-            final String actionName, final String entityName, final String topicName, final String source, final Long entityId, final Long subentityId, final String href,
-            final String json, final String transactionId, final Long productId, final Long templateId,
-            final Long creditBureauId,final Long organisationCreditBureauId) {
+            final String actionName, final String entityName, final String topicName, final String source, final Long entityId,
+            final Long subentityId, final String href, final String json, final String transactionId, final Long productId,
+            final Long templateId, final Long creditBureauId, final Long organisationCreditBureauId) {
 
         this.commandId = null;
         this.officeId = officeId;
@@ -112,14 +110,14 @@ public class CommandWrapper {
         this.transactionId = transactionId;
         this.productId = productId;
         this.templateId = templateId;
-        this.creditBureauId=creditBureauId;
-        this.organisationCreditBureauId=organisationCreditBureauId;
+        this.creditBureauId = creditBureauId;
+        this.organisationCreditBureauId = organisationCreditBureauId;
     }
 
     public CommandWrapper(final Long officeId, final Long groupId, final Long clientId, final Long loanId, final Long savingsId,
-                          final String actionName, final String entityName, final Long entityId, final Long subentityId, final String href,
-                          final String json, final String transactionId, final Long productId, final Long templateId,
-                          final Long creditBureauId,final Long organisationCreditBureauId) {
+            final String actionName, final String entityName, final Long entityId, final Long subentityId, final String href,
+            final String json, final String transactionId, final Long productId, final Long templateId, final Long creditBureauId,
+            final Long organisationCreditBureauId) {
 
         this.commandId = null;
         this.officeId = officeId;
@@ -137,14 +135,14 @@ public class CommandWrapper {
         this.transactionId = transactionId;
         this.productId = productId;
         this.templateId = templateId;
-        this.creditBureauId=creditBureauId;
-        this.organisationCreditBureauId=organisationCreditBureauId;
+        this.creditBureauId = creditBureauId;
+        this.organisationCreditBureauId = organisationCreditBureauId;
     }
 
     private CommandWrapper(final Long commandId, final String actionName, final String entityName, final Long resourceId,
             final Long subresourceId, final String resourceGetUrl, final Long productId, final Long officeId, final Long groupId,
-            final Long clientId, final Long loanId, final Long savingsId, final String transactionId,
-            final Long creditBureauId,final Long organisationCreditBureauId) {
+            final Long clientId, final Long loanId, final Long savingsId, final String transactionId, final Long creditBureauId,
+            final Long organisationCreditBureauId) {
 
         this.commandId = commandId;
         this.officeId = officeId;
@@ -161,8 +159,8 @@ public class CommandWrapper {
         this.json = null;
         this.transactionId = transactionId;
         this.productId = productId;
-        this.creditBureauId=creditBureauId;
-        this.organisationCreditBureauId=organisationCreditBureauId;
+        this.creditBureauId = creditBureauId;
+        this.organisationCreditBureauId = organisationCreditBureauId;
     }
 
     public Long getCreditBureauId() {
@@ -238,9 +236,9 @@ public class CommandWrapper {
 
     public boolean isUpdate() {
         // permissions resource has special update which involves no resource.
-        return isPermissionResource() && isUpdateOperation() || isCurrencyResource() && isUpdateOperation() || isCacheResource()
-                && isUpdateOperation() || isWorkingDaysResource() && isUpdateOperation() || isPasswordPreferencesResource()
-                && isUpdateOperation() || isUpdateOperation() && this.entityId != null;
+        return (isPermissionResource() && isUpdateOperation()) || (isCurrencyResource() && isUpdateOperation())
+                || (isCacheResource() && isUpdateOperation()) || (isWorkingDaysResource() && isUpdateOperation())
+                || (isPasswordPreferencesResource() && isUpdateOperation()) || (isUpdateOperation() && (this.entityId != null));
     }
 
     public boolean isCacheResource() {

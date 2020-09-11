@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -29,31 +29,26 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Base Spring Configuration with what's common to all Configuration subclasses.
  *
- * Notably the EnableAutoConfiguration excludes relevant for (and often adjusted
- * when upgrading versions of) Spring Boot, the "old" (pre. Spring Boot &amp;
- * MariaDB4j) fineract appContext.xml which all configurations need, and the
+ * Notably the EnableAutoConfiguration excludes relevant for (and often adjusted when upgrading versions of) Spring
+ * Boot, the "old" (pre. Spring Boot &amp; MariaDB4j) fineract appContext.xml which all configurations need, and the
  * web.xml successor WebXmlConfiguration.
  *
- * Should NOT include Configuration related to embedded Tomcat, data sources,
- * and MariaDB4j (because those differ in the subclasses).
+ * Should NOT include Configuration related to embedded Tomcat, data sources, and MariaDB4j (because those differ in the
+ * subclasses).
  */
 @Configuration
-@Import({ WebXmlConfiguration.class, WebXmlOauthConfiguration.class, WebFrontEndConfiguration.class,
-    MessagingConfiguration.class, WebTwoFactorXmlConfiguration.class, CacheConfiguration.class})
+@Import({ WebXmlConfiguration.class, WebXmlOauthConfiguration.class, WebFrontEndConfiguration.class, MessagingConfiguration.class,
+        WebTwoFactorXmlConfiguration.class, CacheConfiguration.class })
 @ImportResource({ "classpath*:META-INF/spring/appContext.xml" })
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class,
-        FlywayAutoConfiguration.class,
-        GsonAutoConfiguration.class,
-        JdbcTemplateAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class, FlywayAutoConfiguration.class, GsonAutoConfiguration.class,
+        JdbcTemplateAutoConfiguration.class })
 @EnableWebSecurity
 @EnableTransactionManagement
 public abstract class AbstractApplicationConfiguration {

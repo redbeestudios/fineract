@@ -27,7 +27,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_loan_overdue_installment_charge")
-public class LoanOverdueInstallmentCharge extends AbstractPersistableCustom<Long> {
+public class LoanOverdueInstallmentCharge extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "loan_charge_id", referencedColumnName = "id", nullable = false)
@@ -44,9 +44,9 @@ public class LoanOverdueInstallmentCharge extends AbstractPersistableCustom<Long
 
     }
 
-    public LoanOverdueInstallmentCharge(final LoanCharge loanCharge, final LoanRepaymentScheduleInstallment installment,
+    public LoanOverdueInstallmentCharge(final LoanCharge loancharge, final LoanRepaymentScheduleInstallment installment,
             final Integer frequencyNumber) {
-        this.loancharge = loanCharge;
+        this.loancharge = loancharge;
         this.installment = installment;
         this.frequencyNumber = frequencyNumber;
     }

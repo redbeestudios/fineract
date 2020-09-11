@@ -20,7 +20,7 @@ package org.apache.fineract.portfolio.client.service;
 
 import java.util.Map;
 import javax.persistence.PersistenceException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.fineract.infrastructure.codes.domain.CodeValue;
 import org.apache.fineract.infrastructure.codes.domain.CodeValueRepositoryWrapper;
 import org.apache.fineract.infrastructure.codes.exception.CodeValueNotFoundException;
@@ -41,13 +41,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements ClientIdentifierWritePlatformService {
 
-    private final static Logger logger = LoggerFactory.getLogger(ClientIdentifierWritePlatformServiceJpaRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClientIdentifierWritePlatformServiceJpaRepositoryImpl.class);
 
     private final PlatformSecurityContext context;
     private final ClientRepositoryWrapper clientRepository;
@@ -82,8 +83,8 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
         try {
             final Client client = this.clientRepository.findOneWithNotFoundDetection(clientId);
 
-            final CodeValue documentType = this.codeValueRepository.findOneWithNotFoundDetection(clientIdentifierCommand
-                    .getDocumentTypeId());
+            final CodeValue documentType = this.codeValueRepository
+                    .findOneWithNotFoundDetection(clientIdentifierCommand.getDocumentTypeId());
             documentTypeId = documentType.getId();
             documentTypeLabel = documentType.label();
 
@@ -97,13 +98,13 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
                     .withClientId(clientId) //
                     .withEntityId(clientIdentifier.getId()) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleClientIdentifierDataIntegrityViolation(documentTypeLabel, documentTypeId, documentKey, dve.getMostSpecificCause(), dve);
             return CommandProcessingResult.empty();
-        }catch(final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleClientIdentifierDataIntegrityViolation(documentTypeLabel, documentTypeId, documentKey, throwable, dve);
-             return CommandProcessingResult.empty();
+            return CommandProcessingResult.empty();
         }
     }
 
@@ -130,7 +131,9 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
 
             if (changes.containsKey("documentTypeId")) {
                 documentType = this.codeValueRepository.findOneWithNotFoundDetection(documentTypeId);
-                if (documentType == null) { throw new CodeValueNotFoundException(documentTypeId); }
+                if (documentType == null) {
+                    throw new CodeValueNotFoundException(documentTypeId);
+                }
 
                 documentTypeId = documentType.getId();
                 documentTypeLabel = documentType.label();
@@ -159,13 +162,13 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
                     .withEntityId(identifierId) //
                     .with(changes) //
                     .build();
-        } catch (final DataIntegrityViolationException dve) {
+        } catch (final JpaSystemException | DataIntegrityViolationException dve) {
             handleClientIdentifierDataIntegrityViolation(documentTypeLabel, documentTypeId, documentKey, dve.getMostSpecificCause(), dve);
             return new CommandProcessingResult(Long.valueOf(-1));
-        }catch(final PersistenceException dve) {
-            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause()) ;
+        } catch (final PersistenceException dve) {
+            Throwable throwable = ExceptionUtils.getRootCause(dve.getCause());
             handleClientIdentifierDataIntegrityViolation(documentTypeLabel, documentTypeId, documentKey, throwable, dve);
-             return CommandProcessingResult.empty();
+            return CommandProcessingResult.empty();
         }
     }
 
@@ -191,8 +194,9 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
             final String documentKey, final Throwable cause, final Exception dve) {
         if (cause.getMessage().contains("unique_active_client_identifier")) {
             throw new DuplicateClientIdentifierException(documentTypeLabel);
-        } else if (cause.getMessage().contains("unique_identifier_key")) { throw new DuplicateClientIdentifierException(
-                documentTypeId, documentTypeLabel, documentKey); }
+        } else if (cause.getMessage().contains("unique_identifier_key")) {
+            throw new DuplicateClientIdentifierException(documentTypeId, documentTypeLabel, documentKey);
+        }
 
         logAsErrorUnexpectedDataIntegrityException(dve);
         throw new PlatformDataIntegrityException("error.msg.clientIdentifier.unknown.data.integrity.issue",
@@ -200,6 +204,6 @@ public class ClientIdentifierWritePlatformServiceJpaRepositoryImpl implements Cl
     }
 
     private void logAsErrorUnexpectedDataIntegrityException(final Exception dve) {
-        logger.error(dve.getMessage(), dve);
+        LOG.error("Error occured.", dve);
     }
 }

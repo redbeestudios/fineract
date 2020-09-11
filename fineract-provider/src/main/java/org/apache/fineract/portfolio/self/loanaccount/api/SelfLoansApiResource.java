@@ -18,15 +18,15 @@
  */
 package org.apache.fineract.portfolio.self.loanaccount.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -39,7 +39,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.exception.UnrecognizedQueryParamException;
 import org.apache.fineract.infrastructure.security.service.PlatformSecurityContext;
 import org.apache.fineract.portfolio.client.exception.ClientNotFoundException;
@@ -61,10 +61,8 @@ import org.springframework.stereotype.Component;
 @Path("/self/loans")
 @Component
 @Scope("singleton")
-@Api(tags = {"Self Loans"})
-@SwaggerDefinition(tags = {
-  @Tag(name = "Self Loans", description = "")
-})
+
+@Tag(name = "Self Loans", description = "")
 public class SelfLoansApiResource {
 
     private final PlatformSecurityContext context;
@@ -77,13 +75,11 @@ public class SelfLoansApiResource {
     private final GuarantorsApiResource guarantorsApiResource;
 
     @Autowired
-    public SelfLoansApiResource(final PlatformSecurityContext context,
-            final LoansApiResource loansApiResource,
-            final LoanTransactionsApiResource loanTransactionsApiResource,
-            final LoanChargesApiResource loanChargesApiResource,
+    public SelfLoansApiResource(final PlatformSecurityContext context, final LoansApiResource loansApiResource,
+            final LoanTransactionsApiResource loanTransactionsApiResource, final LoanChargesApiResource loanChargesApiResource,
             final AppuserLoansMapperReadService appuserLoansMapperReadService,
-            final AppuserClientMapperReadService appUserClientMapperReadService,
-            final SelfLoansDataValidator dataValidator, final GuarantorsApiResource guarantorsApiResource) {
+            final AppuserClientMapperReadService appUserClientMapperReadService, final SelfLoansDataValidator dataValidator,
+            final GuarantorsApiResource guarantorsApiResource) {
         this.context = context;
         this.loansApiResource = loansApiResource;
         this.loanTransactionsApiResource = loanTransactionsApiResource;
@@ -98,63 +94,66 @@ public class SelfLoansApiResource {
     @Path("{loanId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a Loan", httpMethod = "GET", notes = "Retrieves a Loan\n\n" + "Example Requests:\n" + "\n" + "self/loans/1\n" + "\n" + "\n" + "self/loans/1?fields=id,principal,annualInterestRate\n" + "\n" + "\n" + "self/loans/1?fields=id,principal,annualInterestRate&associations=repaymentSchedule,transactions")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdResponse.class)})
-    public String retrieveLoan(@PathParam("loanId") @ApiParam(value = "loanId") final Long loanId,
-            @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve a Loan", description = "Retrieves a Loan\n\n" + "Example Requests:\n" + "\n" + "self/loans/1\n" + "\n"
+            + "\n" + "self/loans/1?fields=id,principal,annualInterestRate\n" + "\n" + "\n"
+            + "self/loans/1?fields=id,principal,annualInterestRate&associations=repaymentSchedule,transactions")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdResponse.class))) })
+    public String retrieveLoan(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId, @Context final UriInfo uriInfo) {
 
         this.dataValidator.validateRetrieveLoan(uriInfo);
 
         validateAppuserLoanMapping(loanId);
 
         final boolean staffInSelectedOfficeOnly = false;
-        return this.loansApiResource.retrieveLoan(loanId,
-                staffInSelectedOfficeOnly, uriInfo);
+        return this.loansApiResource.retrieveLoan(loanId, staffInSelectedOfficeOnly, uriInfo);
     }
 
     @GET
     @Path("{loanId}/transactions/{transactionId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a Loan Transaction Details", httpMethod = "GET", notes = "Retrieves a Loan Transaction Details" + "Example Request:\n" + "\n" + "self/loans/5/transactions/3")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdTransactionsTransactionIdResponse.class)})
-    public String retrieveTransaction(@PathParam("loanId") @ApiParam(value = "loanId") final Long loanId,
-            @PathParam("transactionId") @ApiParam(value = "transactionId") final Long transactionId,
+    @Operation(summary = "Retrieve a Loan Transaction Details", description = "Retrieves a Loan Transaction Details" + "Example Request:\n"
+            + "\n" + "self/loans/5/transactions/3")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdTransactionsTransactionIdResponse.class))) })
+    public String retrieveTransaction(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId,
+            @PathParam("transactionId") @Parameter(description = "transactionId") final Long transactionId,
             @Context final UriInfo uriInfo) {
 
         this.dataValidator.validateRetrieveTransaction(uriInfo);
 
         validateAppuserLoanMapping(loanId);
 
-        return this.loanTransactionsApiResource.retrieveTransaction(loanId,
-                transactionId, uriInfo);
+        return this.loanTransactionsApiResource.retrieveTransaction(loanId, transactionId, uriInfo);
     }
 
     @GET
     @Path("{loanId}/charges")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "List Loan Charges", httpMethod = "GET", notes = "Lists loan Charges\n\n" + "Example Requests:\n" + "\n" + "self/loans/1/charges\n" + "\n" + "\n" + "self/loans/1/charges?fields=name,amountOrPercentage")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdChargesResponse.class, responseContainer = "List")})
-    public String retrieveAllLoanCharges(
-            @PathParam("loanId") @ApiParam(value = "loanId") final Long loanId,
+    @Operation(summary = "List Loan Charges", description = "Lists loan Charges\n\n" + "Example Requests:\n" + "\n"
+            + "self/loans/1/charges\n" + "\n" + "\n" + "self/loans/1/charges?fields=name,amountOrPercentage")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdChargesResponse.class)))) })
+    public String retrieveAllLoanCharges(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId,
             @Context final UriInfo uriInfo) {
 
         validateAppuserLoanMapping(loanId);
 
-        return this.loanChargesApiResource.retrieveAllLoanCharges(loanId,
-                uriInfo);
+        return this.loanChargesApiResource.retrieveAllLoanCharges(loanId, uriInfo);
     }
 
     @GET
     @Path("{loanId}/charges/{chargeId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve a Loan Charge", httpMethod = "GET", notes = "Retrieves a Loan Charge\n\n" + "Example Requests:\n" + "\n" + "self/loans/1/charges/1\n" + "\n" + "\n" + "self/loans/1/charges/1?fields=name,amountOrPercentage")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdChargesResponse.class)})
-    public String retrieveLoanCharge(@PathParam("loanId") @ApiParam(value = "loanId") final Long loanId,
-            @PathParam("chargeId") @ApiParam(value = "chargeId") final Long loanChargeId,
-            @Context final UriInfo uriInfo) {
+    @Operation(summary = "Retrieve a Loan Charge", description = "Retrieves a Loan Charge\n\n" + "Example Requests:\n" + "\n"
+            + "self/loans/1/charges/1\n" + "\n" + "\n" + "self/loans/1/charges/1?fields=name,amountOrPercentage")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.GetSelfLoansLoanIdChargesResponse.class))) })
+    public String retrieveLoanCharge(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId,
+            @PathParam("chargeId") @Parameter(description = "chargeId") final Long loanChargeId, @Context final UriInfo uriInfo) {
 
         validateAppuserLoanMapping(loanId);
 
@@ -165,63 +164,78 @@ public class SelfLoansApiResource {
     @Path("template")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Retrieve Loan Details Template", httpMethod = "GET", notes = "Retrieves Loan Details Template\n\n" + "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n" + "\n" + "Field Defaults\n" + "Allowed Value Lists\n\n" + "Example Requests:\n" + "\n" + "self/loans/template?templateType=individual&clientId=1\n" + "\n" + "\n" + "self/loans/template?templateType=individual&clientId=1&productId=1")
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.GetSelfLoansTemplateResponse.class)})
-    public String template(@QueryParam("clientId") @ApiParam(value = "clientId") final Long clientId,
-            @QueryParam("productId") @ApiParam(value = "productId") final Long productId,
-            @QueryParam("templateType") @ApiParam(value = "templateType") final String templateType,
+    @Operation(summary = "Retrieve Loan Details Template", description = "Retrieves Loan Details Template\n\n"
+            + "This is a convenience resource. It can be useful when building maintenance user interface screens for client applications. The template data returned consists of any or all of:\n"
+            + "\n" + "Field Defaults\n" + "Allowed description Lists\n\n" + "Example Requests:\n" + "\n"
+            + "self/loans/template?templateType=individual&clientId=1\n" + "\n" + "\n"
+            + "self/loans/template?templateType=individual&clientId=1&productId=1")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.GetSelfLoansTemplateResponse.class))) })
+    public String template(@QueryParam("clientId") @Parameter(description = "clientId") final Long clientId,
+            @QueryParam("productId") @Parameter(description = "productId") final Long productId,
+            @QueryParam("templateType") @Parameter(description = "templateType") final String templateType,
             @Context final UriInfo uriInfo) {
 
-        if(clientId != null){
+        if (clientId != null) {
             validateAppuserClientsMapping(clientId);
         }
 
         if (templateType == null) {
             final String errorMsg = "Loan template type must be provided";
             throw new LoanTemplateTypeRequiredException(errorMsg);
-        } else if (!(templateType.equalsIgnoreCase("individual")
-                || templateType.equalsIgnoreCase("collateral"))){
+        } else if (!(templateType.equalsIgnoreCase("individual") || templateType.equalsIgnoreCase("collateral"))) {
             final String errorMsg = "Loan template type '" + templateType + "' is not supported";
             throw new NotSupportedLoanTemplateTypeException(errorMsg, templateType);
         }
         final Long groupId = null;
         final boolean staffInSelectedOfficeOnly = false;
         final boolean onlyActive = true;
-        return this.loansApiResource.template(clientId, groupId, productId,
-                templateType, staffInSelectedOfficeOnly, onlyActive, uriInfo);
+        return this.loansApiResource.template(clientId, groupId, productId, templateType, staffInSelectedOfficeOnly, onlyActive, uriInfo);
 
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Calculate Loan Repayment Schedule | Submit a new Loan Application", httpMethod = "POST", notes =  "Calculate Loan Repayment Schedule:\n\n" + "Calculates Loan Repayment Schedule\n\n" + "Mandatory Fields: productId, principal, loanTermFrequency, loanTermFrequencyType, numberOfRepayments, repaymentEvery, repaymentFrequencyType, interestRatePerPeriod, amortizationType, interestType, interestCalculationPeriodType, expectedDisbursementDate, transactionProcessingStrategyId\n\n" + "Submit a new Loan Application:\n\n" + "Mandatory Fields: clientId, productId, principal, loanTermFrequency, loanTermFrequencyType, loanType, numberOfRepayments, repaymentEvery, repaymentFrequencyType, interestRatePerPeriod, amortizationType, interestType, interestCalculationPeriodType, transactionProcessingStrategyId, expectedDisbursementDate, submittedOnDate, loanType\n\n" + "Additional Mandatory Fields if interest recalculation is enabled for product and Rest frequency not same as repayment period: recalculationRestFrequencyDate\n\n" + "Additional Mandatory Fields if interest recalculation with interest/fee compounding is enabled for product and compounding frequency not same as repayment period: recalculationCompoundingFrequencyDate\n\n" + "Additional Mandatory Field if Entity-Datatable Check is enabled for the entity of type loan: datatables\n\n" + "Optional Fields: graceOnPrincipalPayment, graceOnInterestPayment, graceOnInterestCharged, linkAccountId, allowPartialPeriodInterestCalcualtion, fixedEmiAmount, maxOutstandingLoanBalance, disbursementData, graceOnArrearsAgeing, createStandingInstructionAtDisbursement (requires linkedAccountId if set to true)\n\n" + "Showing request/response for 'Submit a new Loan Application'")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = SelfLoansApiResourceSwagger.PostSelfLoansRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.PostSelfLoansResponse.class)})
-    public String calculateLoanScheduleOrSubmitLoanApplication(@QueryParam("command") @ApiParam(value = "command") final String commandParam,
-            @Context final UriInfo uriInfo, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Calculate Loan Repayment Schedule | Submit a new Loan Application", description = "Calculate Loan Repayment Schedule:\n\n"
+            + "Calculates Loan Repayment Schedule\n\n"
+            + "Mandatory Fields: productId, principal, loanTermFrequency, loanTermFrequencyType, numberOfRepayments, repaymentEvery, repaymentFrequencyType, interestRatePerPeriod, amortizationType, interestType, interestCalculationPeriodType, expectedDisbursementDate, transactionProcessingStrategyId\n\n"
+            + "Submit a new Loan Application:\n\n"
+            + "Mandatory Fields: clientId, productId, principal, loanTermFrequency, loanTermFrequencyType, loanType, numberOfRepayments, repaymentEvery, repaymentFrequencyType, interestRatePerPeriod, amortizationType, interestType, interestCalculationPeriodType, transactionProcessingStrategyId, expectedDisbursementDate, submittedOnDate, loanType\n\n"
+            + "Additional Mandatory Fields if interest recalculation is enabled for product and Rest frequency not same as repayment period: recalculationRestFrequencyDate\n\n"
+            + "Additional Mandatory Fields if interest recalculation with interest/fee compounding is enabled for product and compounding frequency not same as repayment period: recalculationCompoundingFrequencyDate\n\n"
+            + "Additional Mandatory Field if Entity-Datatable Check is enabled for the entity of type loan: datatables\n\n"
+            + "Optional Fields: graceOnPrincipalPayment, graceOnInterestPayment, graceOnInterestCharged, linkAccountId, allowPartialPeriodInterestCalcualtion, fixedEmiAmount, maxOutstandingLoanBalance, disbursementData, graceOnArrearsAgeing, createStandingInstructionAtDisbursement (requires linkedAccountId if set to true)\n\n"
+            + "Showing request/response for 'Submit a new Loan Application'")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PostSelfLoansRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PostSelfLoansResponse.class))) })
+    public String calculateLoanScheduleOrSubmitLoanApplication(
+            @QueryParam("command") @Parameter(description = "command") final String commandParam, @Context final UriInfo uriInfo,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         HashMap<String, Object> attr = this.dataValidator.validateLoanApplication(apiRequestBodyAsJson);
         final Long clientId = (Long) attr.get("clientId");
         validateAppuserClientsMapping(clientId);
 
-        return this.loansApiResource.calculateLoanScheduleOrSubmitLoanApplication(commandParam,
-                uriInfo, apiRequestBodyAsJson);
+        return this.loansApiResource.calculateLoanScheduleOrSubmitLoanApplication(commandParam, uriInfo, apiRequestBodyAsJson);
     }
 
     @PUT
     @Path("{loanId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Update a Loan Application", httpMethod = "PUT", notes = "Loan application can only be modified when in 'Submitted and pending approval' state. Once the application is approved, the details cannot be changed using this method.")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = SelfLoansApiResourceSwagger.PutSelfLoansLoanIdRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200, message = "OK", response = SelfLoansApiResourceSwagger.PutSelfLoansLoanIdResponse.class)})
-    public String modifyLoanApplication(@PathParam("loanId") @ApiParam(value = "loanId") final Long loanId, @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Update a Loan Application", description = "Loan application can only be modified when in 'Submitted and pending approval' state. Once the application is approved, the details cannot be changed using this method.")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PutSelfLoansLoanIdRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PutSelfLoansLoanIdResponse.class))) })
+    public String modifyLoanApplication(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
 
         HashMap<String, Object> attr = this.dataValidator.validateModifyLoanApplication(apiRequestBodyAsJson);
         validateAppuserLoanMapping(loanId);
         final Long clientId = (Long) attr.get("clientId");
-        if(clientId != null){
+        if (clientId != null) {
             validateAppuserClientsMapping(clientId);
         }
 
@@ -232,11 +246,14 @@ public class SelfLoansApiResource {
     @Path("{loanId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Applicant Withdraws from Loan Application", httpMethod = "POST", notes = "Applicant Withdraws from Loan Application\n\n" + "Mandatory Fields: withdrawnOnDate")
-    @ApiImplicitParams({@ApiImplicitParam(value = "body", required = true, paramType = "body", dataType = "body", format = "body", dataTypeClass = SelfLoansApiResourceSwagger.PostSelfLoansLoanIdRequest.class)})
-    @ApiResponses({@ApiResponse(code = 200,message = "OK", response = SelfLoansApiResourceSwagger.PostSelfLoansLoanIdResponse.class)})
-    public String stateTransitions(@PathParam("loanId") @ApiParam(value = "loanId") final Long loanId, @QueryParam("command") @ApiParam(value = "command") final String commandParam,
-            @ApiParam(hidden = true) final String apiRequestBodyAsJson) {
+    @Operation(summary = "Applicant Withdraws from Loan Application", description = "Applicant Withdraws from Loan Application\n\n"
+            + "Mandatory Fields: withdrawnOnDate")
+    @RequestBody(required = true, content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PostSelfLoansLoanIdRequest.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SelfLoansApiResourceSwagger.PostSelfLoansLoanIdResponse.class))) })
+    public String stateTransitions(@PathParam("loanId") @Parameter(description = "loanId") final Long loanId,
+            @QueryParam("command") @Parameter(description = "command") final String commandParam,
+            @Parameter(hidden = true) final String apiRequestBodyAsJson) {
         if (!is(commandParam, "withdrawnByApplicant")) {
             throw new UnrecognizedQueryParamException("command", commandParam);
         }
@@ -246,8 +263,7 @@ public class SelfLoansApiResource {
 
     private void validateAppuserLoanMapping(final Long loanId) {
         AppUser user = this.context.authenticatedUser();
-        final boolean isLoanMappedToUser = this.appuserLoansMapperReadService
-                .isLoanMappedToUser(loanId, user.getId());
+        final boolean isLoanMappedToUser = this.appuserLoansMapperReadService.isLoanMappedToUser(loanId, user.getId());
         if (!isLoanMappedToUser) {
             throw new LoanNotFoundException(loanId);
         }
@@ -255,8 +271,7 @@ public class SelfLoansApiResource {
 
     private void validateAppuserClientsMapping(final Long clientId) {
         AppUser user = this.context.authenticatedUser();
-        final boolean mappedClientId = this.appUserClientMapperReadService
-                .isClientMappedToUser(clientId, user.getId());
+        final boolean mappedClientId = this.appUserClientMapperReadService.isClientMappedToUser(clientId, user.getId());
         if (!mappedClientId) {
             throw new ClientNotFoundException(clientId);
         }

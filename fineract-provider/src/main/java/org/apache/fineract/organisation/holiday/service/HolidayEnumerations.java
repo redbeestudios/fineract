@@ -22,7 +22,11 @@ import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 import org.apache.fineract.organisation.holiday.domain.HolidayStatusType;
 import org.apache.fineract.organisation.holiday.domain.RescheduleType;
 
-public class HolidayEnumerations {
+public final class HolidayEnumerations {
+
+    private HolidayEnumerations() {
+
+    }
 
     public static EnumOptionData holidayStatusType(final int id) {
         return holidayStatusType(HolidayStatusType.fromInt(id));
@@ -55,7 +59,6 @@ public class HolidayEnumerations {
         return rescheduleType(RescheduleType.fromInt(id));
     }
 
-
     public static EnumOptionData rescheduleType(final RescheduleType type) {
         EnumOptionData optionData = null;
         switch (type) {
@@ -69,8 +72,7 @@ public class HolidayEnumerations {
             break;
 
             default:
-                optionData = new EnumOptionData(RescheduleType.INVALID.getValue().longValue(),
-                        RescheduleType.INVALID.getCode(), "Invalid");
+                optionData = new EnumOptionData(RescheduleType.INVALID.getValue().longValue(), RescheduleType.INVALID.getCode(), "Invalid");
             break;
         }
         return optionData;

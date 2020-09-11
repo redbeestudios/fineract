@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.campaigns.constants.CampaignType;
 import org.apache.fineract.infrastructure.campaigns.sms.constants.SmsCampaignTriggerType;
 import org.apache.fineract.infrastructure.campaigns.sms.data.SmsBusinessRulesData;
@@ -79,7 +79,7 @@ public class SmsCampaignReadPlatformServiceImpl implements SmsCampaignReadPlatfo
             final String sql = "select " + this.smsCampaignMapper.schema + " where sc.id = ? and sc.is_visible = ?";
             return this.jdbcTemplate.queryForObject(sql, this.smsCampaignMapper, new Object[] { campaignId, isVisible });
         } catch (final EmptyResultDataAccessException e) {
-            throw new SmsCampaignNotFound(campaignId);
+            throw new SmsCampaignNotFound(campaignId, e);
         }
     }
 
@@ -117,7 +117,9 @@ public class SmsCampaignReadPlatformServiceImpl implements SmsCampaignReadPlatfo
         final Collection<EnumOptionData> frequencyTypeOptions = this.calendarDropdownReadPlatformService
                 .retrieveCalendarFrequencyTypeOptions();
         final Collection<EnumOptionData> periodFrequencyOptions = this.smsCampaignDropdownReadPlatformService.retrivePeriodFrequencyTypes();
-        //final Collection<TriggerTypeWithSubTypesData> triggerTypeSubTypeOptions = this.smsCampaignDropdownReadPlatformService.getTriggerTypeAndSubTypes();
+        // final Collection<TriggerTypeWithSubTypesData>
+        // triggerTypeSubTypeOptions =
+        // this.smsCampaignDropdownReadPlatformService.getTriggerTypeAndSubTypes();
         return SmsCampaignData.template(smsProviderOptions, campaignTypeOptions, businessRulesOptions, campaignTriggerTypeOptions, months,
                 weekDays, frequencyTypeOptions, periodFrequencyOptions);
     }
@@ -266,8 +268,9 @@ public class SmsCampaignReadPlatformServiceImpl implements SmsCampaignReadPlatfo
             final String reportName = rs.getString("reportName");
             final Long providerId = rs.getLong("providerId");
             final Boolean isNotification = rs.getBoolean("isNotification");
-            return SmsCampaignData.instance(id, campaignName, campaignTypeEnum, triggerTypeEnum, runReportId, reportName, paramValue, status, message, nextTriggerDate, lastTriggerDate,
-                    smsCampaignTimeLine, recurrenceStartDate, recurrence, providerId, isNotification);
+            return SmsCampaignData.instance(id, campaignName, campaignTypeEnum, triggerTypeEnum, runReportId, reportName, paramValue,
+                    status, message, nextTriggerDate, lastTriggerDate, smsCampaignTimeLine, recurrenceStartDate, recurrence, providerId,
+                    isNotification);
         }
     }
 

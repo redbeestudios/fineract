@@ -18,7 +18,7 @@
  */
 package org.apache.fineract.notification;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
@@ -37,12 +37,12 @@ import org.apache.fineract.useradministration.domain.AppUser;
 import org.apache.fineract.useradministration.domain.AppUserRepository;
 import org.apache.fineract.useradministration.domain.Role;
 import org.apache.fineract.useradministration.domain.RoleRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TopicTest {
 
     @Mock
@@ -79,7 +79,7 @@ public class TopicTest {
 
         verify(this.roleRepository, times(1)).save(role);
         verify(this.topicWritePltfService, times(1)).create(refEq(topic));
-        assertEquals(topicId, new Long(1));
+        assertEquals(topicId, Long.valueOf(1));
 
     }
 
@@ -97,7 +97,7 @@ public class TopicTest {
         Long subscriberId = this.topicSubscriberWritePltfService.create(topicSubscriber);
 
         verify(this.topicSubscriberWritePltfService, times(1)).create(refEq(topicSubscriber));
-        assertEquals(subscriberId, new Long(1));
+        assertEquals(subscriberId, Long.valueOf(1));
 
     }
 

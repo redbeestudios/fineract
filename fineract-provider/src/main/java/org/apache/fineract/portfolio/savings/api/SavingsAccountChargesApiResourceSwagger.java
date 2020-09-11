@@ -18,305 +18,305 @@
  */
 package org.apache.fineract.portfolio.savings.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 
 /**
  * Created by Chirag Gupta on 12/30/17.
  */
 final class SavingsAccountChargesApiResourceSwagger {
-    private SavingsAccountChargesApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "GetSavingsAccountsSavingsAccountIdChargesResponse")
-    public final static class GetSavingsAccountsSavingsAccountIdChargesResponse {
-        private GetSavingsAccountsSavingsAccountIdChargesResponse() {
-        }
+    private SavingsAccountChargesApiResourceSwagger() {}
 
-        final class GetChargesCurrencyResponse {
-            @ApiModelProperty(example = "USD")
+    @Schema(description = "GetSavingsAccountsSavingsAccountIdChargesResponse")
+    public static final class GetSavingsAccountsSavingsAccountIdChargesResponse {
+
+        private GetSavingsAccountsSavingsAccountIdChargesResponse() {}
+
+        static final class GetChargesCurrencyResponse {
+
+            @Schema(example = "USD")
             public String code;
-            @ApiModelProperty(example = "US Dollar")
+            @Schema(example = "US Dollar")
             public String name;
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer decimalPlaces;
-            @ApiModelProperty(example = "$")
+            @Schema(example = "$")
             public String displaySymbol;
-            @ApiModelProperty(example = "currency.USD")
+            @Schema(example = "currency.USD")
             public String nameCode;
-            @ApiModelProperty(example = "US Dollar ($)")
+            @Schema(example = "US Dollar ($)")
             public String displayLabel;
         }
 
-        final class GetChargesChargeCalculationType {
-            private GetChargesChargeCalculationType() {
-            }
+        static final class GetChargesChargeCalculationType {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesChargeCalculationType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeCalculationType.flat")
+            @Schema(example = "chargeCalculationType.flat")
             public String code;
-            @ApiModelProperty(example = "Flat")
-            public String value;
+            @Schema(example = "Flat")
+            public String description;
         }
 
-        final class GetChargesChargeTimeType {
-            private GetChargesChargeTimeType() {
-            }
+        static final class GetChargesChargeTimeType {
 
-            @ApiModelProperty(example = "1")
+            private GetChargesChargeTimeType() {}
+
+            @Schema(example = "1")
             public Integer id;
-            @ApiModelProperty(example = "chargeTimeType.specifiedDueDate")
+            @Schema(example = "chargeTimeType.specifiedDueDate")
             public String code;
-            @ApiModelProperty(example = "Specified due date")
-            public String value;
+            @Schema(example = "Specified due date")
+            public String description;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "3")
+        @Schema(example = "3")
         public Integer chargeId;
-        @ApiModelProperty(example = "57")
+        @Schema(example = "57")
         public Integer accountId;
-        @ApiModelProperty(example = "Savings account maintenance fee")
+        @Schema(example = "Savings account maintenance fee")
         public String name;
         public GetChargesChargeTimeType chargeTimeType;
         public GetChargesChargeCalculationType chargeCalculationType;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Double percentage;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Double amountPercentageAppliedTo;
         public GetChargesCurrencyResponse currency;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amount;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountPaid;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWaived;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWrittenOff;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amountOutstanding;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amountOrPercentage;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean penalty;
     }
 
-    @ApiModel(value = "GetSavingsAccountsSavingsAccountIdChargesTemplateResponse")
-    public final static class GetSavingsAccountsSavingsAccountIdChargesTemplateResponse {
-        private GetSavingsAccountsSavingsAccountIdChargesTemplateResponse() {
-        }
+    @Schema(description = "GetSavingsAccountsSavingsAccountIdChargesTemplateResponse")
+    public static final class GetSavingsAccountsSavingsAccountIdChargesTemplateResponse {
 
-        final class GetSavingsChargesOptions {
-            private GetSavingsChargesOptions() {
-            }
+        private GetSavingsAccountsSavingsAccountIdChargesTemplateResponse() {}
 
-            final class GetSavingsChargesChargeTimeType {
-                private GetSavingsChargesChargeTimeType() {
-                }
+        static final class GetSavingsChargesOptions {
 
-                @ApiModelProperty(example = "2")
+            private GetSavingsChargesOptions() {}
+
+            static final class GetSavingsChargesChargeTimeType {
+
+                private GetSavingsChargesChargeTimeType() {}
+
+                @Schema(example = "2")
                 public Integer id;
-                @ApiModelProperty(example = "chargeTimeType.specifiedDueDate")
+                @Schema(example = "chargeTimeType.specifiedDueDate")
                 public String code;
-                @ApiModelProperty(example = "Specified due date")
-                public String value;
+                @Schema(example = "Specified due date")
+                public String description;
             }
 
-            final class GetChargesAppliesTo {
-                private GetChargesAppliesTo() {
-                }
+            static final class GetChargesAppliesTo {
 
-                @ApiModelProperty(example = "1")
+                private GetChargesAppliesTo() {}
+
+                @Schema(example = "1")
                 public Integer id;
-                @ApiModelProperty(example = "chargeAppliesTo.savings")
+                @Schema(example = "chargeAppliesTo.savings")
                 public String code;
-                @ApiModelProperty(example = "Savings")
-                public String value;
+                @Schema(example = "Savings")
+                public String description;
             }
 
-            @ApiModelProperty(example = "2")
+            @Schema(example = "2")
             public Integer id;
-            @ApiModelProperty(example = "Passbook Fee")
+            @Schema(example = "Passbook Fee")
             public String name;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public Boolean active;
-            @ApiModelProperty(example = "false")
+            @Schema(example = "false")
             public Boolean penalty;
             public GetSavingsAccountsSavingsAccountIdChargesResponse.GetChargesCurrencyResponse currency;
-            @ApiModelProperty(example = "100")
+            @Schema(example = "100")
             public Float amount;
             public GetSavingsChargesChargeTimeType chargeTimeType;
             public GetChargesAppliesTo chargesAppliesTo;
             public GetSavingsAccountsSavingsAccountIdChargesResponse.GetChargesChargeCalculationType chargeCalculationType;
         }
 
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountPaid;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWaived;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWrittenOff;
         public Set<GetSavingsChargesOptions> chargeOptions;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean penalty;
     }
 
-    @ApiModel(value = "GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
-    public final static class GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
-        private GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {
-        }
+    @Schema(description = "GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
+    public static final class GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private GetSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer id;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer chargeId;
-        @ApiModelProperty(example = "Passbook fee")
+        @Schema(example = "Passbook fee")
         public String name;
         public GetSavingsAccountsSavingsAccountIdChargesResponse.GetChargesChargeTimeType chargeTimeType;
         public GetSavingsAccountsSavingsAccountIdChargesResponse.GetChargesChargeCalculationType chargeCalculationType;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Double percentage;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Double amountPercentageAppliedTo;
         public GetSavingsAccountsSavingsAccountIdChargesResponse.GetChargesCurrencyResponse currency;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amount;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountPaid;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWaived;
-        @ApiModelProperty(example = "0")
+        @Schema(example = "0")
         public Float amountWrittenOff;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amountOutstanding;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amountOrPercentage;
-        @ApiModelProperty(example = "false")
+        @Schema(example = "false")
         public Boolean penalty;
     }
 
-    @ApiModel(value = "PostSavingsAccountsSavingsAccountIdChargesRequest")
-    public final static class PostSavingsAccountsSavingsAccountIdChargesRequest {
-        private PostSavingsAccountsSavingsAccountIdChargesRequest() {
-        }
+    @Schema(description = "PostSavingsAccountsSavingsAccountIdChargesRequest")
+    public static final class PostSavingsAccountsSavingsAccountIdChargesRequest {
 
-        @ApiModelProperty(example = "2")
+        private PostSavingsAccountsSavingsAccountIdChargesRequest() {}
+
+        @Schema(example = "2")
         public Integer chargeId;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "100")
+        @Schema(example = "100")
         public Float amount;
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "29 April 2013")
+        @Schema(example = "29 April 2013")
         public String dueDate;
     }
 
-    @ApiModel(value = "PostSavingsAccountsSavingsAccountIdChargesResponse")
-    public final static class PostSavingsAccountsSavingsAccountIdChargesResponse {
-        private PostSavingsAccountsSavingsAccountIdChargesResponse() {
-        }
+    @Schema(description = "PostSavingsAccountsSavingsAccountIdChargesResponse")
+    public static final class PostSavingsAccountsSavingsAccountIdChargesResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostSavingsAccountsSavingsAccountIdChargesResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "6")
+        @Schema(example = "6")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest")
-    public final static class PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest {
-        private PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest() {
-        }
+    @Schema(description = "PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest")
+    public static final class PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest {
 
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        private PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest() {}
+
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "60")
+        @Schema(example = "60")
         public Float amount;
-        @ApiModelProperty(example = "27 March 2013")
+        @Schema(example = "27 March 2013")
         public String dueDate;
     }
 
-    @ApiModel(value = "PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
-    public final static class PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
-        private PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {
-        }
+    @Schema(description = "PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
+    public static final class PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
 
-        final class PutSavingsChanges {
-            private PutSavingsChanges() {
-            }
+        private PutSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {}
 
-            @ApiModelProperty(example = "27 March 2013")
+        static final class PutSavingsChanges {
+
+            private PutSavingsChanges() {}
+
+            @Schema(example = "27 March 2013")
             public String dueDate;
-            @ApiModelProperty(example = "dd MMMM yyyy")
+            @Schema(example = "dd MMMM yyyy")
             public String dateFormat;
-            @ApiModelProperty(example = "en")
+            @Schema(example = "en")
             public String locale;
-            @ApiModelProperty(example = "60.0")
+            @Schema(example = "60.0")
             public Float amount;
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "6")
+        @Schema(example = "6")
         public Integer resourceId;
         public PutSavingsChanges changes;
     }
 
-    @ApiModel(value = "PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest")
-    public final static class PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest {
-        private PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest() {
-        }
+    @Schema(description = "PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest")
+    public static final class PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest {
 
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        private PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdRequest() {}
+
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "60")
+        @Schema(example = "60")
         public Float amount;
-        @ApiModelProperty(example = "12 September 2013")
+        @Schema(example = "12 September 2013")
         public String dueDate;
     }
 
-    @ApiModel(value = "PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
-    public final static class PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
-        private PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {
-        }
+    @Schema(description = "PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
+    public static final class PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private PostSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 
-    @ApiModel(value = "DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
-    public final static class DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
-        private DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {
-        }
+    @Schema(description = "DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse")
+    public static final class DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse {
 
-        @ApiModelProperty(example = "1")
+        private DeleteSavingsAccountsSavingsAccountIdChargesSavingsAccountChargeIdResponse() {}
+
+        @Schema(example = "1")
         public Integer officeId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer clientId;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Integer savingsId;
-        @ApiModelProperty(example = "2")
+        @Schema(example = "2")
         public Integer resourceId;
     }
 }

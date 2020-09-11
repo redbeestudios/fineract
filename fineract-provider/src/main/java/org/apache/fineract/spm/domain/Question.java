@@ -32,7 +32,7 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 
 @Entity
 @Table(name = "m_survey_questions")
-public class Question extends AbstractPersistableCustom<Long> {
+public class Question extends AbstractPersistableCustom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
@@ -58,7 +58,7 @@ public class Question extends AbstractPersistableCustom<Long> {
     private Integer sequenceNo;
 
     public Question() {
-        super();
+
     }
 
     public Survey getSurvey() {

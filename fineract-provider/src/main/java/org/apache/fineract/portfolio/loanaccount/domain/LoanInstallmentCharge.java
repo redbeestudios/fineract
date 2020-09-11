@@ -30,7 +30,7 @@ import org.apache.fineract.organisation.monetary.domain.Money;
 
 @Entity
 @Table(name = "m_loan_installment_charge")
-public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> implements Comparable<LoanInstallmentCharge> {
+public class LoanInstallmentCharge extends AbstractPersistableCustom implements Comparable<LoanInstallmentCharge> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "loan_charge_id", referencedColumnName = "id", nullable = false)
@@ -73,8 +73,8 @@ public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> imple
         return this.installment.getInstallmentNumber().compareTo(o.installment.getInstallmentNumber());
     }
 
-    public LoanInstallmentCharge(final BigDecimal amount, final LoanCharge loanCharge, final LoanRepaymentScheduleInstallment installment) {
-        this.loancharge = loanCharge;
+    public LoanInstallmentCharge(final BigDecimal amount, final LoanCharge loancharge, final LoanRepaymentScheduleInstallment installment) {
+        this.loancharge = loancharge;
         this.installment = installment;
         this.amount = amount;
         this.amountOutstanding = amount;
@@ -103,12 +103,16 @@ public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> imple
     }
 
     private boolean determineIfFullyPaid() {
-        if (this.amount == null) { return true; }
+        if (this.amount == null) {
+            return true;
+        }
         return BigDecimal.ZERO.compareTo(calculateOutstanding()) == 0;
     }
 
     private BigDecimal calculateOutstanding() {
-        if (this.amount == null) { return null; }
+        if (this.amount == null) {
+            return null;
+        }
         BigDecimal amountPaidLocal = BigDecimal.ZERO;
         if (this.amountPaid != null) {
             amountPaidLocal = this.amountPaid;
@@ -264,7 +268,6 @@ public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> imple
         }
     }
 
-
     public void updateInstallment(LoanRepaymentScheduleInstallment installment) {
         this.installment = installment;
     }
@@ -275,12 +278,12 @@ public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> imple
 
         Money amountToDeductOnThisCharge = Money.zero(incrementBy.getCurrency());
         if (incrementBy.isGreaterThanOrEqualTo(amountPaidToDate)) {
-                amountToDeductOnThisCharge = amountPaidToDate;
+            amountToDeductOnThisCharge = amountPaidToDate;
             amountPaidToDate = Money.zero(incrementBy.getCurrency());
             this.amountPaid = amountPaidToDate.getAmount();
             this.amountOutstanding = this.amount;
         } else {
-                amountToDeductOnThisCharge = incrementBy;
+            amountToDeductOnThisCharge = incrementBy;
             amountPaidToDate = amountPaidToDate.minus(incrementBy);
             this.amountPaid = amountPaidToDate.getAmount();
             this.amountOutstanding = calculateAmountOutstanding(incrementBy.getCurrency());
@@ -294,9 +297,9 @@ public class LoanInstallmentCharge extends AbstractPersistableCustom<Long> imple
     public LoanCharge getLoancharge() {
         return this.loancharge;
     }
+
     public LoanRepaymentScheduleInstallment getInstallment() {
         return this.installment;
     }
-
 
 }

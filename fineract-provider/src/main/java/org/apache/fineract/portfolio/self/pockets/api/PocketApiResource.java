@@ -19,13 +19,13 @@
 
 package org.apache.fineract.portfolio.self.pockets.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -35,7 +35,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.commands.domain.CommandWrapper;
 import org.apache.fineract.commands.service.CommandWrapperBuilder;
 import org.apache.fineract.commands.service.PortfolioCommandSourceWritePlatformService;
@@ -50,64 +50,67 @@ import org.springframework.stereotype.Component;
 @Path("/self/pockets")
 @Component
 @Scope("singleton")
-@Api(tags = {"Pocket"})
-@SwaggerDefinition(tags = {
-  @Tag(name = "Pocket", description = "")
-})
+
+@Tag(name = "Pocket", description = "")
 public class PocketApiResource {
- private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
- @SuppressWarnings("rawtypes")
- private final DefaultToApiJsonSerializer toApiJsonSerializer;
- private final PocketAccountMappingReadPlatformService pocketAccountMappingReadPlatformService;
 
- @SuppressWarnings("rawtypes")
- @Autowired
- public PocketApiResource(PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService,
-   final DefaultToApiJsonSerializer toApiJsonSerializer,
-   final PocketAccountMappingReadPlatformService pocketAccountMappingReadPlatformService) {
-  this.commandsSourceWritePlatformService = commandsSourceWritePlatformService;
-  this.toApiJsonSerializer = toApiJsonSerializer;
-  this.pocketAccountMappingReadPlatformService = pocketAccountMappingReadPlatformService;
- }
+    private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
+    @SuppressWarnings("rawtypes")
+    private final DefaultToApiJsonSerializer toApiJsonSerializer;
+    private final PocketAccountMappingReadPlatformService pocketAccountMappingReadPlatformService;
 
- @POST
- @Consumes({ MediaType.APPLICATION_JSON })
- @Produces({ MediaType.APPLICATION_JSON })
- @ApiOperation(value = "Link/delink accounts to/from pocket", httpMethod = "POST", notes = "Pockets behave as favourites. An user can link his/her Loan, Savings and Share accounts to pocket for faster access. In a similar way linked accounts can be delinked from the pocket.\n\n" + "Example Requests:\n" + "\n" + "self/pockets?command=linkAccounts\n" + "\n" + "self/pockets?command=delinkAccounts")
- @ApiResponses({@ApiResponse(code = 200, message = "OK", response =  PocketApiResourceSwagger.PostLinkDelinkAccountsToFromPocketResponse.class)})
- public String handleCommands(@QueryParam("command") @ApiParam(value = "command") final String commandParam, @Context final UriInfo uriInfo,
-   final String apiRequestBodyAsJson) {
+    @SuppressWarnings("rawtypes")
+    @Autowired
+    public PocketApiResource(PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService,
+            final DefaultToApiJsonSerializer toApiJsonSerializer,
+            final PocketAccountMappingReadPlatformService pocketAccountMappingReadPlatformService) {
+        this.commandsSourceWritePlatformService = commandsSourceWritePlatformService;
+        this.toApiJsonSerializer = toApiJsonSerializer;
+        this.pocketAccountMappingReadPlatformService = pocketAccountMappingReadPlatformService;
+    }
 
-  final CommandWrapperBuilder builder = new CommandWrapperBuilder().withJson(apiRequestBodyAsJson);
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Operation(summary = "Link/delink accounts to/from pocket", description = "Pockets behave as favourites. An user can link his/her Loan, Savings and Share accounts to pocket for faster access. In a similar way linked accounts can be delinked from the pocket.\n\n"
+            + "Example Requests:\n" + "\n" + "self/pockets?command=linkAccounts\n" + "\n" + "self/pockets?command=delinkAccounts")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PocketApiResourceSwagger.PostLinkDelinkAccountsToFromPocketResponse.class))) })
+    public String handleCommands(@QueryParam("command") @Parameter(description = "command") final String commandParam,
+            @Context final UriInfo uriInfo, final String apiRequestBodyAsJson) {
 
-  CommandProcessingResult result = null;
+        final CommandWrapperBuilder builder = new CommandWrapperBuilder().withJson(apiRequestBodyAsJson);
 
-  if (is(commandParam, PocketApiConstants.linkAccountsToPocketCommandParam)) {
-   final CommandWrapper commandRequest = builder.linkAccountsToPocket().build();
-   result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
-  } else if (is(commandParam, PocketApiConstants.delinkAccountsFromPocketCommandParam)) {
-   final CommandWrapper commandRequest = builder.delinkAccountsFromPocket().build();
-   result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
-  }
+        CommandProcessingResult result = null;
 
-  if (result == null) {
-   throw new UnrecognizedQueryParamException("command", commandParam);
-  }
+        if (is(commandParam, PocketApiConstants.linkAccountsToPocketCommandParam)) {
+            final CommandWrapper commandRequest = builder.linkAccountsToPocket().build();
+            result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
+        } else if (is(commandParam, PocketApiConstants.delinkAccountsFromPocketCommandParam)) {
+            final CommandWrapper commandRequest = builder.delinkAccountsFromPocket().build();
+            result = this.commandsSourceWritePlatformService.logCommandSource(commandRequest);
+        }
 
-  return this.toApiJsonSerializer.serialize(result);
- }
+        if (result == null) {
+            throw new UnrecognizedQueryParamException("command", commandParam);
+        }
 
- @GET
- @Consumes({ MediaType.APPLICATION_JSON })
- @Produces({ MediaType.APPLICATION_JSON })
- @ApiOperation(value = "Retrieve accounts linked to pocket", httpMethod = "GET", notes = "All linked loan\n\n" + "Example Requests:\n" + "\n"  + "\n" + "self/pockets")
- @ApiResponses({@ApiResponse(code = 200, message = "OK", response =  PocketApiResourceSwagger.GetAccountsLinkedToPocketResponse.class)})
- public String retrieveAll() {
-  return this.toApiJsonSerializer.serialize(this.pocketAccountMappingReadPlatformService.retrieveAll());
- }
+        return this.toApiJsonSerializer.serialize(result);
+    }
 
- private boolean is(final String commandParam, final String commandValue) {
-  return StringUtils.isNotBlank(commandParam) && commandParam.trim().equalsIgnoreCase(commandValue);
- }
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Operation(summary = "Retrieve accounts linked to pocket", description = "All linked loan\n\n" + "Example Requests:\n" + "\n" + "\n"
+            + "self/pockets")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PocketApiResourceSwagger.GetAccountsLinkedToPocketResponse.class))) })
+    public String retrieveAll() {
+        return this.toApiJsonSerializer.serialize(this.pocketAccountMappingReadPlatformService.retrieveAll());
+    }
+
+    private boolean is(final String commandParam, final String commandValue) {
+        return StringUtils.isNotBlank(commandParam) && commandParam.trim().equalsIgnoreCase(commandValue);
+    }
 
 }

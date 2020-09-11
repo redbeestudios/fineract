@@ -28,23 +28,27 @@ import java.util.Random;
 import org.apache.fineract.integrationtests.common.Utils;
 import org.apache.fineract.integrationtests.common.accounting.Account;
 
-public class ProvisioningHelper {
+public final class ProvisioningHelper {
 
-    public final static Map createProvisioingCriteriaJson(ArrayList<Integer> loanProducts, ArrayList categories, Account liability,
+    private ProvisioningHelper() {
+
+    }
+
+    public static final Map createProvisioingCriteriaJson(ArrayList<Integer> loanProducts, ArrayList categories, Account liability,
             Account expense) {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("loanProducts", addLoanProducts(loanProducts));
         map.put("definitions", addProvisioningCategories(categories, liability, expense));
         DateFormat simple = new SimpleDateFormat("dd MMMM yyyy");
         String formattedString = simple.format(Utils.getLocalDateOfTenant().toDate());
-        Random rand = new Random() ;
-        String criteriaName = "General Provisioning Criteria" + formattedString+rand.nextLong();
+        Random rand = new Random();
+        String criteriaName = "General Provisioning Criteria" + formattedString + rand.nextLong();
         map.put("criteriaName", criteriaName);
         map.put("locale", "en");
-       return map ;
+        return map;
     }
 
-    public final static String createProvisioningEntryJson() {
+    public static final String createProvisioningEntryJson() {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("createjournalentries", Boolean.FALSE);
         map.put("locale", "en");
@@ -55,7 +59,7 @@ public class ProvisioningHelper {
         return provisioningEntryCreateJson;
     }
 
-    public final static String createProvisioningEntryJsonWithJournalsEnabled() {
+    public static final String createProvisioningEntryJsonWithJournalsEnabled() {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("createjournalentries", Boolean.TRUE);
         map.put("locale", "en");
@@ -66,23 +70,23 @@ public class ProvisioningHelper {
         return provisioningEntryCreateJson;
     }
 
-    private static ArrayList addLoanProducts(ArrayList<Integer> loanProducts) {
-        ArrayList list = new ArrayList<>();
+    private static ArrayList<HashMap<String, Integer>> addLoanProducts(ArrayList<Integer> loanProducts) {
+        ArrayList<HashMap<String, Integer>> list = new ArrayList<>();
         for (int i = 0; i < loanProducts.size(); i++) {
-            HashMap map = new HashMap();
+            HashMap<String, Integer> map = new HashMap<>();
             map.put("id", loanProducts.get(i));
             list.add(map);
         }
         return list;
     }
 
-    public static ArrayList addProvisioningCategories(ArrayList categories, Account liability, Account expense) {
-        ArrayList list = new ArrayList();
+    public static ArrayList<HashMap<String, Object>> addProvisioningCategories(ArrayList categories, Account liability, Account expense) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
         int minStart = 0;
         int maxStart = 30;
 
         for (int i = 0; i < categories.size(); i++) {
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<>();
             HashMap category = (HashMap) categories.get(i);
             map.put("categoryId", category.get("id"));
             map.put("categoryName", category.get("categoryName"));
@@ -90,9 +94,9 @@ public class ProvisioningHelper {
             if (i == categories.size() - 1) {
                 map.put("maxAge", 90000);
             } else {
-                map.put("maxAge", (i+1) * 30);
+                map.put("maxAge", (i + 1) * 30);
             }
-            map.put("provisioningPercentage", new Float((i + 1) * 5.5));
+            map.put("provisioningPercentage", Float.valueOf((float) ((i + 1) * 5.5)));
             map.put("liabilityAccount", liability.getAccountID());
             map.put("expenseAccount", expense.getAccountID());
             list.add(map);

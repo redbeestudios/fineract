@@ -26,14 +26,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.infrastructure.jobs.api.SchedulerJobApiConstants;
 
 @Entity
 @Table(name = "job")
-public class ScheduledJobDetail extends AbstractPersistableCustom<Long> {
+public class ScheduledJobDetail extends AbstractPersistableCustom {
 
     @Column(name = "name")
     private String jobName;

@@ -36,7 +36,7 @@ import org.apache.fineract.portfolio.floatingrates.domain.FloatingRate;
 
 @Entity
 @Table(name = "m_product_loan_floating_rates")
-public class LoanProductFloatingRates extends AbstractPersistableCustom<Long> {
+public class LoanProductFloatingRates extends AbstractPersistableCustom {
 
     @OneToOne
     @JoinColumn(name = "loan_product_id", nullable = false)
@@ -61,12 +61,13 @@ public class LoanProductFloatingRates extends AbstractPersistableCustom<Long> {
     @Column(name = "is_floating_interest_rate_calculation_allowed", nullable = false)
     private boolean isFloatingInterestRateCalculationAllowed;
 
-    public LoanProductFloatingRates(){
+    public LoanProductFloatingRates() {
 
     }
+
     public LoanProductFloatingRates(FloatingRate floatingRate, LoanProduct loanProduct, BigDecimal interestRateDifferential,
             BigDecimal minDifferentialLendingRate, BigDecimal maxDifferentialLendingRate, BigDecimal defaultDifferentialLendingRate,
-            boolean isFloatingInterestRateCalculationAllowed){
+            boolean isFloatingInterestRateCalculationAllowed) {
         this.floatingRate = floatingRate;
         this.loanProduct = loanProduct;
         this.interestRateDifferential = interestRateDifferential;
@@ -140,8 +141,8 @@ public class LoanProductFloatingRates extends AbstractPersistableCustom<Long> {
             this.maxDifferentialLendingRate = newValue;
         }
         final String isFloatingInterestRateCalculationAllowed = "isFloatingInterestRateCalculationAllowed";
-        if (command
-                .isChangeInBooleanParameterNamed(isFloatingInterestRateCalculationAllowed, this.isFloatingInterestRateCalculationAllowed)) {
+        if (command.isChangeInBooleanParameterNamed(isFloatingInterestRateCalculationAllowed,
+                this.isFloatingInterestRateCalculationAllowed)) {
             final boolean newValue = command.booleanPrimitiveValueOfParameterNamed(isFloatingInterestRateCalculationAllowed);
             actualChanges.put(isFloatingInterestRateCalculationAllowed, newValue);
             this.isFloatingInterestRateCalculationAllowed = newValue;

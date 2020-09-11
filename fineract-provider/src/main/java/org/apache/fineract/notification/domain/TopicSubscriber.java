@@ -29,7 +29,7 @@ import org.apache.fineract.useradministration.domain.AppUser;
 
 @Entity
 @Table(name = "topic_subscriber")
-public class TopicSubscriber extends AbstractPersistableCustom<Long> {
+public class TopicSubscriber extends AbstractPersistableCustom {
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
@@ -42,8 +42,7 @@ public class TopicSubscriber extends AbstractPersistableCustom<Long> {
     @Column(name = "subscription_date")
     private Date subscriptionDate;
 
-    public TopicSubscriber() {
-    }
+    public TopicSubscriber() {}
 
     public TopicSubscriber(Topic topic, AppUser subscriber, Date subscriptionDate) {
         this.topic = topic;

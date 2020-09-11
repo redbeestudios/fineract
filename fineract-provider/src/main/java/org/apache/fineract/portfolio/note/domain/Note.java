@@ -25,7 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.infrastructure.core.api.JsonCommand;
 import org.apache.fineract.infrastructure.core.domain.AbstractAuditableCustom;
 import org.apache.fineract.portfolio.client.domain.Client;
@@ -35,11 +35,10 @@ import org.apache.fineract.portfolio.loanaccount.domain.LoanTransaction;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccount;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccountTransaction;
 import org.apache.fineract.portfolio.shareaccounts.domain.ShareAccount;
-import org.apache.fineract.useradministration.domain.AppUser;
 
 @Entity
 @Table(name = "m_note")
-public class Note extends AbstractAuditableCustom<AppUser, Long> {
+public class Note extends AbstractAuditableCustom {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = true)
@@ -74,7 +73,6 @@ public class Note extends AbstractAuditableCustom<AppUser, Long> {
     @ManyToOne
     @JoinColumn(name = "share_account_id", nullable = true)
     private ShareAccount shareAccount;
-
 
     public static Note clientNoteFromJson(final Client client, final JsonCommand command) {
         final String note = command.stringValueOfParameterNamed("note");

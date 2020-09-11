@@ -22,8 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /***
- * * People typically use either of the following settings when defining interest
- * recalculation method:
+ * * People typically use either of the following settings when defining interest recalculation method:
  * <ul>
  * <li>RESCHEDULE_NEXT_REPAYMENTS</li>
  * <li>REDUCE_NUMBER_OF_INSTALLMENTS</li>
@@ -53,7 +52,7 @@ public enum LoanRescheduleStrategyMethod {
         return type;
     }
 
-    private LoanRescheduleStrategyMethod(final Integer value, final String code) {
+    LoanRescheduleStrategyMethod(final Integer value, final String code) {
         this.value = value;
         this.code = code;
     }

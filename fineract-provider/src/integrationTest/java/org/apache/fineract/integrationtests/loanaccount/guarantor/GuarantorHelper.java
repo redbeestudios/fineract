@@ -18,8 +18,8 @@
  */
 package org.apache.fineract.integrationtests.loanaccount.guarantor;
 
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.fineract.integrationtests.common.CommonConstants;
@@ -49,8 +49,8 @@ public class GuarantorHelper {
     }
 
     public HashMap deleteGuarantor(final Integer guarantorId, final Integer fundId, final Integer loanId) {
-        return Utils.performServerDelete(this.requestSpec, this.responseSpec, LOAN_URL + loanId + GUARANTOR_API_URL + guarantorId + TENANT
-                + "&guarantorFundingId=" + fundId, "");
+        return Utils.performServerDelete(this.requestSpec, this.responseSpec,
+                LOAN_URL + loanId + GUARANTOR_API_URL + guarantorId + TENANT + "&guarantorFundingId=" + fundId, "");
     }
 
     public HashMap deleteGuarantor(final Integer guarantorId, final Integer loanId) {

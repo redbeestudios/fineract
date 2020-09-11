@@ -18,71 +18,71 @@
  */
 package org.apache.fineract.portfolio.collectionsheet.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 /**
  * Created by Chirag Gupta on 12/17/17.
  */
+@SuppressWarnings({ "MemberName" })
 final class CollectionSheetApiResourceSwagger {
-    private CollectionSheetApiResourceSwagger() {
-    }
 
-    @ApiModel(value = "PostCollectionSheetRequest")
-    public final static class PostCollectionSheetRequest {
-        private PostCollectionSheetRequest() {
-        }
+    private CollectionSheetApiResourceSwagger() {}
 
-        final class PostCollectionSheetBulkRepaymentTransactions {
-            private PostCollectionSheetBulkRepaymentTransactions() {
-            }
+    @Schema(description = "PostCollectionSheetRequest")
+    public static final class PostCollectionSheetRequest {
 
-            @ApiModelProperty(example = "10")
+        private PostCollectionSheetRequest() {}
+
+        static final class PostCollectionSheetBulkRepaymentTransactions {
+
+            private PostCollectionSheetBulkRepaymentTransactions() {}
+
+            @Schema(example = "10")
             public Integer loanId;
-            @ApiModelProperty(example = "1221.36")
+            @Schema(example = "1221.36")
             public Double transactionAmount;
-            @ApiModelProperty(example = "19")
+            @Schema(example = "19")
             public Integer paymentTypeId;
-            @ApiModelProperty(example = "1245356")
+            @Schema(example = "1245356")
             public Long receiptNumber;
         }
 
-        @ApiModelProperty(example = "dd MMMM yyyy")
+        @Schema(example = "dd MMMM yyyy")
         public String dateFormat;
-        @ApiModelProperty(example = "en")
+        @Schema(example = "en")
         public String locale;
-        @ApiModelProperty(example = "04 May 2014")
+        @Schema(example = "04 May 2014")
         public String transactionDate;
-        @ApiModelProperty(example = "04 May 2014")
+        @Schema(example = "04 May 2014")
         public String actualDisbursementDate;
         public List<Integer> bulkDisbursementTransactions;
         public PostCollectionSheetBulkRepaymentTransactions bulkRepaymentTransactions;
         public List<Integer> bulkSavingsDueTransactions;
     }
 
-    @ApiModel(value = "PostCollectionSheetResponse")
-    public final static class PostCollectionSheetResponse {
-        private PostCollectionSheetResponse() {
-        }
+    @Schema(description = "PostCollectionSheetResponse")
+    public static final class PostCollectionSheetResponse {
 
-        final class PostCollectionSheetChanges {
-            private PostCollectionSheetChanges() {
-            }
+        private PostCollectionSheetResponse() {}
 
-            @ApiModelProperty(example = "en")
+        static final class PostCollectionSheetChanges {
+
+            private PostCollectionSheetChanges() {}
+
+            @Schema(example = "en")
             public String locale;
-            @ApiModelProperty(example = "dd MMMM yyyy")
+            @Schema(example = "dd MMMM yyyy")
             public String dateFormat;
-            @ApiModelProperty(example = "[15]")
+            @Schema(example = "[15]")
             public List<Integer> loanTransactions;
-            @ApiModelProperty(example = "[]")
+            @Schema(example = "[]")
             public List<Integer> SavingsTransactions;
         }
 
-        @ApiModelProperty(example = "10")
+        @Schema(example = "10")
         public Integer groupId;
-        @ApiModelProperty(example = "10")
+        @Schema(example = "10")
         public Integer resourceId;
         public PostCollectionSheetChanges changes;
     }

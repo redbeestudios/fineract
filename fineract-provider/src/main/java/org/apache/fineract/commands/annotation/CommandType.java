@@ -23,7 +23,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Optional;
 
 /**
  * Specifies the command type for the annotated class.<br>
@@ -51,6 +50,7 @@ public @interface CommandType {
 
     /**
      * Returns the destination topic for this event and action
+     *
      * @return
      */
     String topic() default "default";

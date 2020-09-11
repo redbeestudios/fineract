@@ -20,7 +20,7 @@ package org.apache.fineract.commands.kafka;
 
 public interface CommandConstants {
 
-  String SERIALIZER = "command-serializer";
-  String KAFKA_TEMPLATE_CUSTOM = "kafka-template-custom";
+    String SERIALIZER = "command-serializer";
+    String KAFKA_TEMPLATE_CUSTOM = "kafka-template-custom";
 
 }

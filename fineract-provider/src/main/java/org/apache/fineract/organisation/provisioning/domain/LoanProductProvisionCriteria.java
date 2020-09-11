@@ -27,8 +27,9 @@ import org.apache.fineract.infrastructure.core.domain.AbstractPersistableCustom;
 import org.apache.fineract.portfolio.loanproduct.domain.LoanProduct;
 
 @Entity
-@Table(name = "m_loanproduct_provisioning_mapping", uniqueConstraints = { @UniqueConstraint(columnNames = { "product_id" }, name = "product_id") })
-public class LoanProductProvisionCriteria extends AbstractPersistableCustom<Long> {
+@Table(name = "m_loanproduct_provisioning_mapping", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "product_id" }, name = "product_id") })
+public class LoanProductProvisionCriteria extends AbstractPersistableCustom {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "criteria_id", referencedColumnName = "id", nullable = false)
@@ -43,11 +44,11 @@ public class LoanProductProvisionCriteria extends AbstractPersistableCustom<Long
     }
 
     public LoanProductProvisionCriteria(ProvisioningCriteria criteria, LoanProduct loanProduct) {
-        this.criteria = criteria ;
-        this.loanProduct = loanProduct ;
+        this.criteria = criteria;
+        this.loanProduct = loanProduct;
     }
 
     public LoanProduct getLoanProduct() {
-        return this.loanProduct ;
+        return this.loanProduct;
     }
 }

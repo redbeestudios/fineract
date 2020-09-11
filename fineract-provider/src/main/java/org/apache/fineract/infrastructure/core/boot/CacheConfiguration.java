@@ -32,16 +32,12 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.time.Duration;
-
 @Configuration
 @EnableCaching
 public class CacheConfiguration extends CachingConfigurerSupport {
 
-    private @Value("${spring.redis.host}")
-    String redisHost;
-    private @Value("${spring.redis.port}")
-    int redisPort;
+    private @Value("${spring.redis.host}") String redisHost;
+    private @Value("${spring.redis.port}") int redisPort;
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
@@ -64,12 +60,8 @@ public class CacheConfiguration extends CachingConfigurerSupport {
     @Autowired
     @Primary
     public RedisCacheManager redisCacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
-        return RedisCacheManager.RedisCacheManagerBuilder
-                .fromConnectionFactory(lettuceConnectionFactory)
-                .cacheDefaults(
-                        RedisCacheConfiguration
-                                .defaultCacheConfig())
-                .build();
+        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(lettuceConnectionFactory)
+                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig()).build();
     }
 
 }

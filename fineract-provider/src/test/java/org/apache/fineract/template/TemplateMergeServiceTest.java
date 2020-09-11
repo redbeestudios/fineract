@@ -18,9 +18,8 @@
  */
 package org.apache.fineract.template;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -32,6 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,22 +45,20 @@ import org.apache.fineract.template.domain.Template;
 import org.apache.fineract.template.domain.TemplateMapper;
 import org.apache.fineract.template.service.TemplateMergeService;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TemplateMergeServiceTest {
 
     private TemplateMergeService tms = new TemplateMergeService();
 
-    @Before
+    @BeforeEach
     public void setUpForEachTestCase() throws Exception {
 
         Field field = MoneyHelper.class.getDeclaredField("roundingMode");
         field.setAccessible(true);
         field.set(null, RoundingMode.HALF_EVEN);
     }
-
-
 
     @Test
     public void compileHelloTemplate() throws Exception {
@@ -83,8 +81,8 @@ public class TemplateMergeServiceTest {
         Map<String, Object> scopes = new HashMap<>();
         scopes.put("installments", installments);
 
-        String templateText = Resources.toString(Resources.getResource("template.mustache"), Charsets.UTF_8);
-        String expectedOutput = Resources.toString(Resources.getResource("template-expected.html"), Charsets.UTF_8);
+        String templateText = Resources.toString(Resources.getResource("template.mustache"), StandardCharsets.UTF_8);
+        String expectedOutput = Resources.toString(Resources.getResource("template-expected.html"), StandardCharsets.UTF_8);
 
         String output = compileTemplateText(templateText, scopes);
         assertEquals(expectedOutput, output);
@@ -124,8 +122,8 @@ public class TemplateMergeServiceTest {
 
     protected Map<String, Object> createMapFromJSON(String jsonText) {
         Gson gson = new Gson();
-        Type ssMap = new TypeToken<Map<String, Object>>(){}.getType();
-        JsonElement json = new JsonParser().parse(jsonText);
+        Type ssMap = new TypeToken<Map<String, Object>>() {}.getType();
+        JsonElement json = JsonParser.parseString(jsonText);
         return gson.fromJson(json, ssMap);
     }
 }

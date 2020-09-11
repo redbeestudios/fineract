@@ -18,8 +18,7 @@
  */
 package org.apache.fineract.batch.api;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 import org.apache.fineract.batch.domain.Header;
 
@@ -27,50 +26,53 @@ import org.apache.fineract.batch.domain.Header;
  * Created by sanyam on 26/7/17.
  */
 final class BatchApiResourceSwagger {
+
     private BatchApiResourceSwagger() {
 
     }
 
-    @ApiModel(value = "PostBatchesRequest")
-    public static final class PostBatchesRequest{
+    @Schema(description = "PostBatchesRequest")
+    public static final class PostBatchesRequest {
+
         private PostBatchesRequest() {
 
         }
 
-        public static final class PostBodyRequestSwagger{
+        public static final class PostBodyRequestSwagger {
+
             private PostBodyRequestSwagger() {
 
             }
 
-            @ApiModelProperty(example = "1")
+            @Schema(example = "1")
             public Long officeId;
-            @ApiModelProperty(example = "\"Petra\"")
+            @Schema(example = "\"Petra\"")
             public String firstname;
-            @ApiModelProperty(example = "\"Yton\"")
+            @Schema(example = "\"Yton\"")
             public String lastname;
-            @ApiModelProperty(example = "\"ex_externalId1\"")
+            @Schema(example = "\"ex_externalId1\"")
             public String externalId;
-            @ApiModelProperty(example = "\"dd MMMM yyyy\"")
+            @Schema(example = "\"dd MMMM yyyy\"")
             public String dateFormat;
-            @ApiModelProperty(example = "\"en\"")
+            @Schema(example = "\"en\"")
             public String locale;
-            @ApiModelProperty(example = "true")
+            @Schema(example = "true")
             public boolean active;
-            @ApiModelProperty(example = "\"04 March 2009\"")
+            @Schema(example = "\"04 March 2009\"")
             public String activationDate;
-            @ApiModelProperty(example = "\"04 March 2009\"")
+            @Schema(example = "\"04 March 2009\"")
             public String submittedOnDate;
 
         }
 
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Long requestId;
-        @ApiModelProperty(example = "clients")
+        @Schema(example = "clients")
         public String relativeUrl;
-        @ApiModelProperty(example = "POST")
+        @Schema(example = "POST")
         public String method;
         public Set<Header> headers;
-        @ApiModelProperty(example = "1")
+        @Schema(example = "1")
         public Long reference;
         public PostBodyRequestSwagger body;
     }

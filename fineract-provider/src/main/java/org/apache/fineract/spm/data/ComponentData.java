@@ -27,12 +27,11 @@ public class ComponentData {
     private Integer sequenceNo;
 
     public ComponentData() {
-        super();
+
     }
 
-    public ComponentData(final Long id, final String key, final String text,
-                         final String description, final Integer sequenceNo) {
-        super();
+    public ComponentData(final Long id, final String key, final String text, final String description, final Integer sequenceNo) {
+
         this.id = id;
         this.key = key;
         this.text = text;

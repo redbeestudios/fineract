@@ -18,9 +18,7 @@
  */
 package org.apache.fineract.portfolio.shareproducts.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,7 +29,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fineract.commands.domain.CommandWrapper;
 import org.apache.fineract.commands.service.CommandWrapperBuilder;
 import org.apache.fineract.commands.service.PortfolioCommandSourceWritePlatformService;
@@ -52,10 +50,8 @@ import org.springframework.stereotype.Component;
 @Path("/shareproduct/{productId}/dividend")
 @Component
 @Scope("singleton")
-@Api(tags = {"Self Dividend"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Self Dividend", description = "")
-})
+
+@Tag(name = "Self Dividend", description = "")
 public class ShareDividendApiResource {
 
     private final DefaultToApiJsonSerializer<ShareProductDividendPayOutData> toApiJsonSerializer;
@@ -101,7 +97,8 @@ public class ShareDividendApiResource {
     @Produces({ MediaType.APPLICATION_JSON })
     public String retrieveDividendDetails(@PathParam("dividendId") final Long dividendId, @QueryParam("offset") final Integer offset,
             @QueryParam("limit") final Integer limit, @QueryParam("orderBy") final String orderBy,
-            @QueryParam("sortOrder") final String sortOrder, @QueryParam("accountNo") final String accountNo) {
+            @QueryParam("sortOrder") final String sortOrder, @QueryParam("accountNo") final String accountNo,
+            @PathParam("productId") final Long productId) {
 
         this.platformSecurityContext.authenticatedUser().validateHasReadPermission(this.resourceNameForPermissions);
         final SearchParameters searchParameters = SearchParameters.forPaginationAndAccountNumberSearch(offset, limit, orderBy, sortOrder,
