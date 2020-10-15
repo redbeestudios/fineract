@@ -81,9 +81,11 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
+<!--    <Connector port="8080" protocol="HTTP/1.1"-->
+<!--               connectionTimeout="20000"-->
+<!--               redirectPort="8443" />-->
     <Connector port="8080" protocol="HTTP/1.1"
-               connectionTimeout="20000"
-               redirectPort="8443" />
+               connectionTimeout="20000" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -99,15 +101,15 @@
          Either JSSE or OpenSSL style configuration may be used regardless of
          the SSLImplementation selected. JSSE style configuration is used below.
     -->
-	<Connector protocol="org.apache.coyote.http11.Http11Protocol"
-    port="8443" maxThreads="200" scheme="https"
-    secure="true" SSLEnabled="true"
-    keystoreFile="/opt/bitnami/tomcat/tomcat.keystore"
-    keystorePass="xyz123"
-    clientAuth="false" sslProtocol="TLS"
-    URIEncoding="UTF-8"
-    compression="force"
-    compressableMimeType="text/html,text/xml,text/plain,text/javascript,text/css"/>
+<!--	<Connector protocol="org.apache.coyote.http11.Http11Protocol"-->
+<!--    port="8443" maxThreads="200" scheme="https"-->
+<!--    secure="true" SSLEnabled="true"-->
+<!--    keystoreFile="/opt/bitnami/tomcat/tomcat.keystore"-->
+<!--    keystorePass="xyz123"-->
+<!--    clientAuth="false" sslProtocol="TLS"-->
+<!--    URIEncoding="UTF-8"-->
+<!--    compression="force"-->
+<!--    compressableMimeType="text/html,text/xml,text/plain,text/javascript,text/css"/>-->
     <!--
     <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                maxThreads="150" SSLEnabled="true">
